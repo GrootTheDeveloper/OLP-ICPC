@@ -1703,16 +1703,30 @@ The output is one line for each case: the arrival time of Charley. Round up (cei
 
 %------------------------------------------------------------------------------%
 
-\subsubsection{I Think I Need a Houseboat}
+\subsubsection{Self-Numbers}
 
+In 1949, the Indian mathematician D.R. Kaprekar discovered a class of numbers called self-
+numbers. For any positive integer n, define $d(n)$ to be $n$ plus the sum of the digits of $n$. (The $d$
+stands for digitadition, a term coined by Kaprekar.) For example, $d(75) = 75 + 7 + 5 = 87$. Given
+any positive integer $n$ as a starting point, you can construct the infinite increasing sequence of
+integers $n, d(n), d(d(n)), d(d(d(n))), …$. For example, if you start with $33$, the next number is
+$33 + 3 + 3 = 39$, the next is $39 + 3 + 9 = 51$, the next is $51 + 5 + 1 = 57$, and so on, and you gener-
+ate the sequence
+\begin{center}
+$33, 39, 51, 57, 69, 84, 96, 111, 114, 120, 123, 129, 141, …$
+\end{center}
+The number $n$ is called a generator of $d(n)$. In the sequence above, $33$ is a generator of $39$, $39$ is
+a generator of $51$, $51$ is a generator of $57$, and so on. Some numbers have more than one generator;
+for example, $101$ has two generators, $91$ and $100$. A number with no generators is a self-number.
+There are $13$ self-numbers less than $100$: $1, 3, 5, 7, 9, 20, 31, 42, 53, 64, 75, 86,$ and $97$.
 
 \paragraph{Input} \mbox{} \\
 
-.
+There is no input for this problem.
 
 \paragraph{Output}\mbox{} \\
 
-
+Write a program to output all positive self-numbers less than $10,000$ in increasing order, one per line.
 
 \paragraph{Example}\mbox{} \\
 
@@ -1722,42 +1736,104 @@ The output is one line for each case: the arrival time of Charley. Round up (cei
         \hline
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-            &   \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ \hline
+            & 1  \\ 
+            & 3 \\ 
+            & 5 \\ 
+            & 7 \\ 
+            & 9 \\ 
+            & 20 \\
+			& 31 \\
+			& 42 \\
+			& 53 \\
+			& 64 \\
+			& | \\
+			& a lot more numbers \\
+			& | \\
+			& 9903 \\
+			& 9914 \\
+			& 9925 \\
+			& 9927 \\
+			& 9938 \\
+			& 9949 \\
+			& 9960 \\
+			& 9971 \\
+			& 9982 \\
+			& 9993 \\
+			\hline
     \end{tabular}
 \end{table}
 
-\textit{Source}: 
 
-\textbf{IDs for online judges}: 
+\textit{Source}: ACM Mid-Central United States 1998.
+
+\textbf{IDs for online judges}: POJ 1316, ZOJ 1180, UVA 640.
 
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
-
+Ý tưởng tương tự như Sàng nguyên tố, đầu tiên ta cho tất cả các số $[1..10000]$ đều
+là self-number. Sau đó duyệt từ $i = 1 đến 10000$, nếu số hiện tại là self-number, thì 
+d(n) của nó không phải là self-number, và mọi d(d(n)), d(d(d(n)))... đều không phải là self-number.
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 
 \begin{lstlisting}
-
+	#include <bits/stdc++.h>
+	using namespace std;
+	
+	const int limit = 10000;
+	
+	int d(int n) {
+		int digit = 0;
+		int number = n;
+		while(number != 0) {
+			digit += number % 10;
+			number /= 10;
+		}
+		return n + digit;
+	}
+	
+	int main(){
+		vector<bool>selfNumber(limit + 1, true);
+		for (int i = 1; i <= limit; i++) {
+			int num = i;
+			if (selfNumber[num] == true) {
+				while(d(num) <= limit) {
+					selfNumber[d(num)] = false;
+					num = d(num);
+				}
+			}
+		}
+		for (int i = 1; i <= limit; i++) {
+			if (selfNumber[i] == true) {
+				cout << i << endl;
+			}
+		} 
+	}
 \end{lstlisting}
 
 %------------------------------------------------------------------------------%
 
-\subsubsection{I Think I Need a Houseboat}
+\subsubsection{Bee}
+
+In Africa, there is a very special species of bee. Every year, the female bees of the species give birth to
+one male bee, while the male bees give birth to one male bee and one female bee, and then they die.\\
+
+Now scientists have accidentally found one “magical” female bee of the special species to the
+effect that she is immortal, but still able to give birth once a year as all the other female bees. The
+scientists would like to know how many bees there will be after N years. Write a program that
+helps them find the number of male bees and the total number of all bees after N years.
 
 
 \paragraph{Input} \mbox{} \\
 
-.
+Each line of input contains an integer $N$ $(N \geq 0)$. Input ends with a case where N = –1. (This case
+should not be processed.)
 
 \paragraph{Output}\mbox{} \\
 
-
+Each line of output should have two numbers, the first one the number of male bees after $N$ years
+and the second one the total number of bees after $N$ years. (The two numbers will not exceed $2^{32}$.)
 
 \paragraph{Example}\mbox{} \\
 
@@ -1767,18 +1843,15 @@ The output is one line for each case: the arrival time of Charley. Round up (cei
         \hline
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-            &   \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ \hline
+        1   & 1 2   \\ 
+        3   & 4 7  \\  
+        -1  &  \\ \hline
     \end{tabular}
 \end{table}
 
 \textit{Source}: 
 
-\textbf{IDs for online judges}: 
+\textbf{IDs for online judges}: UVA 11000.
 
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
