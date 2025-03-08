@@ -1,4 +1,9 @@
-#include <bits/stdc++.h>
+/*
+Source: ACM 2000, Northeastern European Regional Programming Contest (test tour).
+IDs for online judges: Ural 1068.
+Status: Accepted
+*/
+#include <iostream>
 using namespace std;
 
 int main() {

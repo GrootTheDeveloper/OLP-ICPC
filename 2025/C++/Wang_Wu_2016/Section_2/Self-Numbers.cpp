@@ -1,4 +1,10 @@
-#include <bits/stdc++.h>
+/*
+Source: ACM Mid-Central United States 1998.
+IDs for online judges: POJ 1316, ZOJ 1180, UVA 640.
+Status: Accepted
+*/
+#include <iostream>
+#include <vector>
 using namespace std;
 
 const int limit = 10000;

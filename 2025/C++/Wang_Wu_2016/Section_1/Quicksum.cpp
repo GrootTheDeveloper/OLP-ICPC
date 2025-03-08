@@ -1,4 +1,10 @@
-#include <bits/stdc++.h>
+/*
+Source: ACM Mid-Central United States 2006.
+IDs for online judges: POJ 3094, ZOJ 2812, UVA 3594.
+Status: Accepted
+*/
+#include <iostream>
+#include <string>
 using namespace std;
 	
 int main() {
@@ -12,5 +18,4 @@ int main() {
 		}
 		cout << ans << endl;
 	}
-
 }

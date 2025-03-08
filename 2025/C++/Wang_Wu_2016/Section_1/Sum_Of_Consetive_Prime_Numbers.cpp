@@ -1,13 +1,20 @@
-#include <bits/stdc++.h>
+/*
+Source: ACM Japan 2005.
+IDs for online judges: POJ 2739, UVA 3399.
+Status: Accepted
+*/
+#include <iostream>
+#include <vector>
+#include <cmath>
 using namespace std;
 
 vector<int>primes;
 
 int main() {
-	for (int i = 2; i <= 1000; i++) {
+	for (int i = 2; i <= 10000; i++) {
 		bool check = true;
 
-		for (int j = 2; j <= sqrt(i); j++) {
+		for (int j = 2; j <= sqrt((double)i); j++) {
 			if (i % j == 0) {
 				check = false;
 				break;

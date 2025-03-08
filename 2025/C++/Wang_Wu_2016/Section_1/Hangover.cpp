@@ -1,4 +1,11 @@
-#include <bits/stdc++.h>
+/*
+Source: ACM Mid-Central United States 2001.
+IDs for online judges: POJ 1003, UVA 2294.
+Status: Accepted 
+*/
+#include <iostream>
+#include <vector>
+
 using namespace std;
 
 int main() {

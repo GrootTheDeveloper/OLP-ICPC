@@ -1,4 +1,11 @@
-#include <bits/stdc++.h>
+/*
+Source: Ulm Local Contest 1996.
+IDs for online judges: POJ 2242, ZOJ 1090.
+Status: Accepted
+*/
+#include <iostream>
+#include <cmath>
+#include <iomanip>
 using namespace std;
 
 struct point {

@@ -1,9 +1,3 @@
-/*
-Source: ACM Mid-Atlantic United States 2001.
-IDs for online judges: POJ 1005, ZOJ 1049, UVA 2363.
-Status: Accepted
-*/
-
 #include <iostream>
 #include <cmath>
 
@@ -44,5 +38,5 @@ int main() {
 
 		cout << "Property " << property << ": This property will begin eroding in year " << yearEnd << "." << endl;
 	}
-	cout << "END OF OUTPUT.";
+	cout << "END OF FILE.";
 }

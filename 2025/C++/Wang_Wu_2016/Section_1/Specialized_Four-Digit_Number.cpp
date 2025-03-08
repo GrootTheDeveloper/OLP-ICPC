@@ -1,4 +1,9 @@
-#include <bits/stdc++.h>
+/*
+Source: ACM Pacific Northwest 2004.
+IDs for online judges: POJ 2196, ZOJ 2405, UVA 3199.
+Status: Accepted
+*/
+#include <iostream>
 using namespace std;
 
 int calc(int n, int base) {

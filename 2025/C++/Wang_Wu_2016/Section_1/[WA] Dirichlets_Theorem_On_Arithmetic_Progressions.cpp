@@ -1,4 +1,11 @@
-#include <bits/stdc++.h>
+/*
+Source: ACM Japan 2006, Domestic.
+IDs for online judges: POJ 3006.
+Status: Wrong Answer.
+*/
+#include <iostream>
+#include <vector>
+
 using namespace std;
 	
 int maxPrimeNumber = 469487;
