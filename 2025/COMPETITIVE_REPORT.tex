@@ -1466,14 +1466,16 @@ Số 1 là ngoại lệ.
 
 \begin{lstlisting}
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
 
 int main(){
 	int n;
 
 	vector<int> uglyNumber;
-	for (int i = 1; i <= 1500; i++) {
+	int i;
+	for (i = 1; uglyNumber.size() < 1500; i++) {
 		int number = i;
 		while (number % 2 == 0) {
 			number /= 2;
@@ -1487,7 +1489,6 @@ int main(){
 		}
 		if (number == 1) uglyNumber.push_back(i);
 	}
-
 	while (cin >> n && n != 0) {
 		n--;
 		cout << uglyNumber[n] << endl;
@@ -1620,7 +1621,7 @@ For each input set, print the distance driven, followed by a space, followed by 
     \end{tabular}
 \end{table}
 
-\textit{Source}: ACM Mid-Central United States 2004
+\textit{Source}: ACM Mid-Central United States 2004.
 
 \textbf{IDs for online judges}: POJ 2017, ZOJ 2176, UVA 3059.
 
@@ -1633,8 +1634,8 @@ Làm theo y chang đề bài mô tả luôn, không biết phân tích gì....
 
 
 \begin{lstlisting}
-
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
 
 int main(){
@@ -1645,16 +1646,15 @@ int main(){
 		for (int i = 0; i < n; i++) {
 			int speed, time;
 			cin >> speed >> time;
-			a[i] = { speed, time };
+			a[i].first = speed;
+			a[i].second = time;
 		}
 		int distance = a[0].first * a[0].second;
 		for (int i = 1; i < n; i++) {
 			distance += a[i].first * (a[i].second - a[i - 1].second);
 		}
 		cout << distance << " miles"<< endl;
-
 	}
-
 }
 
 \end{lstlisting}
@@ -1711,12 +1711,42 @@ The output is one line for each case: the arrival time of Charley. Round up (cei
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
+Vì Charley chỉ bám theo người vượt hắn, nên với những người xuất phát trước thì không cần xét. \\
+Vì Charley chỉ bám theo, nên ta chỉ cần xét người tới đích đầu tiên mà không cần xét bám theo ai và ai vượt lên cho phức tạp.
+
 
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 
 \begin{lstlisting}
+#include <iostream>
+#include <vector>
+using namespace std;
 
+struct driver {
+	double v;
+	double t;
+};
+
+int main(){
+	int n;
+	const double distance = 4500; 
+	while(cin >> n && n != 0) {
+		vector<driver> a(n);
+		for (int i = 0; i < n; i++) {
+			cin >> a[i].v >> a[i].t;
+			a[i].v = a[i].v * 1000 / 3600;
+		}
+		double min_dist = 1e9 + 7;
+		for (int i = 0; i < n; i++) {
+			if (a[i].t >= 0) {
+				min_dist = min(min_dist,distance / a[i].v + a[i].t); 
+			}
+		}
+		int ans = (int)min_dist + (min_dist == (int)min_dist ? 0 : 1);
+		cout << ans << endl;
+	}
+}
 \end{lstlisting}
 
 %------------------------------------------------------------------------------%
@@ -1875,26 +1905,78 @@ and the second one the total number of bees after $N$ years. (The two numbers wi
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
+Ban đầu, có 1 con ong cái "ma thuật", 0 ong đực, 0 ong cái.\\
+
+1 ong cái sinh ra 1 ong đực, 1 ong đực sinh ra 1 ong cái và 1 ong đực. Sau khi sinh thì chết, trừ ong ma thuật.\\
+
+Ta gọi $T(n)$ là số ong sinh ra sau $n$ năm.\\
+$F(n)$ là số ong cái sinh ra sau $n$ năm.\\
+$M(n)$ là số ong đực sinh ra sau $n$ năm.\\
+
+Ta có công thức truy hồi như sau: \\
+
+$F(n) = M(n - 1)$\\
+$M(n) = F(n - 1) + M(n - 1) + \text{magicBee}$\\
+$T(n) = F(n) + M(n)$ \\
+
+Với $M(0) = 0, T(0) = 0, \text{magic bee = 1}$\\
+
+\textbf{Lưu ý, dùng kiểu dữ liệu long long để phù hợp với bài này.}
+
 
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 
 \begin{lstlisting}
+#include <iostream>
+#define int long long
+using namespace std;
 
+const int magicBee = 1;
+
+signed main(){
+
+	int year;
+	while(cin >> year && year != -1) {
+		int femaleBee = 0;
+		int maleBee = 0;
+		for (int y = 1; y <= year; y++) {
+			int newFemaleBee = maleBee;
+			int newMaleBee = maleBee + femaleBee + magicBee;
+			maleBee = newMaleBee;
+			femaleBee = newFemaleBee;
+		}
+		cout << maleBee << " " << maleBee + femaleBee + magicBee << endl;
+	}   
+}
 \end{lstlisting}
 
 %------------------------------------------------------------------------------%
 
-\subsubsection{I Think I Need a Houseboat}
+\subsubsection{Gold Coins}
 
+The king pays his loyal knight in gold coins. On the first day of his service, the knight receives one
+gold coin. On each of the next two days (the second and third days of service), the knight receives
+two gold coins. On each of the next three days (the fourth, fifth, and sixth days of service), the
+knight receives three gold coins. On each of the next four days (the seventh, eighth, ninth, and
+tenth days of service), the knight receives four gold coins. This pattern of payments will continue
+indefinitely: after receiving N gold coins on each of N consecutive days, the knight will receive
+N + 1 gold coins on each of the next N + 1 consecutive days, where N is any positive integer.
+\\Your program will determine the total number of gold coins paid to the knight in any given
+number of days (starting from day 1).
 
 \paragraph{Input} \mbox{} \\
 
-.
+The input contains at least 1, but no more than 21 lines. Each line of the input file (except the last
+one) contains data for one test case of the problem, consisting of exactly one integer (in the range
+1 .. 10000), representing the number of days. The end of the input is signaled by a line containing the
+number 0.
 
 \paragraph{Output}\mbox{} \\
 
-
+There is exactly one line of output for each test case. This line contains the number of days from
+the corresponding line of input, followed by one blank space and the total number of gold coins
+paid to the knight in the given number of days, starting with day 1.
 
 \paragraph{Example}\mbox{} \\
 
@@ -1904,42 +1986,96 @@ and the second one the total number of bees after $N$ years. (The two numbers wi
         \hline
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-            &   \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
+        10    & 10 30  \\ 
+        6    & 6 14 \\ 
+        7   & 7 18 \\ 
+        11    & 11 35 \\ 
+        15    & 15 55 \\ 
+		16	&  16 61\\ 
+        100    & 100 945 \\ 
+        10000    & 10000 942820 \\ 
+		1000	& 1000 29820 \\ 
+        21    & 21 91 \\ 
+        22    & 22 98 \\ 
+		0	&  \\ 
             &  \\ \hline
     \end{tabular}
 \end{table}
 
-\textit{Source}: 
+\textit{Source}: ACM Rocky Mountain 2004.
 
-\textbf{IDs for online judges}: 
+\textbf{IDs for online judges}: POJ 2000, ZOJ 2345, UVA 3045.
 
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
+Ta có thể thấy số ngày được chia ra từng block với ý nghĩa block i là gồm i ngày liên tiếp, và mỗi ngày trong block i được nhận i đồng tiền.\\
+Vậy cứ trừ dần từng block đến khi nó bằng 0, hoặc còn dư thì cộng số ngày còn lại trong block nhân với số tiền tương ứng trong block đang xét.
 
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 
 \begin{lstlisting}
+#include <iostream>
+using namespace std;
 
+int main(){
+	int n;
+	while (cin >> n && n != 0) {
+		int d = n;
+		int day = 1;
+		int coin = 0;
+		while (n - day >= 0) {
+			n -= day;
+			coin += day * day;
+			day++;
+		}
+		if (n > 0) {
+			coin += (n * day);
+		}
+		cout << d << " " << coin << endl;
+	}
+}
 \end{lstlisting}
 
 %------------------------------------------------------------------------------%
 
-\subsubsection{I Think I Need a Houseboat}
+\subsubsection{The 3n + 1 Problem}
 
+Problems in computer science are often classified as belonging to a certain class of problems (e.g.,
+NP, unsolvable, recursive). In this problem you will analyze a property of an algorithm whose classification is not known for all possible inputs.\\
+Consider the following algorithm:
+
+1. input n\\
+2. print n\\
+3. if n = 1 then STOP\\
+4. if n is odd then n <-- 3n + 1\\
+5. else n <-- n/2\\
+6. GOTO 2\\
+
+Given the input 22, the following sequence of numbers will be printed: 22 11 34 17 52 26 13
+40 20 10 5 16 8 4 2 1.\\
+It is conjectured that the algorithm above will terminate (when a 1 is printed) for any integral
+input value. Despite the simplicity of the algorithm, it is unknown whether this conjecture is true. It has been verified, however, for all integers n such that 0 < n < 1,000,000 (and, in fact, for many
+more numbers than this). \\
+Given an input n, it is possible to determine the number of numbers printed before the 1 is
+printed. For a given n this is called the cycle length of n. In the example above, the cycle length
+of 22 is 16.\\
+For any two numbers i and j you are to determine the maximum cycle length over all numbers
+between i and j.
 
 \paragraph{Input} \mbox{} \\
-
-.
+The input will consist of a series of pairs of integers i and j, one pair of integers per line. All integers
+will be less than 10,000 and greater than 0.\\
+You should process all pairs of integers and for each pair determine the maximum cycle length
+over all integers between and including i and j.
 
 \paragraph{Output}\mbox{} \\
-
-
+For each pair of input integers i and j you should output i, j, and the maximum cycle length for
+integers between and including i and j. These three numbers should be separated by at least one
+space with all three numbers on one line and with one line of output for each line of input. The
+integers i and j must appear in the output in the same order in which they appeared in the input
+and should be followed by the maximum cycle length (on the same line).
 
 \paragraph{Example}\mbox{} \\
 
@@ -1949,38 +2085,75 @@ and the second one the total number of bees after $N$ years. (The two numbers wi
         \hline
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-            &   \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ \hline
+        1 10    & 1 10 20   \\ 
+        100 200  & 100 200 125  \\ 
+        201 210  & 201 210 89  \\ 
+        900 1000  & 900 1000 174  \\
+        \hline
     \end{tabular}
 \end{table}
 
-\textit{Source}: 
+\textit{Source}: Duke Internet Programming Contest 1990.
 
-\textbf{IDs for online judges}: 
+\textbf{IDs for online judges}: POJ 1207, UVA 100.
 
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
+Làm theo yêu cầu bài toán thôi, tuy nhiên điểm cần lưu ý ở bài này là không cho $(i < j)$, tức là i có thể > j. Vậy thay vì duyệt từ i đến j, ta duyệt từ min(i,j) đến max(i,j).
 
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 
 \begin{lstlisting}
+#include <iostream>
+#include <algorithm>
+using namespace std;
 
+int main(){
+	int l, r;
+	while(cin >> l >> r) {
+		int maxCycle = -1;
+		for (int i = min(l,r) ; i <= max(l,r) ; i++) {
+			int num = i;
+			int currentCycle = 0;
+			while(num != 1) {
+				if (num % 2 == 1) {
+					num = num * 3 + 1;
+				}
+				else {
+					num = num /2;
+				}
+				currentCycle++;
+			}
+			maxCycle = max(maxCycle, currentCycle + 1);
+		}
+		cout << l << " " << r << " " << maxCycle << endl;
+	}
+}
 \end{lstlisting}
 
 %------------------------------------------------------------------------------%
 
-\subsubsection{I Think I Need a Houseboat}
-
-
+\subsubsection{Pascal Library}
+Pascal University, one of the oldest in the country, needs to renovate its library building, because
+after all these centuries the building has started to show the effects of supporting the weight of the
+enormous amount of books it houses.\\
+To help in the renovation, the alumni association of the university decided to organize a series
+of fund-raising dinners, for which all alumni were invited. These events proved to be a huge success, and several were organized during the past year. (One of the reasons for the success of this
+initiative seems to be the fact that students that went through the Pascal system of education have
+fond memories of that time and would love to see a renovated Pascal library.)\\
+The organizers maintained a spreadsheet indicating which alumni participated in each dinner.
+Now they want your help to determine whether any alumnus or alumna took part in all of the
+dinners.
 \paragraph{Input} \mbox{} \\
 
-.
+The input contains several test cases. The first line of a test case contains two integers, N and D,
+indicating, respectively, the number of alumni and the number of dinners organized $(1 \leq N \leq
+100$ and $1 \leq D \leq 500)$. Alumni are identified by integers from 1 to N. Each of the next D lines
+describes the attendees of a dinner and contains N integers Xi
+ indicating if the alumnus or alumna
+i attended that dinner $(X_i = 1)$ or not $(X_i = 0)$. The end of input is indicated by N = D = 0.
 
 \paragraph{Output}\mbox{} \\
 
