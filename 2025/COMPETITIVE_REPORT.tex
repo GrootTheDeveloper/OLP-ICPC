@@ -2156,7 +2156,9 @@ describes the attendees of a dinner and contains N integers Xi
 i attended that dinner $(X_i = 1)$ or not $(X_i = 0)$. The end of input is indicated by N = D = 0.
 
 \paragraph{Output}\mbox{} \\
-
+For each test case in the input your program must produce one line of output, containing either
+the word “yes,” in case there exists at least one alumnus or alumna that attended all dinners, or
+the word “no” otherwise.
 
 
 \paragraph{Example}\mbox{} \\
@@ -2167,41 +2169,105 @@ i attended that dinner $(X_i = 1)$ or not $(X_i = 0)$. The end of input is indic
         \hline
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-            &   \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ \hline
+        3 3    & Yes  \\ 
+        1 1 1    & No \\ 
+        0 1 1    &  \\ 
+        1 1 1    &  \\ 
+        7 2    &  \\ 
+        1 0 1 0 1 0 1    &  \\ 
+		0 1 0 1 0 1 0&   \\
+		0 0 &  \\ 
+		\hline
     \end{tabular}
 \end{table}
 
-\textit{Source}: 
+\textit{Source}: ACM South America 2005.
 
-\textbf{IDs for online judges}: 
+\textbf{IDs for online judges}: : POJ 2864, UVA 3470.
 
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
 
 \paragraph{Program -- Chương trình} \mbox{} \\
-
+Ta chỉ cần duyệt theo từng cột, nếu toàn bộ đều là 1 thì xuất "yes", ngược lại nếu sau khi duyệt tất cả các cột mà vẫn không tồn tại điều kiện thỏa mãn thì xuất "no".
 
 \begin{lstlisting}
+#include <iostream>
+#include <vector>
+using namespace std;
 
+int main(){
+	int n, d;
+	while (cin >> n >> d && n != 0 && d != 0) {
+		vector<vector<int>> a(d, vector<int>(n));
+		for (int i = 0; i < d; i++) {
+			for (int j = 0; j < n; j++) {
+				cin >> a[i][j];
+			}
+		}
+		bool check = false;
+		for (int i = 0; i < n; i++) {
+			bool attended_check = true;
+			for (int j = 0; j < d; j++) {
+				if (a[j][i]== 0) {
+					attended_check = false;
+					break;
+				}
+			}
+			if (attended_check) {
+				check = true;
+				break;
+			}
+		}
+		if (check) cout << "yes";
+		else cout << "no";
+		cout << endl;
+	}
+}
+	
 \end{lstlisting}
 
 %------------------------------------------------------------------------------%
 
-\subsubsection{I Think I Need a Houseboat}
-
+\subsubsection{Calendar}
+Most of us have a calendar on which we scribble details of important events in our lives—visits
+to the dentist, the Regent 24-hour book sale, programming contests, and so on. However, there
+are also the fixed dates—partner’s birthdays, wedding anniversaries, and the like—and we also
+need to keep track of these. Typically we need to be reminded of when these important dates are
+approaching—the more important the event, the further in advance we wish to have our memo-
+ries jogged.\\
+Write a program that will provide such a service. The input will specify the year for which the
+calendar is relevant (in the range 1901–1999). Bear in mind that, within the range specified, all
+years that are divisible by 4 are leap years and hence have an extra day (February 29) added. The
+output will specify “today’s”’ date, a list of forthcoming events and an indication of their relative
+importance.
 
 \paragraph{Input} \mbox{} \\
 
-.
+The first line of input will contain an integer representing the year (in the range 1901–1999).
+This will be followed by a series of lines representing anniversaries or days for which the service is
+requested.\\
+An anniversary line will consist of the letter ‘A’; three integer numbers (D, M, P) representing
+the date, the month, and the importance of the event; and a string describing the event, all sepa-
+rated by one or more spaces. P will be a number between 1 and 7 (both inclusive) and represents
+the number of days before the event that the reminder service should start. The string describing
+the event will always be present and will start at the first nonblank character after the priority.
+A date line will consist of the letter ‘D’ and the date and month as above.\\
+All anniversary lines will precede any date lines. No line will be longer than 255 characters in
+total. The file will be terminated by a line consisting of a single \#.
 
 \paragraph{Output}\mbox{} \\
-
+Output will consist of a series of blocks of lines, one for each date line in the input. Each block
+will consist of the requested date followed by the list of events for that day and as many following
+days as necessary.\\
+The output should specify the date of the event (D and M), right justified in fields of width
+3, and the relative importance of the event. Events that happen today should be flagged as shown
+below, events that happen tomorrow should have P stars, events that happen the day after tomor-
+row should have P– – 1 stars, and so on. If several events are scheduled for the same day, order
+them by relative importance (number of stars).\\
+If there is still a conflict, order them by their appearance in the input stream. Follow the format
+used in the example below. Leave one blank line between blocks
 
 
 \paragraph{Example}\mbox{} \\
@@ -2212,42 +2278,174 @@ i attended that dinner $(X_i = 1)$ or not $(X_i = 0)$. The end of input is indic
         \hline
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-            &   \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ \hline
+        1993    &   \\ 
+		A 23 12 5 \text{Partner's birthday}& \text{Today is: 20 12}  \\ 
+        A 25 12 7 \text{Christmas}    & \text{20 12 *TODAY* Unspecified anniversary} \\ 
+		A 20 12 1 \text{Unspecified anniversary}& \ text{23 12 *** Partner's birthday}  \\ 
+        D 20 12  & \text{25 12 *** Christmas}  \\ 
+         \#   &  \\ \hline
     \end{tabular}
 \end{table}
 
-\textit{Source}: 
+\textit{Source}: New Zealand Contest 1993.
 
-\textbf{IDs for online judges}: 
-
+\textbf{IDs for online judges}: UVA 158.
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
+Nếu số ngày cách ngày khảo sát vượt quá 7 ngày thì chẳng cần xét.\\
+Tính số ngày cách ngày khảo sát bằng công thức: như trong code (lười quá tại bị Wrong Answer mà chẳng biết tại sao lại thế?).
 
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 
 \begin{lstlisting}
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
 
+struct event{
+	int day;
+	int month;
+	int important;
+	string name;
+	int idxInput; 
+};
+
+bool compare(const event &x, const event &y) {
+	if (x.month != y.month) {
+		return x.month < y.month;
+	}
+	if (x.day != y.day) {
+		return x.day < y.day;
+	}
+	if (x.important != y.important) {
+		return x.important > y.important;
+	}
+	return x.idxInput < y.idxInput;
+}
+
+int get_day_in_month(int month, bool leap) {
+	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+		return 31;
+	}
+	else if (month == 2) {
+		if (leap) {
+			return 29;
+		}
+		else return 28;
+	}
+	else {
+		return 30;
+	}
+}
+
+int main(){
+	vector<event> a;
+	int year; cin >> year;
+	char c;
+
+	bool leap = (year % 4 == 0);
+
+	int indexInput = 0;
+	while (cin >> c && c != '#') {
+		if (c == 'A') {
+			int day, month, important;
+			string name;
+			cin >> day >> month >> important;
+			cin.ignore();
+			getline(cin, name);
+			a.push_back({day, month, important, name, indexInput});
+			indexInput++;
+		}
+		else if (c == 'D') {
+			int day, month;
+			cin >> day >> month;
+			cout << "Today is: " <<day << " " << month << endl;
+			sort(a.begin(), a.end(), compare);
+			int idx = 0;
+			while (idx < a.size()) {
+				if (a[idx].day == day && a[idx].month == month) {
+					break;
+				}
+				idx++;
+			}
+			if (idx == a.size()) idx = 0;
+
+			for (int i = idx; i < a.size(); i++) {
+
+				if (a[i].day == day && a[i].month == month) {
+					cout << a[i].day << " " << a[i].month << " ";
+					cout << "*TODAY* " <<a[i].name << endl;
+				}
+				else {
+					int day_diff = 0;
+					
+					for (int j = month; j < a[i].month; j++) {
+						day_diff += get_day_in_month(j,leap);
+					}
+					day_diff += a[i].day;
+					day_diff -= day;
+
+					if (day_diff >= 1 && day_diff <= 7) {
+						cout << a[i].day << " " << a[i].month << " ";
+						for (int j = day_diff; j <= a[i].important; j++){
+							cout << "*";
+						}
+						cout << " " << a[i].name << endl;
+					}
+				}
+			}
+		}
+	}
+}
+	
 \end{lstlisting}
 
 %------------------------------------------------------------------------------%
 
-\subsubsection{I Think I Need a Houseboat}
+\subsubsection{Manager}
+One of the programming paradigms in parallel processing is the producer–consumer paradigm
+that can be implemented using a system with a “manager” process and several “client” processes.
+The clients can be producers, consumers, and so on. The manager keeps a trace of client processes. \\
+Each process is identified by its cost, which is a strictly positive integer in the range 1 .. 10,000.
+The number of processes with the same cost cannot exceed 10,000. The queue is managed according to three types of requests, as follows:\\
 
+a x: Add to the queue the process with the cost x.\\
+r: Remove a process, if possible, from the queue according to the current manager policy.\\
+p i: Enforce the policy i of the manager, where i is 1 or 2. The default manager policy is 1.\\
+e: Ends the list of requests.\\
+
+There are two manager policies:\\
+
+1. Remove the minimum cost process.\\
+2. Remove the maximum cost process. \\
+
+The manager will print the cost of a removed process only if the ordinal number of the removed
+process is in the removal list.\\
+Your job is to write a program that simulates the manager process.
 
 \paragraph{Input} \mbox{} \\
 
-.
+The input is from the standard input. Each data set in the input has the following format:\\
+
+The maximum cost of the processes.\\
+The length of the removal list.\\
+The removal list—the list of ordinal numbers of the removed processes that will be displayed. For example, 1 4 means that the cost of the first and fourth removed processes will
+be displayed.\\
+The list of requests, each on a separate line\\
+
+Each data set ends with an e request. The data sets are separated by empty lines.
 
 \paragraph{Output}\mbox{} \\
 
-
+The program prints on standard output the cost of each process that is removed, provided that the
+ordinal number of the remove request is in the list and the queue is not empty at that moment. If
+the queue is empty, the program prints –1. The results are printed on separate lines. An empty line
+separates the results of different data sets.\\
+An example is given in the following:
 
 \paragraph{Example}\mbox{} \\
 
@@ -2257,28 +2455,101 @@ i attended that dinner $(X_i = 1)$ or not $(X_i = 0)$. The end of input is indic
         \hline
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-            &   \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
-            &  \\ 
+        5    & 2  \\ 
+        2    &  5 \\ 
+        1 3    &  \\ 
+        a 2    &  \\ 
+        a 3    &  \\
+		r &  \\ 
+		a 4&  \\ 
+		p 2&  \\ 
+		r &  \\ 
+		a 5&  \\ 
+		r &  \\ 
+		e &  \\
             &  \\ \hline
     \end{tabular}
 \end{table}
 
-\textit{Source}: 
+\textit{Source}: ACM Southeastern Europe 2002.
 
-\textbf{IDs for online judges}: 
+\textbf{IDs for online judges}: POJ 1281, UVA 2514.
 
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
+Mấu chốt bài này là dùng \textbf{mảng đánh dấu} để tìm phần tử lớn nhất hoặc nhỏ nhất.\\
+Nếu $p = 1$, ta duyệt từ 0 lên maximum cost, nếu $p = 2$ ta duyệt từ maximum cost xuống 0. Nếu tìm thấy phần tử $ \text{maximum\_cost}[i] > 0 $ thì giảm giá trị $ \text{maximum\_cost}[i] $ đi 1 đơn vị, và xét nếu lần loại bỏ hiện tại có nằm trong danh sách \textbf{removal list} hay không, nếu có thì in ra $i$ vừa giảm. Ngược lại, nếu không tìm thấy thì và lần loại bỏ nằm trong \textbf{removal list} thì in ra $-1$ theo yêu cầu đề.
 
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 
 \begin{lstlisting}
+#include <iostream>
+#include <vector>
 
+using namespace std;
+
+
+int main(){
+
+	int maximum_cost;
+	int n; 
+	while(cin >> maximum_cost >> n){
+		vector<int>costs(maximum_cost + 1, 0);
+		vector<int>removal_list(n);
+		for (int i = 0; i < n; i++) {
+			cin >> removal_list[i];
+		}
+
+		char c; 
+		int cnt = 0;
+		int policy = 1;
+		while (cin >> c && c != 'e') {
+			if (c == 'a') {
+				int cost; cin >> cost;
+				costs[cost]++;
+			}
+			else if (c == 'p') {
+				int p;cin >> p;
+				policy = p;
+			}
+			else if (c == 'r'){
+				cnt++;
+				bool check = false;
+				for (int j = 0; j < removal_list.size(); j++) {
+					if (removal_list[j] == cnt) {
+						check = true;
+					}
+				}
+
+				int val = -1;
+
+				if (policy == 1) {
+					for (int j = 0; j <= maximum_cost; j++) {
+						if (costs[j] == 0) continue;
+						costs[j]--;
+						val = j;
+						break;
+					} 
+				}
+				else {
+					for (int j = maximum_cost; j >= 0; j--) {
+						if (costs[j] == 0) continue;
+						costs[j]--;
+						val = j;
+						break;
+					}
+				}
+				if (check) {
+					cout << val << endl;
+				}
+
+			}
+		}
+		cout << endl;
+	}
+}
 \end{lstlisting}
 
 
