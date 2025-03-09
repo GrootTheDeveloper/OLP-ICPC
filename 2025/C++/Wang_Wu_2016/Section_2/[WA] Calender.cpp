@@ -94,7 +94,7 @@ int main(){
                     day_diff -= day;
 
                     if (day_diff >= 1 && day_diff <= 7) {
-                        cout << a[i].day << " " << a[i].month << " ";
+                        cout << "   " << a[i].day << " " << a[i].month << " ";
                         for (int j = day_diff; j <= a[i].important; j++){
                             cout << "*";
                         }
@@ -102,6 +102,7 @@ int main(){
                     }
                 }
             }
+            cout << endl;
         }
     }
 }
