@@ -9,23 +9,37 @@ signed main(){
 
     int t; cin >> t;
     while(t--){
-        int n; cin >> n;
-        if (n % 2 == 0) {
-            cout << -1;
+        int n, x; cin >> n >> x;
+        vector<int> skill(n);
+        for (int i = 0; i < n; i++) {
+            cin >> skill[i];
         }
-        else {
-            int even = 2;
-            int odd = 1;
-            while (odd <= n) {
-                cout << odd << " ";
-                odd += 2;
+        sort(skill.begin(), skill.end());
+        int idx = n -1;
+        int teamMember = 0;
+        int minPower = LLONG_MAX;
+        bool valid = false;
+
+        int ans = 0;
+
+        while (idx >= 0) {
+            if (valid == false) {
+                teamMember++;
+                minPower = min(minPower, skill[idx]);
+                int tempValue = teamMember * minPower;
+                if (tempValue >= x) {
+                    valid = true;
+                }
             }
-            while (even <= n){
-                cout << even << " ";
-                even += 2;
-            }
+            if (valid) {
+                ans++;
+                teamMember = 0;
+                minPower = LLONG_MAX;
+                valid = false;
+            }    
+            idx--;
         }
-        cout << endl;
+        cout << ans << endl;
     }
     return 0;
 }
