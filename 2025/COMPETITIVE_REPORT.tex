@@ -78,9 +78,7 @@
 	\textbf{Mục tiêu kỳ vọng sau quá trình ôn luyện:}
 	\begin{quote}
 	\begin{itemize}
-		\item Khối Siêu cúp - OLPTHSV 2025: Giải 3.
-		\item ICPC Southern Vietnam 2025: Giải 3.
-		\item ICPC Vietnam National 2025: Được đề xuất tham dự ICPC Regional 2025.
+		\item ICPC Southern Vietnam 2025: Có giải.
 		\item UMT: Trả thù đời.\\ 
 	\end{itemize}
 	\end{quote}
@@ -2589,6 +2587,342 @@ int main(){
 \subsubsection{Đánh Giá Chủ Quan Chap 2 - Section 1}
 Chap này không quá yêu cầu về mặt thuật toán, mà chủ yếu ở phần cài đặt code, làm xong là tay to hơn rõ về phần cài đặt code.\\
 Cái hay là vậy, nhưng chap này cũng khiến tôi khá ức chế vì yêu cầu quá nhiều về định dạng, phải đọc rất kỹ mới thấy được những yêu cầu đó mà theo tôi là không hề cần thiết.
+
+%---------------------------------------------------------------------------------------------%
+\subsubsection{Red and Black}
+ 
+There is a rectangular room, covered with square tiles. Each tile is colored either red or black. A
+man is standing on a black tile. From a tile, he can move to one of four adjacent tiles. But he can’t
+move on red tiles; he can move only on black tiles. Write a program to count the number of black
+tiles that he can reach by repeating the moves described above.
+
+\paragraph{Input} \mbox{} \\
+
+The input consists of multiple data sets. A data set starts with a line containing two positive inte-
+gers W and H; W and H are the numbers of tiles in the x and y directions, respectively. W and H
+are not more than 20.
+
+There are H more lines in the data set, each of which includes W characters. Each character
+represents the color of a tile as follows:\\
+
+'.': A black tile 
+
+'\#': A red tile 
+
+'@': A man on a black tile (appears exactly once in a data set) \\
+
+The end of the input is indicated by a line consisting of two zeros.
+
+\paragraph{Output}\mbox{} \\
+
+For each data set, your program should output a line that contains the number of tiles the man can
+reach from the initial tile (including itself).
+
+\paragraph{Example}\mbox{} \\
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|r|}
+        \hline
+        \textbf{Sample Input} & \textbf{Sample Output} \\
+        \hline
+	6 9	& 45  \\ 
+	....\#.	&  \\ 
+	.....\#	&  \\ 
+	......	&  \\ 
+	......	&  \\
+	......	&  \\ 
+	......	&  \\ 
+	......	&  \\ 
+	\#@...\#	&  \\ 
+	.\#..\#.	&  \\ 
+		&  \\ \hline
+    \end{tabular}
+\end{table}
+
+\textit{Source}: ACM Japan 2004, Domestic.
+
+\textbf{IDs for online judges}: POJ 1979.
+
+\paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
+
+Nhìn vào có thể thấy được đây là 1 bài toán DFS, đếm số lượng node trong thành phần liên thông hiện tại.
+
+Vậy thì ta cần tạo một mảng visited[x][y] ban đầu đều mang giá trị False. Sau đó, ta đánh dấu vị trí ban đầu của người đàn ông:\
+
+- Nếu các ô kề cạnh có giá trị chỉ số hợp lệ, không phải là '\#' (A red tile), và visited[i][j] = false, thì người đàn ông sẽ đi thăm ô đó, và đánh dấu visited[i][j] (ô mà người đàn ông định thăm) = True;\\
+- Mỗi lần người đàn ông đi vào ô hợp lệ, ta tăng giá trị ô đi được lên thêm 1, hoặc sau khi đi xong, ta chỉ cần đếm số lượng phần tử visited[i][j] = True là ok.
+
+
+\paragraph{Program -- Chương trình} \mbox{} \\
+
+
+\begin{lstlisting}
+
+	#include <iostream>
+#include <vector>
+#include <string>
+#include <queue>
+#define x first
+#define y second
+using namespace std;
+
+vector<string> matrix;
+vector<vector<bool>> visited;
+int w,h;
+
+int dx[4] = {0,0,1,-1};
+int dy[4] = {1,-1,0,0};
+
+void search(int x,int y) {
+    if (x < 0 || x >= h || y < 0 || y >= w || matrix[x][y] == '#' || visited[x][y] == true){
+        return;
+    }
+    visited[x][y] = true;
+    for (int i = 0; i < 4; i++) {
+        int new_x = x + dx[i];
+        int new_y = y + dy[i];
+        search(new_x,new_y);
+    }
+}
+int main(){
+    while (cin >> w >> h && w != 0 && h != 0) {
+        matrix.clear();
+        visited.clear();
+        matrix.resize(h);
+        visited.resize(h, vector<bool>(w, false));
+
+        pair<int,int> man;
+
+        for (int i = 0; i < h; i++) {
+            cin >> matrix[i];
+            for (int j = 0; j < w; j++) {
+                if (matrix[i][j] == '@') {
+                    man.x = i;
+                    man.y = j;
+                }
+            }
+        }
+    search(man.x,man.y);
+        int count = 0;
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                if (visited[i][j] == true) {
+                    count++;
+                }
+            }
+        }
+        cout << count << endl;
+    }
+
+}
+
+	
+\end{lstlisting}
+
+%---------------------------------------------------------------------------------------------%
+\subsubsection{Red and Black}
+ 
+
+\paragraph{Input} \mbox{} \\
+
+
+
+\paragraph{Output}\mbox{} \\
+
+
+\paragraph{Example}\mbox{} \\
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|r|}
+        \hline
+        \textbf{Sample Input} & \textbf{Sample Output} \\
+        \hline
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\
+		&  \\ \hline
+    \end{tabular}
+\end{table}
+
+\textit{Source}: 
+
+\textbf{IDs for online judges}:
+
+\paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
+
+
+
+\paragraph{Program -- Chương trình} \mbox{} \\
+
+
+\begin{lstlisting}
+	
+	
+\end{lstlisting}
+%---------------------------------------------------------------------------------------------%
+\subsubsection{Red and Black}
+ 
+
+\paragraph{Input} \mbox{} \\
+
+
+
+\paragraph{Output}\mbox{} \\
+
+
+\paragraph{Example}\mbox{} \\
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|r|}
+        \hline
+        \textbf{Sample Input} & \textbf{Sample Output} \\
+        \hline
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\
+		&  \\ \hline
+    \end{tabular}
+\end{table}
+
+\textit{Source}: 
+
+\textbf{IDs for online judges}:
+
+\paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
+
+
+
+\paragraph{Program -- Chương trình} \mbox{} \\
+
+
+\begin{lstlisting}
+	
+	
+\end{lstlisting}
+
+%---------------------------------------------------------------------------------------------%
+\subsubsection{Red and Black}
+ 
+
+\paragraph{Input} \mbox{} \\
+
+
+
+\paragraph{Output}\mbox{} \\
+
+
+\paragraph{Example}\mbox{} \\
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|r|}
+        \hline
+        \textbf{Sample Input} & \textbf{Sample Output} \\
+        \hline
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\
+		&  \\ \hline
+    \end{tabular}
+\end{table}
+
+\textit{Source}: 
+
+\textbf{IDs for online judges}:
+
+\paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
+
+
+
+\paragraph{Program -- Chương trình} \mbox{} \\
+
+
+\begin{lstlisting}
+	
+	
+\end{lstlisting}
+%---------------------------------------------------------------------------------------------%
+\subsubsection{Red and Black}
+ 
+
+\paragraph{Input} \mbox{} \\
+
+
+
+\paragraph{Output}\mbox{} \\
+
+
+\paragraph{Example}\mbox{} \\
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|r|}
+        \hline
+        \textbf{Sample Input} & \textbf{Sample Output} \\
+        \hline
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\ 
+		&  \\
+		&  \\ \hline
+    \end{tabular}
+\end{table}
+
+\textit{Source}: 
+
+\textbf{IDs for online judges}:
+
+\paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
+
+
+
+\paragraph{Program -- Chương trình} \mbox{} \\
+
+
+\begin{lstlisting}
+	
+	
+\end{lstlisting}
+%---------------------------------------------------------------------------------------------%
+
 
 %---------------------------------------------------------------------------------------------%
 \section{Codeforces}
