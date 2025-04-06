@@ -3161,10 +3161,10 @@ For the final of the first Olympiad by IT Campus ``NEIMARK'', a rectangular venu
 
 Each desk occupies one of the $m$ spots in a row. Moreover, if several desks occupy consecutive spots in the same row, we call such a group of desks a \textbf{bench}, and the number of desks in the group is the bench's length.
 
-For example, seating $7$ participants on a $3 \times 4$ venue ($n=3$, $m=4$) can be arranged as follows:
+For example, seating $7$ participants on a $3 \times 4$ venue ($n=3$, $m=4$) can be arranged as follows:\\
 
 \begin{center}
-    \includegraphics[width=0.6\textwidth]{Figures/CF_Round1013_D_1.png} 
+    \includegraphics[width=0.35\textwidth]{Figures/CF_Round1013_D_1.png} 
 \end{center}
 
 In the figure above:
@@ -3176,47 +3176,74 @@ In the figure above:
 
 The organizing committee wants to choose the locations so that the length of the longest bench is as small as possible. In particular, the same $7$ desks can be arranged in a more optimal way, so that the lengths of all benches do not exceed $2$:
 
+\begin{center}
+    \includegraphics[width=0.35\textwidth]{Figures/CF_Round1013_D_2.png} 
+\end{center}
+
 \textbf{Goal:} Given the integers $n$, $m$, and $k$, determine the minimum possible length of the longest bench.
 
 \paragraph{Input} \mbox{} \\
 
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 10^4$). The description of the test cases follows.
+
+Each test case contains a single line with three positive integers — $n$, $m$, $k$ ($1 \le n, m, k \le 10^9$, $k \le n \cdot m$).
 
 
 \paragraph{Output}\mbox{} \\
+
+For each test case, output a single number — the minimum possible length of the longest bench.
 
 
 \paragraph{Example}\mbox{} \\
 
 \begin{table}[h]
     \centering
+    \rowcolors{2}{gray!10}{white}
     \begin{tabular}{|l|r|}
         \hline
+        \rowcolor{gray!30}
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\
-		&  \\ \hline
+        5 & \\
+        3\ 4\ 7 & 2 \\
+        5\ 5\ 5 & 1 \\
+        1\ 13\ 2 & 1 \\
+        2\ 4\ 7 & 4 \\
+        1\ 5\ 4 & 2 \\
+        \hline
     \end{tabular}
 \end{table}
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
-Mô tả phân tích bài toán D ở đây.
+Theo đề bài, bảng có $n$ hàng $m$ cột, có $k$ người tham gia. Ta tính được rằng $S = n . m$ chỗ ngồi, và số chỗ trống (không có người ngồi) là $freeSit = S - k.$ \\
+
+Từ dữ kiện trên, biết được số chỗ trống ít nhất mỗi hàng có được bằng $leastSit = freeSit / n$. Không cần quan tâm đến chỗ trống dư vì chỉ phụ thuộc vào hàng có leastSit, những chỗ trống còn dư có thể xếp ở các hàng khác.\\
+
+Vậy, số cách chia nhóm sao cho tối ưu trên dòng có $m$ ghế, tồn tại $leastSit$ chỗ trống là: $ans = m / (leastSit + 1)$
 
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 \begin{lstlisting}
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
 
+signed main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
+	int t; cin >> t;
+	while (t--) {
+		int n, m, k;
+		cin >> n >> m >> k;
+		int free = n * m - k;
+		int divSit = free / n;
+		int ans = m / (divSit + 1);
+		cout << ans << endl;
+	}
+	return 0;
+}
 \end{lstlisting}
 
 \subsubsection{Problem E: Tên bài toán E}
