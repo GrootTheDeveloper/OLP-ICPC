@@ -3155,7 +3155,28 @@ Mô tả phân tích bài toán C ở đây.
 
 \end{lstlisting}
 
-\subsubsection{Problem D: Tên bài toán D}
+\subsubsection{Problem D: Place of the Olympiad}
+
+For the final of the first Olympiad by IT Campus ``NEIMARK'', a rectangular venue was prepared. You may assume that the venue is divided into $n$ rows, each containing $m$ spots for participants' desks. A total of $k$ participants have registered for the final, and each participant will sit at an individual desk. Now, the organizing committee must choose the locations for the desks in the venue.
+
+Each desk occupies one of the $m$ spots in a row. Moreover, if several desks occupy consecutive spots in the same row, we call such a group of desks a \textbf{bench}, and the number of desks in the group is the bench's length.
+
+For example, seating $7$ participants on a $3 \times 4$ venue ($n=3$, $m=4$) can be arranged as follows:
+
+\begin{center}
+    \includegraphics[width=0.6\textwidth]{Figures/CF_Round1013_D_1.png} 
+\end{center}
+
+In the figure above:
+\begin{itemize}
+    \item the first row has one bench of length 3,
+    \item the second row has one bench of length 2,
+    \item the third row has two benches of length 1.
+\end{itemize}
+
+The organizing committee wants to choose the locations so that the length of the longest bench is as small as possible. In particular, the same $7$ desks can be arranged in a more optimal way, so that the lengths of all benches do not exceed $2$:
+
+\textbf{Goal:} Given the integers $n$, $m$, and $k$, determine the minimum possible length of the longest bench.
 
 \paragraph{Input} \mbox{} \\
 
@@ -3929,8 +3950,7 @@ Vì mỗi phép hoán vị chỉ số $i$ và $j$ đều đồng thời áp dụ
 Giả sử ban đầu mình có một mảng chỉ số:
 \[
 P = [0, 1, 2, \ldots, n - 1].
-\]
-
+\]}
 Mình muốn sắp xếp mảng $P$ này thành mảng đích $R$, là mảng các chỉ số mà tại các vị trí đó, cặp $(a_i, b_i)$ đúng là những cặp đối xứng đã được xác định từ trước.
 
 \bigskip
