@@ -2,6 +2,8 @@
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{multicol}
+\usepackage[table]{xcolor}
+\usepackage{colortbl}
 \usepackage[backend=biber,natbib=true,style=alphabetic,maxbibnames=50]{biblatex}
 \addbibresource{/home/nqbh/reference/bib.bib}
 \usepackage[utf8]{vietnam}
@@ -1202,6 +1204,8 @@ Việc còn lại chỉ cần kiểm tra số nguyên tố thứ $n$ trong dãy 
 \textbf{Phía trên là những nhận định sai lầm nhất cuộc đời tôi}\\
 
 Sau khi nộp lần đầu và bị sai, tôi thử tăng giới hạn số nguyên tố lên 1.000.000 thì đã AC.
+
+Từ đây, có thể rút ra được kinh nghiệm thực chiến là: luôn cho giới hạn số nguyên tố lên 1.000.000, hoặc tối đa 10.000.000 (không khuyến khích vì rất chậm), để hạn chế bị sai + đỡ tốn thời gian xét giới hạn.
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 
@@ -2659,7 +2663,7 @@ Vậy thì ta cần tạo một mảng visited[x][y] ban đầu đều mang giá
 
 \begin{lstlisting}
 
-	#include <iostream>
+#include <iostream>
 #include <vector>
 #include <string>
 #include <queue>
@@ -2721,15 +2725,28 @@ int main(){
 \end{lstlisting}
 
 %---------------------------------------------------------------------------------------------%
-\subsubsection{Red and Black}
+\subsubsection{Symmetric Order}
  
+In your job at Albatross Circus Management (yes, it’s run by a bunch of clowns), you have just
+finished writing a program whose output is a list of names in nondescending order by length (so
+that each name is at least as long as the one preceding it). However, your boss does not like the
+way the output looks and instead wants the output to appear more symmetric, with the shorter
+strings at the top and bottom and the longer strings in the middle. His rule is that each pair of
+names belongs on opposite ends of the list, and the first name in the pair is always in the top part
+of the list. In the first example set below, Bo and Pat are the first pair, Jean and Kevin the second
+pair, and so forth.
 
 \paragraph{Input} \mbox{} \\
 
-
+The input consists of one or more sets of strings, followed by a final line containing only the
+value 0. Each set starts with a line containing an integer, $n$, which is the number of strings in
+the set, followed by $n$ strings, one per line, sorted in nondescending order by length. None of the
+strings contain spaces. There is at least 1 and no more than 15 strings per set. Each string is at most
+25 characters long.
 
 \paragraph{Output}\mbox{} \\
-
+For each input set print $“SET n”$ on a line, where $n$ starts at 1, followed by the output set as shown
+in the sample output.
 
 \paragraph{Example}\mbox{} \\
 
@@ -2739,25 +2756,34 @@ int main(){
         \hline
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\
-		&  \\ \hline
+		7& SET 1 \\ 
+		Bo& Bo \\ 
+		Pat&Jean  \\ 
+		Jean&Claude  \\ 
+		Kevin&Marybeth  \\
+		Claude&William  \\ 
+		William&Kevin  \\ 
+		Marybeth&Pat  \\ 
+		6&SET 2  \\ 
+		Jim&Jim  \\ 
+		Ben&Zoe  \\ 
+		Zoe& Frederick \\
+		Joey&Annabelle  \\
+		Frederick&Joey  \\
+		Annabelle&Ben  \\
+		5&SET 3  \\
+		John&John  \\
+		Bill&Fran  \\
+		Fran&Cece  \\
+		Stan&Stan  \\
+		Cece&Bill  \\
+		0  & \\ \hline
     \end{tabular}
 \end{table}
 
-\textit{Source}: 
+\textit{Source}: ACM Mid-Central United States 2004.
 
-\textbf{IDs for online judges}:
+\textbf{IDs for online judges}:POJ 2013, ZOJ 2172.
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
@@ -2921,6 +2947,7 @@ int main(){
 	
 	
 \end{lstlisting}
+
 %---------------------------------------------------------------------------------------------%
 
 
@@ -2931,13 +2958,25 @@ int main(){
 
 Link: \url{}
 
-\subsubsection{Problem A: Tên bài toán A}
+\subsubsection{Problem A: Olympiad Date}
+
+The final of the first Olympiad by IT Campus ``NEIMARK'' is scheduled for March 1, 2025. A nameless intern was tasked with forming the date of the Olympiad using digits — \texttt{01.03.2025}.\\
+
+To accomplish this, the intern took a large bag of digits and began drawing them one by one. In total, he drew $n$ digits — the digit $a_i$ was drawn in the $i$-th turn.\\
+
+You suspect that the intern did extra work. Determine at which step the intern could have first assembled the digits to form the date of the Olympiad (the separating dots can be ignored), or report that it is impossible to form this date from the drawn digits. \textbf{Note that leading zeros must be displayed.}
 
 \paragraph{Input} \mbox{} \\
 
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \leq t \leq 10^4$). The description of the test cases follows.
 
+\begin{itemize}[leftmargin=*]
+    \item The first line of each test case contains a single integer $n$ ($1 \leq n \leq 20$).
+    \item The second line of each test case contains $n$ integers $a_i$ ($0 \leq a_i \leq 9$) — the numbers that the intern pulled out in chronological order.
+\end{itemize}
 
 \paragraph{Output}\mbox{} \\
+For each test case, output the minimum number of digits that the intern could pull out. If all the digits cannot be used to make a date, output the number 0.
 
 
 \paragraph{Example}\mbox{} \\
@@ -2948,64 +2987,120 @@ Link: \url{}
         \hline
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\
-		&  \\ \hline
+        4 & \\
+        10 & \\
+        2 0 1 2 3 2 5 0 0 1 & 9 \\
+        8 & \\
+        2 0 1 2 3 2 5 0 & 0 \\
+        8 & \\
+        2 0 1 0 3 2 5 0 & 8 \\
+        16 & \\
+        2 3 1 2 3 0 1 9 2 1 0 3 5 4 0 3 & 15 \\
+        \hline
     \end{tabular}
 \end{table}
 
+
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
-Mô tả phân tích bài toán A ở đây.
+Kêu gì làm nấy.
 
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 \begin{lstlisting}
+#include <bits/stdc++.h>
 
+using namespace std;
+int cnt[6] = {3,1,2,1,0,1};
+
+bool check(vector<int> &c) {
+	for (int i = 0; i < 6; i++) {
+		if (c[i] < cnt[i]) {
+			return false;
+		}
+	}
+	return true;
+}
+int main(){
+	int t; cin >> t;
+	while(t--) {
+		int count = 0;
+		vector<int> c(6, 0);
+		int n; cin >> n;
+		vector<int>a(n);
+		int ans = 0;
+		for (int i = 0; i < n; i++) {
+			cin >> a[i];            
+		}
+		
+		for (int i = 0; i < n; i++) {
+			if (a[i] <= 5) {
+				c[a[i]]++;
+				if (check(c)) {
+					ans = i + 1;
+					break;
+				}
+			}               
+		}
+		cout << ans << endl;
+	}
+	return 0;
+}
 \end{lstlisting}
 
 \subsubsection{Problem B: Tên bài toán B}
 
+At the IT Campus ``NEIMARK'', there are training sessions in competitive programming — both individual and team-based!\\
+
+For the next team training session, $n$ students will attend, and the skill of the $i$-th student is given by a positive integer $a_i$.\\
+
+The coach considers a team strong if its \textit{strength} is at least $x$. The strength of a team is calculated as the number of team members multiplied by the minimum skill among the team members.\\
+
+For example, if a team consists of 4 members with skills $[5, 3, 6, 8]$, then the team's strength is $4 \cdot \min([5, 3, 6, 8]) = 12$.\\
+
+Output the maximum possible number of strong teams, given that each team must have at least one participant and every participant must belong to exactly one team.
+
 \paragraph{Input} \mbox{} \\
 
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 10^4$). The description of the test cases follows.
+
+\begin{itemize}[leftmargin=*]
+    \item The first line of each test case contains two integers $n$ and $x$ ($1 \le n \le 2 \cdot 10^5$, $1 \le x \le 10^9$) — the number of students in training and the minimum \textit{strength} of a team to be considered strong.
+    \item The second line of each test case contains $n$ integers $a_i$ ($1 \le a_i \le 10^9$) — the skill of each student.
+\end{itemize}
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2 \cdot 10^5$.
 
 
 \paragraph{Output}\mbox{} \\
 
+For each test case, output the maximum possible number of teams with strength at least $x$.
 
 \paragraph{Example}\mbox{} \\
 
 \begin{table}[h]
     \centering
+    \rowcolors{2}{gray!10}{white}  % màu xen kẽ: dòng chẵn xám nhạt, dòng lẻ trắng
     \begin{tabular}{|l|r|}
         \hline
+        \rowcolor{gray!30}  % dòng tiêu đề đậm hơn
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\
-		&  \\ \hline
+        5 & \\
+        6 4 & \\
+        4 5 3 3 2 6 & 4 \\
+        4 10 & \\
+        4 2 1 3 & 0 \\
+        5 3 & \\
+        5 3 2 3 2 & 4 \\
+        3 6 & \\
+        9 1 7 & 2 \\
+        6 10 & \\
+        6 1 3 6 3 2 & 1 \\
+        \hline
     \end{tabular}
 \end{table}
+
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
@@ -3524,6 +3619,456 @@ Mô tả phân tích bài toán E ở đây.
 \end{lstlisting}
 
 %---------------------------------------------------------------------------------------------%
+\subsection{Round 1015}
+
+Link: \url{https://codeforces.com/contest/2084}
+
+\subsubsection{Problem A: Max and Mod}
+
+You are given an integer $n$. Find any permutation $p$ of length $n$\footnote{A permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation (2 appears twice in the array), and $[1,3,4]$ is also not a permutation ($n = 3$ but there is 4 in the array).} such that:
+
+\begin{itemize}
+    \item For all $2 \le i \le n$, 
+    \[
+        \max(p_{i-1}, p_i) \bmod i = i - 1
+    \]
+\end{itemize}
+
+If it is impossible to find such a permutation $p$, output $-1$.
+
+\textsuperscript{$\dagger$} $x \bmod y$ denotes the remainder from dividing $x$ by $y$.
+
+
+\paragraph{Input} \mbox{} \\
+
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 99$). The description of the test cases follows.\\
+
+The first line of each test case contains a single integer $n$ ($2 \le n \le 100$).
+
+\paragraph{Output}\mbox{} \\
+
+For each test case:
+
+\begin{itemize}
+    \item If such a permutation $p$ doesn't exist, output a single integer $-1$.
+    \item Otherwise, output $n$ integers $p_1, p_2, \ldots, p_n$ — the permutation $p$ you’ve found. If there are multiple answers, output any of them.
+\end{itemize}
+
+\paragraph{Example}\mbox{} \\
+
+\begin{table}[h]
+    \centering
+    \rowcolors{2}{gray!10}{white}
+    \begin{tabular}{|l|r|}
+        \hline
+        \rowcolor{gray!30}
+        \textbf{Sample Input} & \textbf{Sample Output} \\
+        \hline
+        4 & \\
+        2 & -1 \\
+        3 & 3 2 1 \\
+        4 & -1 \\
+        5 & 1 5 2 3 4 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
+
+Để $\max(p_{i-1}, p_i) \bmod i = i - 1$, ta hiểu rằng cần đặt một số nguyên $x$ ở vị trí $i$ ($i \leq 2$) sao cho $x = i - 1$. Vậy với hoán vị có độ dài $n$, ta đặt $n$ lên đầu hoán vị, và lần lượt đặt các số từ $2$ đến $n - 1$ liên tiếp sau đó. Tuy nhiên:
+
+Nhận xét rằng, nếu $n$ là số chẵn, không thể tồn tại hoán vị nào vì khi đặt $n$ lên đầu hoán vị, $\max(n, 1) \bmod 2 = 0 \ne 1$ (vị trí $2$). Vậy chỉ tồn tại hoán vị khi $n$ là số lẻ (thỏa mãn điều kiện $\max(n, 1) \bmod 2 = 2 - 1 = 1$).
+
+\paragraph{Program -- Chương trình} \mbox{} \\
+
+\begin{lstlisting}
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+
+
+signed main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		if (n % 2 == 0) {
+			cout << -1;
+		}
+		else {
+			cout << n << " ";
+			for (int i = 1; i < n; i++) {
+				cout << i << " ";
+			}
+		}
+		cout << endl;
+	}
+}
+	
+\end{lstlisting}
+
+\subsubsection{Problem B: MIN = GCD}
+
+You are given a positive integer sequence $a$ of length $n$. Determine if it is possible to rearrange $a$ such that there exists an integer $i$ ($1 \le i < n$) satisfying
+
+\[
+\min([a_1, a_2, \ldots, a_i]) = \gcd([a_{i+1}, a_{i+2}, \ldots, a_n]).
+\]
+
+Here $\gcd(c)$ denotes the \href{https://en.wikipedia.org/wiki/Greatest_common_divisor}{greatest common divisor} of $c$, which is the maximum positive integer that divides all integers in $c$.
+
+
+\paragraph{Input} \mbox{} \\
+
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 10^4$). The description of the test cases follows.
+
+\begin{itemize}
+    \item The first line of each test case contains a single integer $n$ ($2 \le n \le 10^5$).
+    \item The second line contains $n$ integers $a_1, a_2, \ldots, a_n$ ($1 \le a_i \le 10^{18}$).
+\end{itemize}
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.
+
+\paragraph{Output}\mbox{} \\
+
+
+For each test case, output \texttt{"Yes"} if it is possible, and \texttt{"No"} otherwise.
+
+You can output the answer in any case (upper or lower). For example, the strings \texttt{"yES"}, \texttt{"yes"}, \texttt{"YeS"}, and \texttt{"YES"} will be recognized as positive responses.
+
+\paragraph{Example}\mbox{} \\
+
+\begin{table}[h]
+    \centering
+    \rowcolors{2}{gray!10}{white}
+    \begin{tabular}{|l|r|}
+        \hline
+        \rowcolor{gray!30}
+        \textbf{Sample Input} & \textbf{Sample Output} \\
+        \hline
+        7 & \\
+        2 & Yes \\
+        1 1 & \\
+        2 & No \\
+        1 2 & \\
+        3 & Yes \\
+        2 2 3 & \\
+        3 & No \\
+        2 3 4 & \\
+        5 & Yes \\
+        4 5 6 9 3 & \\
+        3 & Yes \\
+        998244359987710471 99824435698771045 1000000007 & \\
+        6 & Yes \\
+        1 1 4 5 1 4 & \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
+
+Gọi biểu thức $\min([a_1, a_2, \ldots, a_i]) = \gcd([a_{i+1}, a_{i+2}, \ldots, a_n])$ tương đương với prefix (tiền tố) và suffix (hậu tố).\\
+
+Nhận xét rằng giá trị nhỏ nhất của dãy a (gọi là min(a)) nên được đặt vào prefix. Nếu min(a) nằm trong suffix, thì do tính chất của gcd (ước chung lớn nhất luôn không vượt quá bất kỳ phần tử nào trong tập) ta sẽ có gcd của suffix không thể đạt được giá trị lớn bằng min(a) (ngoại trừ trường hợp suffix toàn bộ là $\min(a)$, nhưng đó là trường hợp đặc biệt).\\
+
+Khi đặt min(a) vào preifx, ta có thể "bỏ qua" các phần tử không cần thiết bằng cách đặt chúng vào prefix (vì min(prefix) = min(a)), nghĩa là không cần phải xét chúng trong tính gcd của suffix. Do đó, suffix sẽ chỉ cần chứa những bội số của min(a) để đảm bảo chuyện rằng khi xét gcd của suffix ta có thể có cách khôi phục lại hay gcd của suffix có thể sẽ bằng min(a) (chỉ có thể chứ không chắc chắn).\\
+
+Khi suffix chỉ tồn tại bội số của min(a), nhận xét được rằng nếu $\gcd(suffix) = \min(a)$, thì thỏa mãn bài toán. Có thể tối ưu hơn khi chia các phần tử trong suffix cho min(a) và xét $\gcd(suffix) = 1$.
+
+\paragraph{Program -- Chương trình} \mbox{} \\
+
+\begin{lstlisting}
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+
+int gcd(int a, int b) {
+	if (b == 0) return a;
+	return gcd(b, a % b);
+}
+
+signed main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		vector<int>a(n);
+		for (int i = 0; i < n; i++) {
+			cin >> a[i];
+		}
+		int m = *min_element(a.begin(), a.end());
+		vector<int> new_a;
+		for (auto& x : a) {
+			if (x % m == 0) {
+				new_a.push_back(x);
+			}
+		}
+		if (new_a.size() < 2) {
+			cout << "no" << endl;
+			continue;
+		}
+		bool check = false;
+		vector<int> X;
+		for (auto x : new_a) {
+			if (!check && x == m) {
+				check = true;
+			}
+			else {
+				X.push_back(x / m);
+			}
+		}
+		int g = 0;
+		for (auto c : X) {
+			g = gcd(c, g);
+		}
+		if (g == 1) {
+			cout << "yes";
+		}
+		else cout << "no";
+		cout << endl;
+	}
+}
+
+\end{lstlisting}
+
+\subsubsection{Problem C: Asuna and the Mosquitoes}
+
+You are given a permutation $a$ and $b$ of length $n$\footnote{
+A permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation (2 appears twice in the array), and $[1,3,4]$ is also not a permutation ($n = 3$ but there is 4 in the array).
+}.
+You can perform the following operation at most $n$ times:
+\begin{itemize}
+    \item Choose two indices $i$ and $j$ ($1 \le i, j \le n$, $i \ne j$), swap $a_i$ with $a_j$, and swap $b_i$ with $b_j$.
+\end{itemize}
+
+Determine whether $a$ and $b$ can be reverses of each other after operations. In other words, for each $i = 1, 2, \ldots, n$, we want $a_i = b_{n+1-i}$.
+
+If it is possible, output any valid sequence of operations. Otherwise, output $-1$.
+
+\paragraph{Input} \mbox{} \\
+
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 10^4$). The description of the test cases follows.
+
+\begin{itemize}
+    \item The first line of each test case contains a single integer $n$ ($2 \le n \le 2 \cdot 10^5$) — the length of the permutations.
+    \item The second line contains $n$ integers $a_1, a_2, \ldots, a_n$ ($1 \le a_i \le n$).
+    \item The third line contains $n$ integers $b_1, b_2, \ldots, b_n$ ($1 \le b_i \le n$).
+\end{itemize}
+
+It is guaranteed that $a$ and $b$ are permutations of length $n$.
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2 \cdot 10^5$.
+
+\paragraph{Output}\mbox{} \\
+
+For each test case:
+
+\begin{itemize}
+    \item If it is impossible, output $-1$ in the only line.
+    \item Otherwise, output a single integer $m$ ($0 \le m \le n$) — the number of operations in the first line. In the following $m$ lines, output two integers — the indices $i$ and $j$ ($1 \le i, j \le n$, $i \ne j$) in each operation in order. If there are multiple solutions, print any of them.
+\end{itemize}
+
+\paragraph{Example}\mbox{} \\
+
+\begin{table}[h]
+    \centering
+    \rowcolors{2}{gray!10}{white}
+    \begin{tabular}{|l|r|}
+        \hline
+        \rowcolor{gray!30}
+        \textbf{Sample Input} & \textbf{Sample Output} \\
+        \hline
+        5 & \\
+        2 & -1 \\
+        1 2 & \\
+        1 2 & \\
+        2 & 0 \\
+        1 2 & \\
+        2 1 & \\
+        4 & 1 \\
+        1 3 2 4 & 1 2 \\
+        2 4 1 3 & \\
+        5 & 2 \\
+        2 5 1 3 4 & 1 2 \\
+        3 5 4 2 1 & 1 3 \\
+        5 & -1 \\
+        3 1 2 4 5 & \\
+        1 2 3 4 5 & \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
+
+Gọi mỗi cặp số ở cùng vị trí là $(a_i, b_i)$. Vì ta được phép hoán đổi chỉ số $i$ và $j$ trong cả hai mảng $a$ và $b$ cùng lúc, nên ta có thể xem như đang hoán đổi cặp $(a_i, b_i)$ với cặp $(a_j, b_j)$.
+
+Bài toán yêu cầu sau khi hoán đổi, ta phải có: $a_i = b_{n+1-i} \quad \text{với mọi } i.$
+Điều này có nghĩa là mỗi cặp $(a_i, b_i)$ phải ``đối xứng'' với cặp $(a_{n+1-i}, b_{n+1-i})$, tức là: $(a_i, b_i) = (b_{n+1-i}, a_{n+1-i}).$
+Hay nói dễ hiểu hơn là nếu mình có một cặp $(x, y)$, thì ở vị trí đối xứng với nó, mình cần có cặp $(y, x)$. Vì vậy, để giải được bài này, mình cần gom các cặp giống nhau hoặc đối xứng với nhau.\\
+
+Xét trường hợp đặc biệt: nếu $a_i = b_i$, tức là mình có một cặp $(x, x)$, ta gọi đây là ``cặp tự đối xứng'' vì nó đối xứng với chính nó. Lúc này có 2 trường hợp:
+
+\begin{itemize}
+    \item Nếu $n$ là số chẵn, thì không có vị trí "ở giữa" để đặt cặp tự đối xứng, nên không được có cặp nào dạng $(x,x)$.
+    \item Nếu $n$ là số lẻ, thì có đúng một vị trí ở giữa $i = \frac{n+1}{2}$, nên ta chỉ được phép có đúng một cặp tự đối xứng.
+\end{itemize}
+
+Còn lại, ta sẽ gom các cặp $(x, y)$ và $(y, x)$ lại với nhau thành từng cặp đối. Sau đó, sắp xếp để đưa một cặp vào bên trái và cặp đối xứng của nó vào bên phải, để đảm bảo điều kiện: $a_i = b_{n+1-i}.$\\
+
+Bước tiếp theo là sắp xếp lại các chỉ số sao cho sau một loạt phép hoán vị, dãy $a$ và $b$ trở nên đối xứng nhau: $a_i = b_{n+1-i} \quad \text{với mọi } i.$
+
+Vì mỗi phép hoán vị chỉ số $i$ và $j$ đều đồng thời áp dụng cho cả hai mảng $a$ và $b$, nên thay vì nghĩ đến việc hoán vị từng phần tử, ta có thể xem đó là việc hoán vị các chỉ số.
+
+\textbf{Ý tưởng:}
+
+Giả sử ban đầu mình có một mảng chỉ số:
+\[
+P = [0, 1, 2, \ldots, n - 1].
+\]
+
+Mình muốn sắp xếp mảng $P$ này thành mảng đích $R$, là mảng các chỉ số mà tại các vị trí đó, cặp $(a_i, b_i)$ đúng là những cặp đối xứng đã được xác định từ trước.
+
+\bigskip
+
+\textbf{Cách làm cụ thể:}
+
+\begin{itemize}
+    \item Dùng một mảng \texttt{pos[]} để lưu vị trí hiện tại của từng chỉ số trong $P$. Tức là: \texttt{pos[P[i]] = i}.
+    \item Duyệt qua từng vị trí $i = 0 \ldots n-1$, nếu $P[i] \ne R[i]$ (tức là chỉ số hiện tại không đúng vị trí mong muốn), thì:
+    \begin{enumerate}
+        \item Gọi $x = R[i]$, là chỉ số cần có tại vị trí $i$.
+        \item Tìm vị trí hiện tại của $x$ là $j = \texttt{pos}[x]$.
+        \item Thực hiện phép hoán vị: \texttt{swap}(P[$i$], P[$j$]).
+        \item Cập nhật lại \texttt{pos[P[i]] = i} và \texttt{pos[P[j]] = j}.
+    \end{enumerate}
+    \item Lưu lại mỗi lần hoán vị $(i+1, j+1)$ vào danh sách kết quả (do chỉ số trong đề bài tính từ 1).
+\end{itemize}
+
+Lặp lại như vậy cho đến khi $P$ khớp với $R$, khi đó ta đã sắp xếp xong và có được dãy các thao tác hợp lệ.
+
+\paragraph{Program -- Chương trình} \mbox{} \\
+
+\begin{lstlisting}
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+
+signed main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		vector<int> a(n), b(n);
+		for (int i = 0; i < n; i++) cin >> a[i];
+		for (int i = 0; i < n; i++) cin >> b[i];
+
+		map<pair<int, int>, vector<int>> groups;
+		for (int i = 0; i < n; i++) groups[{a[i], b[i]}].push_back(i);
+		
+
+		bool check = true;
+		vector<pair<int, int>> pairings;  
+		vector<int> selfSym;
+
+		for (auto& entry : groups) {
+			auto key = entry.first;
+			if (key.first == key.second) {
+				for (auto idx : entry.second)
+					selfSym.push_back(idx);
+			}
+			else {
+				pair<int, int> revKey = { key.second, key.first };
+				if (key < revKey) {
+					if (groups.find(revKey) == groups.end()) {
+						check = false;
+						break;
+					}
+					auto& vec1 = entry.second;
+					auto& vec2 = groups[revKey];
+					if (vec1.size() != vec2.size()) {
+						check = false;
+						break;
+					}
+					for (int i = 0; i < vec1.size(); i++) {
+						pairings.push_back({ vec1[i], vec2[i] });
+					}
+				}
+			}
+		}
+		if (n % 2 == 0) {
+			if (!selfSym.empty()) {
+				check = false;
+			}
+		}
+		else {
+			if (selfSym.size() != 1) {
+				check = false;
+			}
+		}
+
+		int pairsNeeded = n / 2;
+		if (pairings.size() != pairsNeeded) {
+			check = false;
+		}
+
+		if (!check) {
+			cout << -1 << endl;
+			continue;
+		}
+
+		vector<int> R(n, -1);
+		int L = 0, Rpos = n - 1;
+		for (auto& pr : pairings) {
+			R[L] = pr.first;
+			R[Rpos] = pr.second;
+			L++;
+			Rpos--;
+		}
+		if (n % 2 == 1) {
+			R[n / 2] = selfSym[0];
+		}
+
+		vector<int> P(n);
+		for (int i = 0; i < n; i++) {
+			P[i] = i;
+		}
+		vector<bool> visited(n, false);
+		vector<pair<int, int>> ops;
+
+		vector<int> pos(n);
+		for (int i = 0; i < n; i++) {
+			pos[P[i]] = i;
+		}
+		for (int i = 0; i < n; i++) {
+			if (P[i] != R[i]) {
+				int j = pos[R[i]];
+				swap(P[i], P[j]);
+				pos[P[i]] = i;
+				pos[P[j]] = j;
+				ops.push_back({ i + 1, j + 1 });
+			}
+		}
+
+		if (ops.size() > n) {
+			cout << -1 << endl;
+			continue;
+		}
+
+		cout << ops.size() << endl;
+		for (auto op : ops)
+			cout << op.first << " " << op.second << endl;
+	}
+	return 0;
+}
+	
+\end{lstlisting}
 
 %---------------------------------------------------------------------------------------------%
 \section{VNOI}

@@ -22,7 +22,7 @@ int main() {
     vector<long> numbers = { 5, 3, 8, 1, 2 };
 
     sort(numbers); // dùng hàm sort bạn viết bằng template
-
+    
     for (int num : numbers) {
         cout << num << " ";
     }
