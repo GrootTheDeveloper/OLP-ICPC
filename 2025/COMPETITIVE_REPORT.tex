@@ -3246,47 +3246,137 @@ signed main() {
 }
 \end{lstlisting}
 
-\subsubsection{Problem E: Tên bài toán E}
+\subsubsection{Problem E: Interesting Ratio}
+
+Recently, Misha at the IT Campus ``NEIMARK'' camp learned a new topic — the Euclidean algorithm.
+
+He was somewhat surprised when he realized that:
+\[
+a \cdot b = \mathrm{lcm}(a, b) \cdot \gcd(a, b),
+\]
+where $\gcd(a, b)$ is the \href{https://en.wikipedia.org/wiki/Greatest_common_divisor}{greatest common divisor (GCD)} of $a$ and $b$, and $\mathrm{lcm}(a, b)$ is the \href{https://en.wikipedia.org/wiki/Least_common_multiple}{least common multiple (LCM)}.
+
+Misha thought that since the product of LCM and GCD exists, it might be interesting to consider their quotient:
+\[
+F(a, b) = \frac{\mathrm{lcm}(a, b)}{\gcd(a, b)}.
+\]
+
+For example, he took $a = 2$ and $b = 4$, computed $F(2, 4) = \frac{4}{2} = 2$, and obtained a prime number (a number is prime if it has exactly two divisors). Now he considers $F(a, b)$ to be an interesting ratio if $a < b$ and $F(a, b)$ is a prime number.
+
+Since Misha has just started studying number theory, he needs your help to calculate — how many different pairs of numbers $a$ and $b$ are there such that $F(a, b)$ is an interesting ratio and $1 \le a < b \le n$?
 
 \paragraph{Input} \mbox{} \\
 
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 10^3$).
+
+Each test case consists of a single line containing an integer $n$ ($2 \le n \le 10^7$).
+
+It is guaranteed that the sum of all $n$ over all test cases does not exceed $10^7$.
 
 
 \paragraph{Output}\mbox{} \\
+
+For each test case, output the number of interesting ratios $F(a, b)$ for pairs satisfying $1 \le a < b \le n$.
 
 
 \paragraph{Example}\mbox{} \\
 
 \begin{table}[h]
     \centering
+    \rowcolors{2}{gray!10}{white}
     \begin{tabular}{|l|r|}
         \hline
+        \rowcolor{gray!30}
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\
-		&  \\ \hline
+        4 & \\
+        5 & 4 \\
+        10 & 11 \\
+        34 & 49 \\
+        10007 & 24317 \\
+        \hline
     \end{tabular}
 \end{table}
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
+Theo đề bài, ta có:
+\[
+ab = \mathrm{lcm}(a, b) \cdot \gcd(a, b).
+\]
 
-Mô tả phân tích bài toán E ở đây.
+Gọi:
+\[
+X = \frac{\mathrm{lcm}(a,b)}{\gcd(a,b)} \Rightarrow X = \frac{ab}{\gcd(a,b)^2},
+\]
+và $X$ là một số nguyên tố.
+
+\bigskip
+
+Từ biểu thức của $X$, ta xét các cặp $(a, b)$ và nhận thấy rằng nếu $b$ là bội số của $a$ và $\dfrac{b}{a}$ là một số nguyên tố thì cặp $(a, b)$ sẽ thỏa mãn điều kiện. Do đó, với mỗi số $i$ bất kỳ trong đoạn $[1, n]$, ta có thể đếm được số lượng số nguyên tố $p$ sao cho $p \cdot i \leq n$. Mỗi số như vậy sẽ tạo thành một cặp $(i, p \cdot i)$ thỏa mãn yêu cầu đề bài.
+
+\bigskip
+
+Giả sử ta đã có danh sách các số nguyên tố $\texttt{prime}$ được đánh chỉ số từ $0$. Với mỗi $i \in [1, n]$, ta thực hiện:
+
+\begin{itemize}
+    \item Tìm chỉ số lớn nhất $j$ sao cho $\texttt{prime}[j] \cdot i \leq n$.
+    \item Khi đó, số lượng số nguyên tố thỏa mãn là $j + 1$.
+\end{itemize}
+
+Tổng các giá trị này với mọi $i$ từ $1$ đến $n$ chính là kết quả cần tìm.
 
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 \begin{lstlisting} 
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
 
+const int MAXP = 10000005;
+vector<int> checkPrime(MAXP, true);
+vector<int> prime;
+
+void sieve() {
+	checkPrime[0] = checkPrime[1] = false;
+	for (int i = 2; i < MAXP; i++) {
+		if (checkPrime[i]) {
+			for (int j = i * i; j < MAXP; j += i) {
+				checkPrime[j] = false;
+			}
+		}
+	}
+	for (int i = 2; i < MAXP; i++) {
+		if(checkPrime[i]) prime.push_back(i);
+	}
+}
+
+signed main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	sieve();
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		int ans = 0;
+		for (int i = 1; i <= n; i++) {
+			int l = 0, r = prime.size() - 1;
+			int need = -1;
+			while (l <= r) {
+				int mid = (l + r) >> 1;
+				if (prime[mid] * i <= n) {
+					need = mid;
+					l = mid + 1;
+				}
+				else {
+					r = mid - 1;
+				}
+			}
+			ans += need + 1;
+		}
+		cout << ans << endl;
+	}
+	return 0;
+}
 \end{lstlisting}
 
 %---------------------------------------------------------------------------------------------%
@@ -3977,7 +4067,7 @@ Vì mỗi phép hoán vị chỉ số $i$ và $j$ đều đồng thời áp dụ
 Giả sử ban đầu mình có một mảng chỉ số:
 \[
 P = [0, 1, 2, \ldots, n - 1].
-\]}
+\]
 Mình muốn sắp xếp mảng $P$ này thành mảng đích $R$, là mảng các chỉ số mà tại các vị trí đó, cặp $(a_i, b_i)$ đúng là những cặp đối xứng đã được xác định từ trước.
 
 \bigskip
