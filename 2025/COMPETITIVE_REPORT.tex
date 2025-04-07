@@ -2954,9 +2954,9 @@ in the sample output.
 %---------------------------------------------------------------------------------------------%
 \section{Codeforces}
 
-\subsection{Round 1013}
+\subsection{Round 1013 (Div. 3)}
 
-Link: \url{}
+Link: \url{https://codeforces.com/contest/2091}
 
 \subsubsection{Problem A: Olympiad Date}
 
@@ -3048,7 +3048,7 @@ int main(){
 }
 \end{lstlisting}
 
-\subsubsection{Problem B: Tên bài toán B}
+\subsubsection{Problem B: Team Training}
 
 At the IT Campus ``NEIMARK'', there are training sessions in competitive programming — both individual and team-based!\\
 
@@ -3104,55 +3104,143 @@ For each test case, output the maximum possible number of teams with strength at
 
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
-Mô tả phân tích bài toán B ở đây.
+Đối với bài toán này, ta chỉ cần có một trái tim đầy mưu lược và một cái đầu hơi tham lam thì rất dễ dàng để giải quyết. Cứ chọn từ thằng lớn nhất dần dần về thằng nhỏ nhất là ok.
 
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 \begin{lstlisting}
 
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+
+signed main(){
+
+	int t; cin >> t;
+	while(t--){
+		int n, x; cin >> n >> x;
+		vector<int> skill(n);
+		for (int i = 0; i < n; i++) {
+			cin >> skill[i];
+		}
+		sort(skill.begin(), skill.end());
+		int idx = n -1;
+		int teamMember = 0;
+		int minPower = LLONG_MAX;
+		bool valid = false;
+
+		int ans = 0;
+
+		while (idx >= 0) {
+			if (valid == false) {
+				teamMember++;
+				minPower = min(minPower, skill[idx]);
+				int tempValue = teamMember * minPower;
+				if (tempValue >= x) {
+					valid = true;
+				}
+			}
+			if (valid) {
+				ans++;
+				teamMember = 0;
+				minPower = LLONG_MAX;
+				valid = false;
+			}    
+			idx--;
+		}
+		cout << ans << endl;
+	}
+	return 0;
+}
 \end{lstlisting}
 
-\subsubsection{Problem C: Tên bài toán C}
+\subsubsection{Problem C: Combination Lock}
+At the IT Campus ``NEIMARK'', there are several top-secret rooms where problems for major programming competitions are developed. To enter one of these rooms, you must unlock a circular lock by selecting the correct code. This code is updated every day.
+
+Today's code is a \textit{permutation} of the numbers from $1$ to $n$, with the property that in every \textit{cyclic shift} of it, there is exactly one fixed point. That is, in every cyclic shift, there exists exactly one element whose value is equal to its position in the permutation.
+
+Output any valid permutation that satisfies this condition. Keep in mind that a valid permutation might not exist. In that case, output $-1$.
+
+\bigskip
+
+\noindent
+\textbf{Note:}
+\begin{itemize}[leftmargin=1.5em]
+    \item A permutation is defined as a sequence of length $n$ consisting of integers from $1$ to $n$, where each number appears exactly once. 
+    For example, $(2\ 1\ 3)$, $(1)$, $(4\ 3\ 1\ 2)$ are permutations; $(1\ 2\ 2)$, $(3)$, $(1\ 3\ 2\ 5)$ are not.
+    \item A \textbf{cyclic shift} of an array is obtained by moving the last element to the beginning of the array.
+    A permutation of length $n$ has exactly $n$ cyclic shifts.
+\end{itemize}
 
 \paragraph{Input} \mbox{} \\
 
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 500$).
+
+Each of the next $t$ lines contains a single integer $n$ ($1 \le n \le 2 \cdot 10^5$).
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2 \cdot 10^5$.
 
 
 \paragraph{Output}\mbox{} \\
 
+For each test case, output the desired permutation. If multiple solutions exist, output any one of them.
+
+If no suitable permutation exists, output $-1$.
 
 \paragraph{Example}\mbox{} \\
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{|l|r|}
+    \rowcolors{2}{gray!10}{white}
+    \begin{tabular}{|l|l|}
         \hline
+        \rowcolor{gray!30}
         \textbf{Sample Input} & \textbf{Sample Output} \\
         \hline
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\ 
-		&  \\
-		&  \\ \hline
+        3 & \\
+        4 & -1 \\
+        5 & 4 1 3 5 2 \\
+        3 & 1 3 2 \\
+        \hline
     \end{tabular}
 \end{table}
 
+
 \paragraph{Analysis -- Phân tích bài toán} \mbox{} \\
 
-Mô tả phân tích bài toán C ở đây.
+Tôi không biết nói sao nữa, chắc có lẽ giải được là do bản năng của 1 alpha male.
 
 \paragraph{Program -- Chương trình} \mbox{} \\
 
 \begin{lstlisting}
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
 
+signed main(){
+
+	int t; cin >> t;
+	while(t--){
+		int n; cin >> n;
+		if (n % 2 == 0) {
+			cout << -1;
+		}
+		else {
+			int even = 2;
+			int odd = 1;
+			while (odd <= n) {
+				cout << odd << " ";
+				odd += 2;
+			}
+			while (even <= n){
+				cout << even << " ";
+				even += 2;
+			}
+		}
+		cout << endl;
+	}
+	return 0;
+}
 \end{lstlisting}
 
 \subsubsection{Problem D: Place of the Olympiad}
@@ -3381,9 +3469,9 @@ signed main() {
 
 %---------------------------------------------------------------------------------------------%
 
-\subsection{Round 1014}
+\subsection{Round 1014 (Div. 2)}
 
-Link: \url{}
+Link: \url{https://codeforces.com/contest/2092}
 
 \subsubsection{Problem A: Kamilka and the Sheep}
 
@@ -3757,7 +3845,7 @@ Mô tả phân tích bài toán E ở đây.
 \end{lstlisting}
 
 %---------------------------------------------------------------------------------------------%
-\subsection{Round 1015}
+\subsection{Round 1015 (Div. 1 + Div. 2)}
 
 Link: \url{https://codeforces.com/contest/2084}
 
