@@ -1,0 +1,2 @@
+A001;Bruce Nguyen;50;admin;123;Tru Tri;;;;;;;;;
+A002;Nguyen Van A;40;admin2;456;Pho Tru Tri;;;;;;;;;
