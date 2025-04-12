@@ -1,0 +1,5 @@
+D001;Nguyen Van B;28;bdev;789;0123456789;HCM;15;Dong;
+D002;Tran Thu C;32;tranthu;999;0123477777;Hanoi;150;Bac;
+3;Dang Phuc An Khang;19;ak;ak;0967670770;bro;0;Dong;
+4;Faker;19;SSS;1;09405450431;BRUCEE;0;Dong;
+5;Quoc Van;46;qv123;1;029392139213429139188;i12u4012ucri13h;0;Dong;
