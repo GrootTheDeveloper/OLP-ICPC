@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <sstream> // stringstream
-#include "ReligiousEvent.h"  // Include ở đây là hợp lý
+#include "ReligiousEvent.h"  
 
 Devotee::Devotee()
     : Person(), phone(""), address(""), meritPoint(0), rank("Dong") {}

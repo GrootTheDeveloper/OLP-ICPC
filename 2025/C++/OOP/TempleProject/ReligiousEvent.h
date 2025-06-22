@@ -33,6 +33,8 @@ public:
     int getMaxParticipant() const { return maxParticipant; }
     std::vector<std::string> getRegisteredDevotees() const { return registeredDevotees; }
 
+
+    
     void setEventID(const std::string& _id) { eventID = _id; }
     void setEventName(const std::string& _name) { eventName = _name; }
     void setDateTime(const std::string& _dt) { dateTime = _dt; }

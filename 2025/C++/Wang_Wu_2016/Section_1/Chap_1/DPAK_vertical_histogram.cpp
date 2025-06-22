@@ -3,14 +3,19 @@ Source: USACO, February 2003, Orange.
 IDs for online judges: POJ 2136.
 Status: Compile Error, Fuck-POJ
 */
-#include <bits/stdc++.h>
+#include <iostream>     // cout, cin
+#include <string>       // string, getline
+#include <vector>       // vector
+#include <queue>        // priority_queue
+#include <algorithm>    // max_element
 using namespace std;
 
 int main(){
 	string s[4];
 	for (int i = 0; i < 4; i++) {
-		cin >> s[i];
+		getline(cin, s[i]);
 	}
+
 	vector<int>character(26, 0);
 	priority_queue<pair<int, char>> pq;
 
@@ -48,11 +53,11 @@ int main(){
 
 	for (int i = 0; i < maxSize; i++) {
 		for (int j = 0; j < 26; j++) {
-			cout << show[i][j] << "  ";
+			cout << show[i][j] << " ";
 		}
-		cout << endl << endl;
+		cout << '\n';
 	}
 	for (char C = 'A'; C <= 'Z'; C++) {
-		cout << C << "  ";
+		cout << C << " ";
 	}
 }

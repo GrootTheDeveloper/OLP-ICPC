@@ -1,6 +1,6 @@
 /*
-Source: ACM Mid-Central United States 2004.
-IDs for online judges: POJ 2013, ZOJ 2172.
+Source: ACM Japan 2004, Domestic.
+IDs for online judges: POJ 1979.
 Status: 
 */
 
@@ -11,5 +11,6 @@ Status:
 using namespace std;
 
 int main(){
-    
+
+
 }
