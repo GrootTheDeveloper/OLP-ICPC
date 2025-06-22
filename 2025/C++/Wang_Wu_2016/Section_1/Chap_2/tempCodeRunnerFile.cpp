@@ -1,109 +1,71 @@
 /*
-Source: 
-IDs for online judges: 
-Status: 
+Source: ACM Southeastern Europe 2002.
+IDs for online judges: POJ 1281, UVA 2514.
+Status: Accepted
 */
 
 #include <iostream>
 #include <vector>
-#include <string>
-#include <algorithm>
+
 using namespace std;
 
-struct event{
-    int day;
-    int month;
-    int important;
-    string name;
-    int idxInput; 
-};
-
-bool compare(const event &x, const event &y) {
-    if (x.month != y.month) {
-        return x.month < y.month;
-    }
-    if (x.day != y.day) {
-        return x.day < y.day;
-    }
-    if (x.important != y.important) {
-        return x.important > y.important;
-    }
-    return x.idxInput < y.idxInput;
-}
-
-int get_day_in_month(int month, bool leap) {
-    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
-        return 31;
-    }
-    else if (month == 2) {
-        if (leap) {
-            return 29;
-        }
-        else return 28;
-    }
-    else {
-        return 30;
-    }
-}
 
 int main(){
-    vector<event> a;
-    int year; cin >> year;
-    char c;
 
-    bool leap = (year % 4 == 0);
-
-    int indexInput = 0;
-    while (cin >> c && c != '#') {
-        if (c == 'A') {
-            int day, month, important;
-            string name;
-            cin >> day >> month >> important;
-            cin.ignore();
-            getline(cin, name);
-            a.push_back({day, month, important, name, indexInput});
-            indexInput++;
+    int maximum_cost;
+    int n; 
+    while(cin >> maximum_cost >> n){
+        vector<int>costs(maximum_cost + 1, 0);
+        vector<int>removal_list(n);
+        for (int i = 0; i < n; i++) {
+            cin >> removal_list[i];
         }
-        else if (c == 'D') {
-            int day, month;
-            cin >> day >> month;
-            cout << "Today is: " <<day << " " << month << endl << endl;
-            sort(a.begin(), a.end(), compare);
-            int idx = 0;
-            while (idx < a.size()) {
-                if (a[idx].day == day && a[idx].month == month) {
-                    break;
-                }
-                idx++;
+
+        char c; 
+        int cnt = 0;
+        int policy = 1;
+        while (cin >> c && c != 'e') {
+            if (c == 'a') {
+                int cost; cin >> cost;
+                costs[cost]++;
             }
-            if (idx == a.size()) idx = 0;
+            else if (c == 'p') {
+                int p;cin >> p;
+                policy = p;
+            }
+            else if (c == 'r'){
+                cnt++;
+                bool check = false;
+                for (int j = 0; j < removal_list.size(); j++) {
+                    if (removal_list[j] == cnt) {
+                        check = true;
+                    }
+                }
 
-            for (int i = idx; i < a.size(); i++) {
+                int val = -1;
 
-                if (a[i].day == day && a[i].month == month) {
-                    cout << a[i].day << " " << a[i].month << " ";
-                    cout << "*TODAY* " <<a[i].name << endl << endl;
+                if (policy == 1) {
+                    for (int j = 0; j <= maximum_cost; j++) {
+                        if (costs[j] == 0) continue;
+                        costs[j]--;
+                        val = j;
+                        break;
+                    } 
                 }
                 else {
-                    int day_diff = 0;
-                    
-                    for (int j = month; j < a[i].month; j++) {
-                        day_diff += get_day_in_month(j,leap);
-                    }
-                    day_diff += a[i].day;
-                    day_diff -= day;
-
-                    if (day_diff >= 1 && day_diff <= 7) {
-                        cout << a[i].day << " " << a[i].month << " ";
-                        for (int j = day_diff; j <= a[i].important; j++){
-                            cout << "*";
-                        }
-                        cout << " " << a[i].name << endl << endl;
+                    for (int j = maximum_cost; j >= 0; j--) {
+                        if (costs[j] == 0) continue;
+                        costs[j]--;
+                        val = j;
+                        break;
                     }
                 }
-            }
-            
+                if (check) {
+                    cout << val << endl;
+                }
 
+            }
         }
+        cout << endl;
     }
 }
