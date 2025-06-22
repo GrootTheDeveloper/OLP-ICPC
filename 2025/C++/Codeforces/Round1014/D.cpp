@@ -30,7 +30,6 @@ signed main(){
             curChar = s[idx-1];
             nextChar = s[idx];
         }
-
     }
     return 0;
 }

@@ -1,0 +1,185 @@
+\documentclass[11pt,a4paper,landscape]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\setlength{\columnsep}{0.7cm}
+\setlength{\columnseprule}{0.2pt}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[L]{\textbf{University of Management and Technology HCM City}}
+\fancyhead[R]{\thepage}
+\fancyfoot{}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{xcolor}
+\definecolor{codegray}{gray}{0.95}
+\usepackage{listings}
+\lstset{
+    backgroundcolor=\color{codegray},
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    frame=single,
+    columns=fullflexible,
+    keepspaces=true,
+    tabsize=4,
+    language=C++,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{red},
+    showstringspaces=false
+}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\title{\vspace{-2cm}ICPC Reference Notebook}
+\author{DuongNhuTruocKhiEmTonTai -- University of Management and Technology HCM City}
+\date{}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\begin{multicols}{3}
+
+\section{Template}
+\subsection{Fast IO}
+\begin{lstlisting}
+ios::sync_with_stdio(false);
+cin.tie(0); cout.tie(0);
+\end{lstlisting}
+\subsection{Typedefs}
+\begin{lstlisting}
+typedef long long ll;
+typedef pair<int, int> pii;
+const int INF = 1e9;
+\end{lstlisting}
+
+\section{Math}
+\subsection{GCD / LCM}
+\begin{lstlisting}
+int gcd(int a, int b) {
+    return b ? gcd(b, a % b) : a;
+}
+int lcm(int a, int b) {
+    return a / gcd(a, b) * b;
+}
+\end{lstlisting}
+\subsection{Modular Exponentiation}
+\begin{lstlisting}
+ll modpow(ll a, ll b, ll m) {
+    ll res = 1;
+    while (b) {
+        if (b & 1) res = res * a % m;
+        a = a * a % m;
+        b >>= 1;
+    }
+    return res;
+}
+\end{lstlisting}
+
+\section{Graphs}
+\subsection{Dijkstra's Algorithm}
+\begin{lstlisting}
+vector<pii> adj[N];
+int dist[N];
+void dijkstra(int src) {
+    priority_queue<pii, vector<pii>, greater<pii>> pq;
+    fill(dist, dist + N, INF);
+    dist[src] = 0;
+    pq.push({0, src});
+    while (!pq.empty()) {
+        int d, u;
+        tie(d, u) = pq.top(); pq.pop();
+        if (d > dist[u]) continue;
+        for (auto [v, w] : adj[u]) {
+            if (dist[v] > dist[u] + w) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+}
+vector<pii> adj[N];
+int dist[N];
+void dijkstra(int src) {
+    priority_queue<pii, vector<pii>, greater<pii>> pq;
+    fill(dist, dist + N, INF);
+    dist[src] = 0;
+    pq.push({0, src});
+    while (!pq.empty()) {
+        int d, u;
+        tie(d, u) = pq.top(); pq.pop();
+        if (d > dist[u]) continue;
+        for (auto [v, w] : adj[u]) {
+            if (dist[v] > dist[u] + w) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+}
+vector<pii> adj[N];
+int dist[N];
+void dijkstra(int src) {
+    priority_queue<pii, vector<pii>, greater<pii>> pq;
+    fill(dist, dist + N, INF);
+    dist[src] = 0;
+    pq.push({0, src});
+    while (!pq.empty()) {
+        int d, u;
+        tie(d, u) = pq.top(); pq.pop();
+        if (d > dist[u]) continue;
+        for (auto [v, w] : adj[u]) {
+            if (dist[v] > dist[u] + w) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+}
+vector<pii> adj[N];
+int dist[N];
+void dijkstra(int src) {
+    priority_queue<pii, vector<pii>, greater<pii>> pq;
+    fill(dist, dist + N, INF);
+    dist[src] = 0;
+    pq.push({0, src});
+    while (!pq.empty()) {
+        int d, u;
+        tie(d, u) = pq.top(); pq.pop();
+        if (d > dist[u]) continue;
+        for (auto [v, w] : adj[u]) {
+            if (dist[v] > dist[u] + w) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+}vector<pii> adj[N];
+int dist[N];
+void dijkstra(int src) {
+    priority_queue<pii, vector<pii>, greater<pii>> pq;
+    fill(dist, dist + N, INF);
+    dist[src] = 0;
+    pq.push({0, src});
+    while (!pq.empty()) {
+        int d, u;
+        tie(d, u) = pq.top(); pq.pop();
+        if (d > dist[u]) continue;
+        for (auto [v, w] : adj[u]) {
+            if (dist[v] > dist[u] + w) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+}
+\end{lstlisting}
+
+% ... (Thêm các section khác ở đây)
+
+\end{multicols}
+\end{document}
