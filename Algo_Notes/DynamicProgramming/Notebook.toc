@@ -1,0 +1,26 @@
+\contentsline {section}{\numberline {1}Preliminaries -- Kiến thức chuẩn bị}{2}{section.1}%
+\contentsline {section}{\numberline {2}Một số bài toán quy hoạch động cổ điển}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}A - Frog 1}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Xếp hàng mua vé}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Dãy con tăng dài nhất (bản dễ)}{4}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Longest Common Subsequence}{4}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Knapsack}{5}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Một số bài toán quy hoạch động nâng cao}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Atcoder Educational DP Contest C - Vacation }{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}IOI '99 P1 - Little Shop of Flowers}{7}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}IOIPALIN - Palindrome 2000}{8}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}BLAST}{9}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Rectangle Cutting}{9}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Quy hoạch động nâng cao (Level 1)}{10}{section.4}%
+\contentsline {subsection}{\numberline {4.1}VOI 13 Bài 4 - Trộn xâu}{10}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Khuyến mãi}{11}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}VOI 09 Bài 1 - Trò chơi với băng số}{12}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Kinh nghiệm (OLP 10\&11 - 2019)}{13}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}IOI07 Miners}{14}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Exam Cheating}{15}{subsection.4.6}%
+\contentsline {section}{\numberline {5}Quy hoạch động nâng cao (Level 2)}{16}{section.5}%
+\contentsline {section}{\numberline {6}Quy hoạch động nâng cao (Level 3)}{16}{section.6}%
+\contentsline {section}{\numberline {7}Đổi biến số trong quy hoạch động}{16}{section.7}%
+\contentsline {section}{\numberline {8}Một số bài tập về đổi biển số}{16}{section.8}%
+\contentsline {section}{\numberline {9}Miscellaneous}{16}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Contributors}{16}{subsection.9.1}%
