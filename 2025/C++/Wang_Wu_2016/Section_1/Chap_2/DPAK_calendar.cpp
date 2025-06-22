@@ -1,7 +1,7 @@
 /*
 Source: New Zealand Contest 1993.
 IDs for online judges: UVA 158. 
-Status: Wrong Answer
+Status: 
 */
 
 #include <iostream>
@@ -67,7 +67,7 @@ int main(){
         else if (c == 'D') {
             int day, month;
             cin >> day >> month;
-            cout << "Today is: " <<day << " " << month << endl;
+            cout << "Today is: " << day << " " << month << endl;
             sort(a.begin(), a.end(), compare);
             int idx = 0;
             while (idx < a.size()) {
