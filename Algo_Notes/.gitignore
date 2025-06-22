@@ -1,0 +1,19 @@
+# Bỏ qua các file phụ của LaTeX
+*.aux
+*.log
+*.out
+*.bcf
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.run.xml
+*.blg
+*.bbl
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+*.dvi
+*.exe

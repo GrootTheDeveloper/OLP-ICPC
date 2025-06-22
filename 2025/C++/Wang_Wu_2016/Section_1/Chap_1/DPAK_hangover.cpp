@@ -27,7 +27,7 @@ int main() {
 				ans = mid;
 				break;
 			}
-			if (f[mid] >= n) {
+			if (f[mid] > n) {
 				ans = mid;
 				r = mid - 1;
 			}
