@@ -146,6 +146,39 @@ Lý thuyết đồ thị là một nhánh của toán học, cụ thể thuộc 
     \item \textbf{Trọng số:} Là một giá trị trên cạnh (hoặc trên đỉnh) nhằm thể hiện một thông số nào đó với bài toán ta đang xét.
 \end{enumerate}
 
+\subsection{Danh sách kề}
+
+Một trong những cách phổ biến để biểu diễn đồ thị là sử dụng \textbf{danh sách kề (adjacency list)}. Cách biểu diễn này đặc biệt hiệu quả đối với đồ thị thưa \href{https://en.m.wikipedia.org/wiki/Sparse_graph}{(sparse graph)}.
+
+
+Cụ thể, ta sử dụng cấu trúc dữ liệu \texttt{vector<int> adj[u]} trong C++, trong đó:
+
+\begin{itemize}
+    \item Mỗi phần tử \texttt{adj[u]} là một vector chứa các đỉnh kề với đỉnh $u$.
+    \item Nghĩa là nếu có cạnh nối từ đỉnh $u$ đến đỉnh $v$ thì $v$ sẽ xuất hiện trong \texttt{adj[u]}.
+    \item Đối với đồ thị vô hướng, nếu có cạnh giữa $u$ và $v$ thì cả $v \in \texttt{adj}[u]$ và $u \in \texttt{adj}[v]$.
+\end{itemize}
+
+\textbf{Ví dụ:}
+
+Giả sử đồ thị vô hướng có các cạnh: $(1,2)$, $(1,3)$, $(2,4)$ thì danh sách kề sẽ là:
+
+\begin{align*}
+\texttt{adj[1]} &= \{2, 3\} \\
+\texttt{adj[2]} &= \{1, 4\} \\
+\texttt{adj[3]} &= \{1\} \\
+\texttt{adj[4]} &= \{2\}
+\end{align*}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{img/b1/adjlist.png}
+    \caption{Minh họa danh sách kề của đồ thị vô hướng vừa mô tả}
+    \label{fig:adjlist}
+\end{figure}
+
+Cách biểu diễn này có độ phức tạp về bộ nhớ là $\mathcal{O}(n + m)$, với $n$ là số đỉnh và $m$ là số cạnh.
+
 \subsubsection{Thuật toán DFS}
 
 Thuật toán DFS (Depth-First Search – Duyệt theo chiều sâu) là một trong những thuật toán cơ bản để duyệt hoặc tìm kiếm trên đồ thị. Ý tưởng chính là xuất phát từ một đỉnh ban đầu, đi sâu theo từng nhánh con của đồ thị cho đến khi không còn đỉnh nào có thể đi tiếp, sau đó quay lui để khám phá các nhánh khác.
@@ -217,7 +250,103 @@ int main() {
 }
 \end{lstlisting}
 
-\textbf{Độ phức tạp: } $O(V + E)$ với $V$ là số đỉnh, $E$ là số cạnh.
+\textbf{Độ phức tạp: } $\mathcal{O}(V + E)$ với $V$ là số đỉnh, $E$ là số cạnh.
+
+\subsubsection{Bài tập}
+\paragraph{2.2.4.1. \href{https://www.spoj.com/problems/MAKEMAZE/}{MAKEMAZE}}
+
+\textbf{Đề bài}
+
+Một mê cung hợp lệ là một mê cung có chính xác 1 lối vào và 1 lối ra  và phải tồn tại ít nhất một đường đi thỏa mãn từ lối vào đến lối ra. Cho một mê cung, hãy chỉ ra rằng mê cung có hợp lệ hay không. Nếu có, in ``valid'', ngược lại in ``invalid''
+
+\textbf{Input}
+
+Dòng đầu chứa một số nguyên $t$ $(1 \leq t \leq 10^4)$ là số lượng test cases. Sau đó với mỗi test case, dòng đầu chứa 2 số nguyên $m$ $(1 \leq m \leq 20)$ và $n$ $(1 \leq n \leq 20)$, lần lượt là số lượng hàng và cột trong mê cung. Sau đó, là mê cung $M$ với kích thước $m$ x $n$. $M[i][j] = '\#'$ đại diện cho bức tường, $M[i][j] = '.'$ đại diện cho ô trống có thể đi vào được.
+
+\textbf{Output}
+
+Với mỗi test case, tìm xem mê cung tương ứng là ``invalid'' hay ``valid''
+
+\textbf{Example}
+
+1\\
+4 4 \\
+\#\#\#\# \\
+\#...  \\
+\#.\#\# \\
+\#.\#\# \\
+
+$\rightarrow$ ``valid''
+
+\textbf{Phân tích bài toán}
+
+Vì mê cung chỉ có chính xác 1 lối vào và 1 lối ra. Trước hết ta cần kiểm tra biên ngoài của mê cung, nếu có chính xác 2 ô '.' thì có thể đó là một mê cung hợp lệ. Ngược lại (có ít hơn hoặc nhiều hơn 1 ô '.' ở biên) ta có thể khẳng định rằng đó không phải là một mê cung hợp lệ. \\
+
+Khi ta đã có giả thuyết rằng mê cung là hợp lệ, ta cần 2 biến \textit{start} và \textit{target} lần lượt lưu lại tọa độ $(x, y)$ của 2 ô ngoài biên. Áp dụng thuật toán DFS tại ô $start$, sau khi DFS nếu \textit{visited[target.first][target.second] = true} thì khẳng định rằng mê chung hợp lệ. Ngược lại, mê cung không hợp lệ.
+\begin{lstlisting}[language=C++, caption={Cài đặt C++ bài MAKEMAZE}, label={code:makemaze}]
+#include <bits/stdc++.h>
+#define int long long
+#define endl "\n"
+using namespace std;
+
+const int MAXN = 21;
+bool visited[MAXN][MAXN];
+
+int dx[4] = {1, -1, 0, 0};
+int dy[4] = {0, 0, 1, -1};
+
+void dfs(pair<int, int> start, const vector<vector<char>> &a, int m, int n) {
+    auto [x, y] = start;
+    visited[x][y] = true;
+    for (int i = 0; i < 4; i++) {
+        int new_x = dx[i] + x;
+        int new_y = dy[i] + y;
+        if (new_x >= 1 && new_x <= m && new_y >= 1 && new_y <= n &&
+            !visited[new_x][new_y] && a[new_x][new_y] == '.') {
+            dfs({new_x, new_y}, a, m, n);
+        }
+    }
+}
+
+signed main() {
+    int t; cin >> t;
+    while (t--) {
+        int m, n; cin >> m >> n;
+        vector<vector<char>> a(m + 1, vector<char>(n + 1));
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                cin >> a[i][j];
+                visited[i][j] = false;
+            }
+        }
+
+        pair<int, int> start = {-1, -1}, target = {-1, -1};
+        int cnt = 0;
+
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if ((i == 1 || i == m || j == 1 || j == n) && a[i][j] == '.') {
+                    if (start == make_pair(-1LL, -1LL)) start = {i, j};
+                    else target = {i, j};
+                    cnt++;
+                }
+            }
+        }
+
+        if (cnt != 2) {
+            cout << "invalid" << endl;
+            continue;
+        } else {
+            dfs(start, a, m, n);
+            if (!visited[target.first][target.second]) cout << "invalid";
+            else cout << "valid";
+            cout << endl;
+        }
+    }
+    return 0;
+}
+
+\end{lstlisting}
 
 \subsection{Topological Sorting}
 
