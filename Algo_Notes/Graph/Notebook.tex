@@ -146,7 +146,7 @@ Lý thuyết đồ thị là một nhánh của toán học, cụ thể thuộc 
     \item \textbf{Trọng số:} Là một giá trị trên cạnh (hoặc trên đỉnh) nhằm thể hiện một thông số nào đó với bài toán ta đang xét.
 \end{enumerate}
 
-\subsection{Danh sách kề}
+\subsubsection{Danh sách kề}
 
 Một trong những cách phổ biến để biểu diễn đồ thị là sử dụng \textbf{danh sách kề (adjacency list)}. Cách biểu diễn này đặc biệt hiệu quả đối với đồ thị thưa \href{https://en.m.wikipedia.org/wiki/Sparse_graph}{(sparse graph)}.
 
@@ -172,14 +172,179 @@ Giả sử đồ thị vô hướng có các cạnh: $(1,2)$, $(1,3)$, $(2,4)$ t
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.3\textwidth]{img/b1/adjlist.png}
+    \includegraphics[width=0.2\textwidth]{img/b1/adjlist.png}
     \caption{Minh họa danh sách kề của đồ thị vô hướng vừa mô tả}
     \label{fig:adjlist}
 \end{figure}
 
 Cách biểu diễn này có độ phức tạp về bộ nhớ là $\mathcal{O}(n + m)$, với $n$ là số đỉnh và $m$ là số cạnh.
 
-\subsubsection{Thuật toán DFS}
+\subsubsection{Chu trình (Cycle)}
+Một \textbf{chu trình} là một đường đi bắt đầu và kết thúc tại cùng một đỉnh, trong đó không có đỉnh nào khác (ngoại trừ đỉnh đầu/cuối) được lặp lại.
+
+\begin{itemize}
+    \item Trong đồ thị vô hướng: chu trình là dãy đỉnh $v_1 \rightarrow v_2 \rightarrow \dots \rightarrow v_k \rightarrow v_1$ với $k \geq 3$.
+    \item Trong đồ thị có hướng: các cung phải có hướng phù hợp với trình tự chu trình.
+\end{itemize}
+
+Một chu trình được gọi là \textit{chu trình đơn giản} nếu không có cạnh hoặc đỉnh nào bị lặp lại (trừ đỉnh đầu/cuối).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{img/b1/cycle.png}
+    \caption{Minh họa chu trình của đồ thị vô hướng}
+    \label{fig:cycle}
+\end{figure}
+
+\subsubsection{Thành phần liên thông \href{https://www.geeksforgeeks.org/dsa/strongly-connected-components/}{(Connected Component)}}
+Một \textbf{thành phần liên thông} là một tập con các đỉnh sao cho giữa mọi cặp đỉnh trong đó đều tồn tại một đường đi.
+
+\begin{itemize}
+    \item Với đồ thị vô hướng: liên thông nếu có đường đi giữa mọi cặp đỉnh.
+    \item Với đồ thị có hướng:
+        \begin{itemize}
+            \item \textit{Liên thông mạnh} nếu tồn tại đường đi theo chiều từ mọi đỉnh đến mọi đỉnh khác.
+            \item \textit{Liên thông yếu} nếu bỏ hướng trên các cạnh thì đồ thị trở nên liên thông.
+        \end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{img/b1/SCC.png}
+    \caption{Minh họa thành phần liên thông mạnh của đồ thị có hướng}
+    \label{SCC}
+\end{figure}
+
+\subsubsection{Bậc của đỉnh (Degree)}
+\begin{itemize}
+    \item Trong đồ thị vô hướng, bậc của một đỉnh là số cạnh nối với nó.
+    \item Trong đồ thị có hướng:
+        \begin{itemize}
+            \item \textit{Bậc vào} (in-degree): số cung đi vào đỉnh.
+            \item \textit{Bậc ra} (out-degree): số cung đi ra từ đỉnh.
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Đường đi đơn giản (Simple Path)}
+Một \textbf{đường đi đơn giản} là đường đi không đi qua một đỉnh nào hai lần (trừ khi là chu trình).
+
+\subsubsection{Cây (Tree)}
+Một \textbf{cây} là một đồ thị vô hướng liên thông và không có chu trình.
+
+Tính chất quan trọng của cây:
+\begin{itemize}
+    \item Với $n$ đỉnh, cây có đúng $n - 1$ cạnh.
+    \item Có duy nhất một đường đi giữa hai đỉnh bất kỳ.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{img/b1/treegraph.png}
+    \caption{Phân biệt Cây và Đồ thị (không phải cây)}
+    \label{treegraph}
+\end{figure}
+
+\subsubsection{Đồ thị vô chu trình (Acyclic Graph).}
+Đồ thị gọi là \textbf{vô chu trình} nếu không tồn tại chu trình nào trong nó.
+\begin{itemize}
+    \item Với đồ thị \textbf{vô hướng}, một đồ thị được xem là \textbf{Acyclic Graph} nếu không tồn tại dãy các đỉnh $v_1 \rightarrow v_2 \rightarrow \dots \rightarrow v_k \rightarrow v_1$ với $k \geq 3$ và các cạnh liên tiếp nối các đỉnh đó.
+    \item Một đồ thị vô hướng đơn giản gồm hai đỉnh được nối với nhau bằng một cạnh cũng là một \textbf{Acyclic Graph}, vì không tồn tại chu trình nào (phải có ít nhất 3 đỉnh để hình thành chu trình trong đồ thị vô hướng).
+    \item Đồ thị có hướng vô chu trình gọi là \textbf{DAG} (Directed Acyclic Graph). Nghĩa là một đồ thị có hướng không chứa bất kỳ chu trình nào tuân theo chiều các cung.
+    \item Cây là một DAG, nhưng không phải tất cả DAG đều là cây.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{img/b1/treevsdag.jpg}
+    \caption{Phân biệt Cây và DAG}
+\end{figure}
+
+\subsubsection{Đồ thị đơn (Simple Graph).}
+Đồ thị đơn là đồ thị không có \emph{cạnh lặp} giữa cùng một cặp đỉnh và không có \emph{khuyên} (loop – cạnh nối đỉnh với chính nó).
+
+\subsubsection{Đa đồ thị (Multigraph).}
+Đa đồ thị cho phép tồn tại \emph{nhiều cạnh song song} giữa hai đỉnh và/hoặc khuyên.  
+Thường dùng để mô hình hoá các mạng có nhiều kênh kết nối.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.2\textwidth]{img/b1/multigraph.png}
+    \caption{Minh họa Đa đồ thị}
+    \label{multigraph}
+\end{figure}
+
+\subsubsection{Đồ thị đầy đủ (Complete Graph).}
+Đồ thị vô hướng \(K_n\) có \(n\) đỉnh, trong đó mọi cặp đỉnh phân biệt đều được nối bởi một cạnh. 
+
+Số cạnh là \(\dfrac{n(n-1)}{2}\).  
+
+Đồ thị có hướng đầy đủ có \(n(n-1)\) cung.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.2\textwidth]{img/b1/CG.png}
+    \caption{Minh họa đồ thị đầy đủ}
+    \label{CG}
+\end{figure}
+
+\subsubsection{Đồ thị hai phía (Bipartite Graph).}
+Một \textbf{đồ thị hai phía} là đồ thị mà tập đỉnh có thể chia thành hai tập rời $U$ và $V$ sao cho mọi cạnh đều nối một đỉnh từ $U$ đến một đỉnh từ $V$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/b1/biparitegraph.png}
+    \caption{Phân biệt đồ thị hai phía}
+    \label{biparite}
+\end{figure}
+
+\subsubsection{Đồ thị hai phía đầy đủ (Complete Bipartite Graph).}
+Cho hai tập đỉnh rời \(U\) và \(V\) với \(|U| = m,\;|V| = n\).  
+Đồ thị \(K_{m,n}\) chứa mọi cạnh nối một đỉnh của \(U\) với một đỉnh của \(V\) và \emph{không có cạnh nội bộ} trong \(U\) hay \(V\).  
+Tổng số cạnh: \(m\,n\).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{img/b1/completebiparitegraph.png}
+    \caption{Minh họa đồ thị hai phía đầy đủ}
+    \label{CBG}
+\end{figure}
+
+\subsubsection{Đồ thị vòng (Cycle Graph)}
+Đồ thị vòng ký hiệu \(C_n\;(n \ge 3)\) là đồ thị vô hướng gồm \(n\) đỉnh
+\(\{v_1,v_2,\dots ,v_n\}\) và \(n\) cạnh
+\[
+E = \bigl\{\{v_1,v_2\},\{v_2,v_3\},\dots ,\{v_{n-1},v_n\},\{v_n,v_1\}\bigr\}.
+\]
+
+\begin{itemize}
+    \item Mỗi đỉnh có bậc \(2\) – \(C_n\) là đồ thị \(2\)-chính quy.
+    \item \(C_n\) chứa đúng một chu trình đơn giản độ dài \(n\).
+    \item \(C_n\) là \textbf{bipartite} khi và chỉ khi \(n\) chẵn.
+    \item Số cạnh \(m = n\); số đỉnh \(n\); đường kính (diameter)  
+          \(\operatorname{diam}(C_n) = \bigl\lfloor n/2 \bigr\rfloor\).
+    \item Tồn tại cây khung nhỏ nhất với trọng số tổng bằng \(n-1\) nếu mọi cạnh có trọng số \(1\).
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{img/b1/CGvsAG.png}
+    \caption{Minh họa CG và AG}
+
+\end{figure}
+\subsubsection{Rừng (Forest).}
+Một \textbf{rừng} là đồ thị vô hướng \emph{không chứa chu trình} nhưng \emph{không nhất thiết liên thông}.  
+Mỗi thành phần liên thông của rừng là một \textbf{cây}.  
+Nếu rừng có \(c\) cây và \(n\) đỉnh, nó có đúng \(n-c\) cạnh.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{img/b1/treevsforest.jpg}
+    \caption{Tree vs Forest}    
+\end{figure}
+
+
+\subsection{Thuật toán DFS}
 
 Thuật toán DFS (Depth-First Search – Duyệt theo chiều sâu) là một trong những thuật toán cơ bản để duyệt hoặc tìm kiếm trên đồ thị. Ý tưởng chính là xuất phát từ một đỉnh ban đầu, đi sâu theo từng nhánh con của đồ thị cho đến khi không còn đỉnh nào có thể đi tiếp, sau đó quay lui để khám phá các nhánh khác.
 
@@ -282,7 +447,7 @@ $\rightarrow$ ``valid''
 
 Vì mê cung chỉ có chính xác 1 lối vào và 1 lối ra. Trước hết ta cần kiểm tra biên ngoài của mê cung, nếu có chính xác 2 ô '.' thì có thể đó là một mê cung hợp lệ. Ngược lại (có ít hơn hoặc nhiều hơn 1 ô '.' ở biên) ta có thể khẳng định rằng đó không phải là một mê cung hợp lệ. \\
 
-Khi ta đã có giả thuyết rằng mê cung là hợp lệ, ta cần 2 biến \textit{start} và \textit{target} lần lượt lưu lại tọa độ $(x, y)$ của 2 ô ngoài biên. Áp dụng thuật toán DFS tại ô $start$, sau khi DFS nếu \textit{visited[target.first][target.second] = true} thì khẳng định rằng mê chung hợp lệ. Ngược lại, mê cung không hợp lệ.
+Khi ta đã có giả thuyết rằng mê cung là hợp lệ, ta cần 2 biến \textit{start} và \textit{target} lần lượt lưu lại tọa độ $(x, y)$ của 2 ô ngoài biên. Áp dụng thuật toán DFS tại ô $start$, sau khi DFS nếu \textit{visited[target.first][target.second] = true} thì khẳng định rằng mê chung hợp lệ. Ngược lại, mê cung khônxg hợp lệ.
 \begin{lstlisting}[language=C++, caption={Cài đặt C++ bài MAKEMAZE}, label={code:makemaze}]
 #include <bits/stdc++.h>
 #define int long long
