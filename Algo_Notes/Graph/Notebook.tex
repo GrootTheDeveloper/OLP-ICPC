@@ -1,0 +1,255 @@
+\documentclass{article}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage[table]{xcolor}
+\usepackage{colortbl}
+\usepackage[backend=biber,natbib=true,style=alphabetic,maxbibnames=50]{biblatex}
+\addbibresource{/home/nqbh/reference/bib.bib}
+\usepackage[utf8]{vietnam}
+\usepackage{tocloft}
+\usepackage{tcolorbox}
+
+\setlength{\parindent}{0pt}
+
+
+\usepackage{minted}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+    language=C++,                    % Ngôn ngữ lập trình
+    basicstyle=\ttfamily\footnotesize, % Cỡ chữ nhỏ hơn
+    keywordstyle=\color{blue},        % Màu từ khóa
+    commentstyle=\color{gray},        % Màu chú thích
+    stringstyle=\color{red},          % Màu chuỗi ký tự
+    numbers=left,                     % Hiển thị số dòng bên trái
+    numberstyle=\tiny\color{gray},    % Định dạng số dòng
+    stepnumber=1,                     % Mỗi dòng đều có số dòng
+    breaklines=true,                   % Tự động xuống dòng nếu quá dài
+    frame=single                      % Đóng khung mã nguồn
+}
+
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=red,citecolor=magenta]{hyperref}
+\usepackage{amsmath,amssymb,amsthm,enumitem,float,graphicx,mathtools,tikz}
+\usetikzlibrary{angles,calc,intersections,matrix,patterns,quotes,shadings}
+\allowdisplaybreaks
+\newtheorem{assumption}{Assumption}
+\newtheorem{baitoan}{}
+\newtheorem{cauhoi}{Câu hỏi}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{corollary}{Corollary}
+\newtheorem{dangtoan}{Dạng toán}
+\newtheorem{definition}{Definition}
+\newtheorem{dinhly}{Định lý}
+\newtheorem{dinhnghia}{Định nghĩa}
+\newtheorem{example}{Example}
+\newtheorem{ghichu}{Ghi chú}
+\newtheorem{hequa}{Hệ quả}
+\newtheorem{hypothesis}{Hypothesis}
+\newtheorem{lemma}{Lemma}
+\newtheorem{luuy}{Lưu ý}
+\newtheorem{nhanxet}{Nhận xét}
+\newtheorem{notation}{Notation}
+\newtheorem{note}{Note}
+\newtheorem{principle}{Principle}
+\newtheorem{problem}{Problem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{question}{Question}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{vidu}{Ví dụ}
+\usepackage[left=1cm,right=1cm,top=5mm,bottom=5mm,footskip=4mm]{geometry}
+\def\labelitemii{$\circ$}
+\DeclareRobustCommand{\divby}{%
+	\mathrel{\vbox{\baselineskip.65ex\lineskiplimit0pt\hbox{.}\hbox{.}\hbox{.}}}%
+}
+\setlist[itemize]{leftmargin=*}
+\setlist[enumerate]{leftmargin=*}
+
+\title{CHUYÊN ĐỀ: LÝ THUYẾT ĐỒ THỊ} 
+\author{Đặng Phúc An Khang\footnote{ E-mail: {\tt ankhangluonvuituoi@gmail.com}. Tây Ninh, Việt Nam.}}
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+	
+	
+	\textbf{Code:}
+	\begin{quote}
+		\begin{itemize}
+			\item C{\tt/}C++: \url{https://github.com/GrootTheDeveloper/OLP-ICPC/tree/master/2025/C%2B%2B}.
+			\item Python: \url{}\\
+		\end{itemize}
+	\end{quote}
+	
+	\textbf{Tài khoản trên các Online Judge:}
+	\begin{quote}
+    	\begin{itemize}
+			\item Codeforces: \url{https://codeforces.com/profile/vuivethoima}.
+			\item VNOI: \url{oj.vnoi.info/user/Groot}.
+			\item IUHCoder: \url{oj.iuhcoder.com/user/ankhang2111}.
+			\item MarisaOJ: \url{https://marisaoj.com/user/grootsiuvip/submissions}.
+			\item CSES: \url{https://cses.fi/user/212174}.
+			\item UMTOJ: \url{sot.umtoj.edu.vn/user/grootsiuvip}.
+			\item SPOJ: \url{www.spoj.com/users/grootsiuvip/}.
+			\item POJ: \url{http://poj.org/userstatus?user_id=vuivethoima}.
+			\item ATCoder: \url{https://atcoder.jp/users/grootsiuvip}
+			\item OnlineJudge.org: \url{vuivethoima}
+			\item updating...
+		\end{itemize}
+	\end{quote}
+    
+\end{abstract}
+\tableofcontents
+
+%------------------------------------------------------------------------------%
+
+\section{Preliminaries -- Kiến thức chuẩn bị}
+
+\textbf{\textsf{Resources -- Tài nguyên.}}
+\begin{enumerate}
+	\item \cite{CP10}. \textit{CP10. Competitive Programming} \url{https://drive.google.com/drive/folders/1MTEVHT-7nBnMJ7C9LgyAR_pEVSE3FlKz?fbclid=IwAR3TovIj2rKCRe1a4oZxW-LQCoEoVkipVAvCzwrr0nJ6GzcAd47P6LO1Rwc}
+	
+	\item \cite{cp-algorithms}. \textit{Algorithms for Competitive Programming} \url{https://cp-algorithms.com}
+
+    \item \cite{VNOI-WIKI}. \textit{Thư viện VNOI} \url{https://wiki.vnoi.info}
+
+
+
+\end{enumerate}
+
+
+%------------------------------------------------------------------------------%
+\section{Kiến thức}
+\subsection{Giới thiệu về đồ thị và thuật toán DFS}
+
+\subsubsection{Lý thuyết đồ thị là gì?}
+
+Lý thuyết đồ thị là một nhánh của toán học, cụ thể thuộc toán rời rạc. Lý thuyết đồ thị chuyên nghiên cứu các bài toán liên quan đến việc biểu diễn và phân tích các sự vật, hiện tượng hoặc trạng thái có mối quan hệ lẫn nhau thông qua mô hình đồ thị.\\
+
+\textbf{Một số minh họa điển hình:} Mạng lưới giao thông, cây phả hệ (cây gia phả), mạng máy tính, sơ đồ tổ chức, v.v.
+
+\subsubsection{Một số khái niệm căn bản trong lý thuyết đồ thị}
+
+\begin{enumerate}
+    \item \textbf{Đỉnh:} Được biểu diễn nhằm mục đích thể hiện sự vật, sự việc hay một trạng thái.
+    \item \textbf{Cạnh:} Biểu diễn cho mối quan hệ giữa 2 đỉnh với nhau. \textbf{Lưu ý:} Giữa 2 đỉnh trong đồ thị có thể có cạnh, không có, hoặc có thể có nhiều cạnh với nhau. Cạnh được chia thành 2 dạng:
+    \begin{enumerate}
+        \item \textbf{Cạnh vô hướng:} Nếu một cạnh vô hướng nối 2 đỉnh $u$ và $v$, thì $u$ có thể đến $v$ trực tiếp vầ ngược lại.
+        \item \textbf{Cạnh có hướng:} Nếu một cạnh có hướng nối từ đỉnh $u$ đến đỉnh $v$, thì ta có thể đi trực tiếp từ $u$ đến $v$, nhưng không thể đi ngược lại từ $v$ đến $u$ trừ khi có một cạnh khác từ $v$ đến $u$.
+    \end{enumerate}
+    \item \textbf{Đường đi:} Một đường đi là một danh sách các đỉnh $x_1, x_2, x_3, x_4,\dots, x_k$. Trong đó 2 đỉnh $x_i$ và $x_{i + 1}$ thì có một đường nối trực tiếp để đi từ $x_i$ $\rightarrow$ $x_{i + 1}$.
+    \item \textbf{Trọng số:} Là một giá trị trên cạnh (hoặc trên đỉnh) nhằm thể hiện một thông số nào đó với bài toán ta đang xét.
+\end{enumerate}
+
+\subsubsection{Thuật toán DFS}
+
+Thuật toán DFS (Depth-First Search – Duyệt theo chiều sâu) là một trong những thuật toán cơ bản để duyệt hoặc tìm kiếm trên đồ thị. Ý tưởng chính là xuất phát từ một đỉnh ban đầu, đi sâu theo từng nhánh con của đồ thị cho đến khi không còn đỉnh nào có thể đi tiếp, sau đó quay lui để khám phá các nhánh khác.
+
+DFS có thể được cài đặt đệ quy hoặc sử dụng ngăn xếp. Nó thường được dùng để:
+
+\begin{itemize}
+    \item Kiểm tra tính liên thông của đồ thị
+    \item Tìm thành phần liên thông
+    \item Phát hiện chu trình
+    \item Tìm đường đi trong mê cung hoặc đồ thị
+\end{itemize}
+
+\subsubsection{Ý tưởng cài đặt thuật toán DFS}
+
+DFS thường được cài đặt bằng đệ quy hoặc sử dụng ngăn xếp. Trong cài đặt đệ quy, ta cần một mảng đánh dấu để theo dõi các đỉnh đã được thăm nhằm tránh lặp vô hạn trong trường hợp đồ thị có chu trình.
+
+\textbf{Các bước cơ bản trong cài đặt DFS đệ quy:}
+
+\begin{enumerate}
+    \item Khởi tạo một mảng \texttt{visited[]} để đánh dấu các đỉnh đã được duyệt, với ý nghĩa: \texttt{visited[u] = true / false} nếu đỉnh $u$ đã thăm / chưa thăm.
+    \item Gọi hàm \texttt{DFS(u)} tại đỉnh bắt đầu $u$.
+    \item Trong mỗi lần gọi:
+    \begin{itemize}
+        \item Đánh dấu \texttt{visited[u] = true}.
+        \item Duyệt qua tất cả các đỉnh kề $v$ của $u$:
+        \begin{itemize}
+            \item Nếu $v$ chưa được thăm (\texttt{visited[v] == false}), đệ quy gọi \texttt{DFS(v)}.
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Cài đặt DFS sử dụng đệ quy trong C++}
+
+\begin{lstlisting}[language=C++, caption={Thuật toán DFS sử dụng đệ quy}, label={code:dfs}]
+#include <iostream>
+#include <vector>
+using namespace std;
+
+const int MAXN = 100005; // So dinh toi da
+vector<int> adj[MAXN];   // Danh sach ke
+bool visited[MAXN];      // Mang danh dau
+
+void DFS(int u) {
+    visited[u] = true;
+    cout << "Tham dinh: " << u << endl;
+    for (int v : adj[u]) {
+        if (!visited[v]) {
+            DFS(v);
+        }
+    }
+}
+int main() {
+    int n, m; // so dinh va so canh
+    cin >> n >> m;
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u); // Neu la do thi vo huong
+    }
+    for (int i = 1; i <= n; i++) {
+        visited[i] = false;
+    }
+    // Goi DFS tu dinh 1 (hoac 1 dinh bat ky)
+    DFS(1);
+
+    return 0;
+}
+\end{lstlisting}
+
+\textbf{Độ phức tạp: } $O(V + E)$ với $V$ là số đỉnh, $E$ là số cạnh.
+
+\subsection{Topological Sorting}
+
+
+\subsection{Khớp và Cầu (Joints and Brides)}
+
+\subsection{Thành phần liên thông mạnh (Strongly Connected Components)}
+
+\subsection{Thuật toán BFS}
+
+\subsection{Thuật toán Dijkstra + Heap}
+
+\subsection{Disjoint Set Union (DSU)}
+
+\subsection{Maximum Flow and Maximum Matching}
+
+\subsection{Minimum Cut}
+\subsection{Euler Tour}
+\subsection{Lowest Common Ancestor}
+\subsection{Heavy Light Decomposition}
+\subsection{Centroid Decomposition}
+\subsection{2-SAT}
+
+
+
+\section{Miscellaneous}
+
+\subsection{Contributors}
+
+
+%------------------------------------------------------------------------------%
+
+\printbibliography[heading=bibintoc]
+	
+\end{document}
