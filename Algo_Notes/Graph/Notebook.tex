@@ -48,10 +48,13 @@
 \newtheorem{example}{Example}
 \newtheorem{ghichu}{Ghi chú}
 \newtheorem{hequa}{Hệ quả}
+\newtheorem{giathuyet}{Giả thuyết}
+\newtheorem{chungminh}{Chứng minh}
 \newtheorem{hypothesis}{Hypothesis}
 \newtheorem{lemma}{Lemma}
 \newtheorem{luuy}{Lưu ý}
 \newtheorem{nhanxet}{Nhận xét}
+\newtheorem{baitap}{Bài tập}
 \newtheorem{notation}{Notation}
 \newtheorem{note}{Note}
 \newtheorem{principle}{Principle}
@@ -129,9 +132,12 @@
 
 \subsubsection{Lý thuyết đồ thị là gì?}
 
-Lý thuyết đồ thị là một nhánh của toán học, cụ thể thuộc toán rời rạc. Lý thuyết đồ thị chuyên nghiên cứu các bài toán liên quan đến việc biểu diễn và phân tích các sự vật, hiện tượng hoặc trạng thái có mối quan hệ lẫn nhau thông qua mô hình đồ thị.\\
-
-\textbf{Một số minh họa điển hình:} Mạng lưới giao thông, cây phả hệ (cây gia phả), mạng máy tính, sơ đồ tổ chức, v.v.
+\begin{dinhnghia}
+    Lý thuyết đồ thị là một nhánh của toán học, cụ thể thuộc toán rời rạc. Lý thuyết đồ thị chuyên nghiên cứu các bài toán liên quan đến việc biểu diễn và phân tích các sự vật, hiện tượng hoặc trạng thái có mối quan hệ lẫn nhau thông qua mô hình đồ thị.
+\end{dinhnghia}
+\begin{vidu}
+    Mạng lưới giao thông, cây phả hệ (cây gia phả), mạng máy tính, sơ đồ tổ chức, v.v.
+\end{vidu}
 
 \subsubsection{Một số khái niệm căn bản trong lý thuyết đồ thị}
 
@@ -180,15 +186,16 @@ Giả sử đồ thị vô hướng có các cạnh: $(1,2)$, $(1,3)$, $(2,4)$ t
 Cách biểu diễn này có độ phức tạp về bộ nhớ là $\mathcal{O}(n + m)$, với $n$ là số đỉnh và $m$ là số cạnh.
 
 \subsubsection{Chu trình (Cycle)}
-Một \textbf{chu trình} là một đường đi bắt đầu và kết thúc tại cùng một đỉnh, trong đó không có đỉnh nào khác (ngoại trừ đỉnh đầu/cuối) được lặp lại.
-
-\begin{itemize}
-    \item Trong đồ thị vô hướng: chu trình là dãy đỉnh $v_1 \rightarrow v_2 \rightarrow \dots \rightarrow v_k \rightarrow v_1$ với $k \geq 3$.
-    \item Trong đồ thị có hướng: các cung phải có hướng phù hợp với trình tự chu trình.
-\end{itemize}
-
-Một chu trình được gọi là \textit{chu trình đơn giản} nếu không có cạnh hoặc đỉnh nào bị lặp lại (trừ đỉnh đầu/cuối).
-
+\begin{dinhnghia}
+    Một \textbf{chu trình} là một đường đi bắt đầu và kết thúc tại cùng một đỉnh, trong đó không có đỉnh nào khác (ngoại trừ đỉnh đầu/cuối) được lặp lại.
+\end{dinhnghia}
+    \begin{itemize}
+        \item Trong đồ thị vô hướng: chu trình là dãy đỉnh $v_1 \rightarrow v_2 \rightarrow \dots \rightarrow v_k \rightarrow v_1$ với $k \geq 3$.
+        \item Trong đồ thị có hướng: các cung phải có hướng phù hợp với trình tự chu trình.
+    \end{itemize}
+    
+    Một chu trình được gọi là \textit{chu trình đơn giản} nếu không có cạnh hoặc đỉnh nào bị lặp lại (trừ đỉnh đầu/cuối).
+    
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.4\textwidth]{img/b1/cycle.png}
@@ -197,8 +204,11 @@ Một chu trình được gọi là \textit{chu trình đơn giản} nếu khôn
 \end{figure}
 
 \subsubsection{Thành phần liên thông \href{https://www.geeksforgeeks.org/dsa/strongly-connected-components/}{(Connected Component)}}
-Một \textbf{thành phần liên thông} là một tập con các đỉnh sao cho giữa mọi cặp đỉnh trong đó đều tồn tại một đường đi.
+\begin{dinhnghia}
 
+    Một \textbf{thành phần liên thông} là một tập con các đỉnh sao cho giữa mọi cặp đỉnh trong đó đều tồn tại một đường đi.
+\end{dinhnghia}
+    
 \begin{itemize}
     \item Với đồ thị vô hướng: liên thông nếu có đường đi giữa mọi cặp đỉnh.
     \item Với đồ thị có hướng:
@@ -229,8 +239,11 @@ Một \textbf{thành phần liên thông} là một tập con các đỉnh sao c
 Một \textbf{đường đi đơn giản} là đường đi không đi qua một đỉnh nào hai lần (trừ khi là chu trình).
 
 \subsubsection{Cây (Tree)}
-Một \textbf{cây} là một đồ thị vô hướng liên thông và không có chu trình.
-
+\begin{dinhnghia}
+    
+    Một \textbf{cây} là một đồ thị vô hướng liên thông và không có chu trình.
+    
+\end{dinhnghia}
 Tính chất quan trọng của cây:
 \begin{itemize}
     \item Với $n$ đỉnh, cây có đúng $n - 1$ cạnh.
@@ -418,7 +431,9 @@ int main() {
 \textbf{Độ phức tạp: } $\mathcal{O}(V + E)$ với $V$ là số đỉnh, $E$ là số cạnh.
 
 \subsubsection{Bài tập}
-\paragraph{2.2.4.1. \href{https://www.spoj.com/problems/MAKEMAZE/}{MAKEMAZE}}
+\begin{baitap}    
+    \href{https://www.spoj.com/problems/MAKEMAZE/}{MAKEMAZE}
+\end{baitap} 
 
 \textbf{Đề bài}
 
@@ -513,9 +528,203 @@ signed main() {
 
 \end{lstlisting}
 
-\subsection{Topological Sorting}
+\subsection{Sắp xếp tô-pô \href{https://wiki.vnoi.info/algo/graph-theory/topological-sort.md}{(Topological Sorting)}}
+
+Nội dung bài chủ yếu tham khảo/copy từ [VNOI WIKI] : \url{https://wiki.vnoi.info/algo/graph-theory/topological-sort.md}
+
+\subsubsection{Định nghĩa}
+
+\begin{dinhnghia}
+Cho một đồ thị có hướng \( G = (V, E) \), sắp xếp tô-pô (topological sorting) là một ánh xạ từ tập đỉnh \( V \) vào tập các số nguyên \( \{1, 2, \dots, |V|\} \), sao cho với mọi cung \( (u, v) \in E \), ta có:
+\[
+\operatorname{order}(u) < \operatorname{order}(v).
+\]
+\end{dinhnghia}
+
+\begin{dinhnghia}
+    Sắp xếp tô-pô là cách sắp xếp các đỉnh của một đồ thị có hướng sao cho nếu có một mũi tên từ đỉnh \( u \) đến đỉnh \( v \), thì \( u \) phải đứng trước \( v \) trong thứ tự đó.
+\end{dinhnghia}
+
+Nói cách khác, thứ tự tô-pô là một hoán vị của các đỉnh sao cho mọi cung đều đi từ đỉnh đứng trước đến đỉnh đứng sau trong thứ tự này. Hay nếu một công việc \( u \) cần hoàn thành trước công việc \( v \), thì \( u \) phải xuất hiện trước \( v \) trong danh sách kết quả.
 
 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{img/b2/topological_sort_img1.png}
+    \caption{Minh họa sắp xếp Tô-pô}
+\end{figure}
+
+\subsubsection{Cảm hứng và Động cơ ứng dụng}
+
+Sắp xếp tô-pô là một công cụ quan trọng trong việc mô hình hóa và giải quyết các bài toán liên quan đến \textbf{phụ thuộc thứ tự} giữa các đối tượng. Về bản chất, nó cho phép ta xác định một trình tự thực hiện hợp lệ sao cho mọi điều kiện tiên quyết đều được thỏa mãn trước khi thực hiện bước tiếp theo.
+
+Một ứng dụng thực tế điển hình là trong \textbf{lập kế hoạch công việc}. Khi một tập hợp các công việc có quan hệ phụ thuộc lẫn nhau, ta cần xác định thứ tự thực hiện sao cho mỗi công việc chỉ bắt đầu sau khi tất cả các công việc phụ thuộc của nó đã hoàn thành.
+
+\textbf{Ví dụ minh họa:} Trong chương trình đào tạo đại học, sinh viên cần hoàn thành nhiều học phần để tốt nghiệp. Một số học phần là điều kiện tiên quyết cho các học phần khác. Chẳng hạn:
+\begin{itemize}
+    \item Để học được môn ``Giới thiệu về thuật toán'', sinh viên phải hoàn thành các môn: ``Nhập môn lập trình'', ``Cấu trúc dữ liệu'', ``Nhập môn thuật toán'', v.v.
+\end{itemize}
+
+Ta có thể xây dựng một đồ thị có hướng, trong đó:
+\begin{itemize}
+    \item Mỗi đỉnh tương ứng với một học phần;
+    \item Có một cung từ đỉnh \( u \) đến đỉnh \( v \) nếu học phần \( u \) là điều kiện tiên quyết của học phần \( v \).
+\end{itemize}
+
+Khi đó, việc tìm một sắp xếp tô-pô của đồ thị này sẽ cho ta một thứ tự học hợp lệ. Nếu không tồn tại sắp xếp tô-pô (tức đồ thị có chu trình), điều đó phản ánh sự xung đột hoặc vòng lặp trong điều kiện tiên quyết giữa các môn học - một cấu trúc bất hợp lệ trong thiết kế chương trình đào tạo.
+
+\begin{ghichu}
+Sắp xếp tô-pô không xử lý các xung đột tài nguyên như trùng lịch học, mà chỉ đảm bảo mối quan hệ thứ tự phụ thuộc.
+\end{ghichu}
+
+
+\begin{ghichu}
+Chỉ tồn tại sắp xếp tô-pô nếu và chỉ nếu đồ thị là DAG (Directed Acyclic Graph).
+
+\end{ghichu}
+
+
+\subsubsection{Chứng minh điều kiện tồn tại thứ tự Tô-pô}
+
+\begin{giathuyet}
+    Một đồ thị có hướng tồn tại thứ tự Tô-pô khi và chỉ khi nó là một \textbf{DAG}.
+\end{giathuyet}
+
+\begin{giathuyet}
+    Đồng nghĩa, mọi DAG đều tồn tại ít nhất một thứ tự Tô-pô.
+\end{giathuyet}
+
+\begin{giathuyet}
+    Có thể tìm được một thứ tự Tô-pô bằng thuật toán trong thời gian tuyến tính \( \mathcal{O}(V + E) \).
+\end{giathuyet}
+
+\begin{chungminh}
+Ta sẽ chứng minh hai chiều của giả thuyết chính.
+
+\textbf{Chiều thuận:} Nếu đồ thị \( G \) có chu trình, thì không thể tồn tại thứ tự tô-pô.
+
+Giả sử tồn tại chu trình \( v_1 \to v_2 \to \dots \to v_n \to v_1 \). Khi đó, theo định nghĩa của thứ tự tô-pô, ta có:
+\[
+\operatorname{order}(v_1) < \operatorname{order}(v_2) < \dots < \operatorname{order}(v_n) < \operatorname{order}(v_1),
+\]
+tức là \( \operatorname{order}(v_1) < \operatorname{order}(v_1) \), mâu thuẫn. Vậy, nếu có chu trình, không tồn tại thứ tự tô-pô.\\
+
+\textbf{Chiều nghịch:} Nếu \( G \) là một DAG, thì tồn tại ít nhất một thứ tự tô-pô.
+
+\begin{enumerate}
+    \item Vì \( G \) không có chu trình, nên tồn tại ít nhất một đỉnh không có cung đi vào (bậc vào bằng 0). Nếu mọi đỉnh đều có bậc vào \(\geq 1\), thì bắt đầu từ một đỉnh bất kỳ, ta luôn đi được sang đỉnh khác (vì có cung đi vào), và cuối cùng sẽ đi thành một chu trình, mâu thuẫn với giả thiết \( G \) là DAG.
+
+    \item Gọi đỉnh đó là \( u \). Đặt \( u \) là đỉnh đầu tiên trong thứ tự tô-pô.
+
+    \item Loại bỏ \( u \) khỏi đồ thị cùng tất cả các cung đi ra từ \( u \). Đồ thị còn lại vẫn là DAG (vì việc xóa đỉnh không thể tạo ra chu trình mới).
+
+    \item Áp dụng lại quá trình trên với đồ thị còn lại: luôn tồn tại đỉnh có bậc vào bằng 0, đưa nó vào tiếp theo trong thứ tự.
+
+    \item Lặp lại cho đến khi tất cả các đỉnh được đưa vào thứ tự.
+
+    \item Cuối cùng, ta thu được một thứ tự thỏa mãn định nghĩa sắp xếp tô-pô.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{img/b2/topological_sort_img2.png}
+    \caption{Minh họa chứng minh chiều nghịch}
+\end{figure}
+\textbf{Kết luận:} Với mỗi DAG, luôn tồn tại ít nhất một thứ tự tô-pô.
+\end{chungminh}
+
+\subsubsection{Bài tập}
+\begin{baitap}
+    TOPOSORT - Sắp xếp TOPO
+\end{baitap}
+
+\textbf{Đề bài}
+Cho đồ thị có hướng không chu trình $G(V, E)$. Hãy đánh số lại các đỉnh của $G$ sao cho chỉ có cung nối từ đỉnh có chỉ số nhỏ đến đỉnh có chỉ số lớn hơn.
+
+\textbf{Input}
+
+\begin{itemize}
+    \item Dòng đầu chứa hai số nguyên $n$ $(1 \leq n \leq 100)$ và $m$ $(0 \leq m \leq \frac{n(n-1)}{2})$
+    \item $m$ dòng tiếp theo, mỗi dòng chứa một cặp số $u, v$ cho biết một cung nối từ $u \rightarrow v$ trong $G$.
+\end{itemize}
+
+\textbf{Output}
+
+Ghi ra $n$ số nguyên dương, số thứ $i$ là chỉ số của đỉnh $i$ sau khi đánh số lại. Hai số trên cùng một dòng được ghi cách nhau một dấu cách (space).
+
+\textbf{Ví dụ}
+
+Input:
+
+7 7\\
+1 2 \\
+1 4 \\
+2 3 \\
+4 5 \\
+6 5 \\
+5 3 \\
+7 4 
+
+Output: 1 2 7 5 6 3 4
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{img/b2/topological_sort_img3.png}
+    \caption{Minh họa ví dụ}
+\end{figure}
+
+\textbf{Phân tích bài toán}
+
+Với một đỉnh $u$ bất kỳ, khi DFS thăm đến một đỉnh u, sau khi đã đệ quy thăm hết tất cả các đỉnh con của nó, ta đẩy u vào ngăn xếp (\href{https://wiki.vnoi.info/algo/data-structures/Stack}{Stack}). Lúc này ngăn xếp sẽ chứa các đỉnh theo thứ tự ``postorder'' đảo ngược (reverse postorder) -- postorder là thời điểm kết thúc của DFS tại đỉnh đó. 
+
+Để gán nhãn, ta lấy lần lượt từng đỉnh trên cùng của ngăn xếp (tương đương là đỉnh có postorder muộn nhất), gán nhãn lần lượt $1, 2, \dots, n$ đến khi ngăn xếp rỗng (đã xử lý hết đỉnh). Ta đảm bảo được rằng, nếu $u$ được đẩy trước $v$ (tức là hoàn thành DFS sớm hơn), thì $u$ sẽ được gán nhãn lớn hơn.
+
+\begin{lstlisting}[language=C++, caption={Cài đặt Sắp xếp Tô-pô bằng DFS}, label={code:toposort}]
+    #include <bits/stdc++.h>
+#define int long long
+#define endl "\n"
+using namespace std;
+
+int n, m;
+vector<int> adj[101];
+stack<int> st;
+vector<bool> visited(101, false);
+
+void dfs(int u) {
+    visited[u] = true;
+    for (auto v : adj[u]) {
+        if (visited[v] == false) {
+            dfs(v);
+        }
+    }
+    st.push(u);
+}
+
+signed main() {
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++) {
+        int u, v; cin >> u >> v;
+        adj[u].push_back(v);
+    }    
+    for (int i = 1; i <= n; i++) {
+        if (visited[i] == false) {
+            dfs(i);
+        }
+    }
+    vector<int> ans(n + 1, 0);
+    int cnt = 1;
+    while (st.empty() == false) {
+        ans[st.top()] = cnt++;
+        st.pop();
+    }
+    for (int i = 1; i <= n; i++) {
+        cout << ans[i] << " ";
+    }
+    return 0;
+}
+
+\end{lstlisting}
 \subsection{Khớp và Cầu (Joints and Brides)}
 
 \subsection{Thành phần liên thông mạnh (Strongly Connected Components)}
