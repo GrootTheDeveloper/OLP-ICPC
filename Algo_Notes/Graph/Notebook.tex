@@ -449,14 +449,20 @@ Với mỗi test case, tìm xem mê cung tương ứng là ``invalid'' hay ``val
 
 \textbf{Example}
 
-1\\
-4 4 \\
-\#\#\#\# \\
-\#...  \\
-\#.\#\# \\
-\#.\#\# \\
+\begin{lstlisting}[caption={Input}]
+ 1
+ 4 4 
+ ####
+ #...  
+ #.## 
+ #.## 
+\end{lstlisting}
 
-$\rightarrow$ ``valid''
+\begin{lstlisting}[caption={Output}]
+valid
+\end{lstlisting}
+
+%$\rightarrow$ ``valid''
 
 \textbf{Phân tích bài toán}
 
@@ -655,18 +661,20 @@ Ghi ra $n$ số nguyên dương, số thứ $i$ là chỉ số của đỉnh $i$
 
 \textbf{Ví dụ}
 
-Input:
-
-7 7\\
-1 2 \\
-1 4 \\
-2 3 \\
-4 5 \\
-6 5 \\
-5 3 \\
+\begin{lstlisting}[caption={Input}]
+7 7
+1 2
+1 4
+2 3
+4 5
+6 5
+5 3
 7 4 
+\end{lstlisting}
 
-Output: 1 2 7 5 6 3 4
+\begin{lstlisting}[caption={Output}]
+1 2 7 5 6 3 4
+\end{lstlisting}
 
 \begin{figure}[H]
     \centering
@@ -749,13 +757,16 @@ Nếu không tìm được thứ tự thỏa mãn, in ra ``IMPOSSIBLE''.
 
 \textbf{Ví dụ}
 
-Input:
-5 3\\
-1 2\\
-3 1\\
-4 5\\
+\begin{lstlisting}[caption={Input}]
+5 3
+1 2
+3 1
+4 5
+\end{lstlisting}
 
-Output: 4 5 3 1 2
+\begin{lstlisting}[caption={Output}]
+4 5 3 1 2
+\end{lstlisting}
 
 \textbf{Phân tích bài toán}
 
@@ -836,16 +847,18 @@ Hãy tìm độ dài của đường đi có hướng dài nhất trong đồ th
 In ra độ dài đường đi có hướng dài nhất trong đồ thị $G$.
 
 \textbf{Ví dụ}
-
-Input:\\
-4 5\\
-1 2\\
-1 3\\
-3 2\\
-2 4\\
+\begin{lstlisting}[caption={Input}]
+4 5
+1 2
+1 3
+3 2
+2 4
 3 4
+\end{lstlisting}
 
-Output: 3
+\begin{lstlisting}[caption={Output}]
+3
+\end{lstlisting}
 
 \begin{figure}[h]
     \centering
@@ -929,7 +942,26 @@ Trong quá trình $DFS$, với mỗi đỉnh $u$ ta có $par[u]$ là số hiệu
 
 Các cạnh thuộc cây $DFS$ được gọi là các ``cạnh nét liền''.
 
-Các cạnh còn lại không thuộc cây $DFS$ được gọi là các ``cạnh nét đứt''.
+Các cạnh còn lại không thuộc cây $DFS$ được gọi là các ``cạnh nét đứt''.\\
+
+Nói cách khác, khi ta thực hiện $DFS$, tưởng tượng như sau:
+
+\begin{enumerate}
+    \item Bắt đầu từ một đỉnh gốc:
+
+    – Ta gọi DFS tại đó, coi nó là “gốc” của cây.
+    \item Mỗi lần đi từ u xuống v lần đầu tiên
+    
+    – Nếu v chưa được thăm, ta đánh dấu par[v] = u (vì u ``gọi'' v), và gọi tiếp DFS(v).
+    
+    – Cạnh (u, v) đó chính là một cạnh cây (nét liền), vì nó nằm trên hành trình ta thực sự đi.
+    \item Khi gặp một cạnh nối u với một đỉnh v đã thăm rồi
+    
+    – Ta không đi tiếp, vì v đã vào cây.
+
+    – Cạnh đó được gọi là cạnh không phải cây (nét đứt). Nó chỉ là ``đường tắt'' giữa hai đỉnh đã có trong cây.
+\end{enumerate}
+
 
 \begin{figure}[h]
     \centering
@@ -937,12 +969,281 @@ Các cạnh còn lại không thuộc cây $DFS$ được gọi là các ``cạn
     \caption{Minh họa cây DFS}    
 \end{figure}
 
+Trong đồ thị có hướng, xét các cung được thăm và không được thăm bởi $DFS$, ta có 4 loại cung sau:
+\begin{itemize}
+    \item Cung của cây $DFS$ \textbf{(Tree egde):} là các cung thuộc cây $DFS$ được định hướng theo chiều từ cha đến con. (ví dụ cạnh $(u, v)$ thuộc cây $DFS$ mà $u$ được thăm trước $v$ hay $u$ là cha của $v$ thì ta có cung $u \rightarrow v$ là cung của cây $DFS$). < Các cung của cây $DFS$ được đánh dấu là các cạnh màu đen trong hình bên dưới >
+    \item Cung xuôi \textbf{(Forward edge):} là các cung không thuộc cây $DFS$ và có dạng $u \rightarrow v$ trong đó $u$ là tổ tiên của $v$ trong cây $DFS$. < Các cung xuôi được đánh dấu là các cạnh màu xanh lá trong hình bên dưới >
+    \item Cung ngược \textbf{(Back edge):} là các cung không thuộc cây $DFS$ và có dạng $v \rightarrow u$ trong đó $u$ là tổ tiên của $v$ trong cây $DFS$. < Các cung ngược được đánh dấu là các cạnh màu đỏ trong hình bên dưới >
+    \item Cung chéo \textbf{(Cross edge):} là các cung không thuộc cây $DFS$ và có dạng $u \rightarrow v$ trong đó $u$ và $v$ thuộc hai nhánh khác nhau của cùng một cây $DFS$. < Các cung chéo được đánh dấu là các cạnh màu xanh dương trong hình bên dưới >
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]{img/b3/Depth-First-Search-Tree_img2.png}   
+    \caption{Mô tả các loại cung trong cây} 
+\end{figure}
+
+
+Trong đồ thị vô hướng:
+\begin{itemize}
+    \item Không tồn tại cung chéo. Vì khi đỉnh $u$ được duyệt trong hàm $DFS$ ta sẽ duyệt tất cả các đỉnh $v$ kề $u$ mà $v$ chưa được thăm. Như vậy nếu tồn tại một cung chéo $(u, v)$ chứng tỏ khi duyệt đến đỉnh $u$ hoặc đỉnh $v$ ta đã không duyệt cạnh $(u, v)$.
+    \item Vì các cạnh trên đồ thị vô hướng không được định chiều nên không thể định nghĩa 2 loại cung xuôi và cung ngược như ở đồ thị có hướng. Do đó, ở đồ thị vô hướng, cung xuôi và cung ngược sẽ được định nghĩa như sau:
+    \begin{itemize}
+        \item Cung xuôi \textbf{(Forward edge):} là các cung thuộc cây $DFS$. Hay còn có cách gọi khác là ``cạnh nét liền'' hoặc ``cung của cây $DFS$''.
+        \item Cung ngược (Back edge): là các cung không thuộc cây $DFS$. Hay còn có cách gọi khác là ``cạnh nét đứt''.
+    \end{itemize}
+    \item Như vậy trên đồ thị vô hướng lúc này chỉ còn  loại cung là cung ngược và cung xuôi (cung của cây $DFS$).
+\end{itemize}
+
+\textbf{Một số mảng quan trọng trong cây DFS:}
+
+\begin{itemize}
+    \item Mảng \textbf{num[]}: cho biết thứ tự duyệt DFS của các đỉnh (thứ tự mà mỗi đỉnh bắt đầu duyệt).
+    \item Mảng \textbf{low[]}: Với mỗi đỉnh $u$, $low[u]$ cho biết thứ tự (giá trị $num$) nhỏ nhất có thể đi đến được từ $u$ bằng cách đi xuôi xuống theo các cạnh nét liền (các cung trên cây DFS) và kết thúc đi ngược lên không quá 1 lần theo cạnh nét đứt. Ngoài ra ta cũng có thể hiểu ý nghĩa của $low[u]$ là thứ tự thăm của đỉnh có thứ tự thăm sớm nhất nằm trong cây con gốc $u$ hoặc kề cạnh với 1 đỉnh bất kì nằm trong cây con gốc $u$.
+    \item Mảng \textbf{tail[]}: cho biết thời điểm kết thúc duyệt DFS của mỗi đỉnh cũng là thời điểm duyệt xong của đỉnh đó.
+\end{itemize}
+
+\noindent\textbf{Nhận xét:} Các đỉnh có thứ tự thăm nằm trong khoảng từ $num[u]$ đến $tail[u]$ chính là các đỉnh nằm trong cây con gốc $u$ trong cây DFS.\\
+
+\textbf{Cách tính mảng low[], num[], tail[]:}
+
+\begin{itemize}
+    \item \textbf{Ý tưởng chính:} Mảng $num[]$, $tail[]$ ta có thể tính dễ dàng bằng cách DFS xác định thời điểm duyệt tới và thời điểm duyệt xong của các đỉnh. Với mảng $low[]$ ta có:
+    \begin{itemize}
+        \item Trước hết, với 1 đỉnh $u$ bất kì có thể tự đi tới chính nó nên ta gán $low[u] = num[u]$.
+        \item Từ $u$ có thể đến các đỉnh $v$ kề u bằng 1 cạnh nét đứt nên ta có $low[u] = \min(low[u], num[v])$ với $(u, v)$ là một cạnh nét đứt.
+        \item Ngược lại, nếu $(u, v)$ là một cạnh nét liền và v không phải cha của u ta có $low[u] = \min(low[u], low[v])$ do từ $u$ ta có thể đi xuống $v$ sau đó đi theo con đường đã xác định ở đỉnh $v$ để tới đỉnh có thứ tự thăm là $low[v]$.
+    \end{itemize}
+    \item \textbf{Chú ý:} Giá trị thực sự của $num[], low[]$ được xác định bằng giá trị thực sự của $low[u], tail[u]$ chỉ được xác định khi đã duyệt xong đỉnh $u$. Thời điểm duyệt tới của một đỉnh $u$ luôn diễn ra trước thời điểm duyệt tới của các đỉnh trong cây con gốc $u$ của cây DFS, thời điểm duyệt xong của đỉnh $u$ luôn diễn ra sau thời điểm duyệt xong của các đỉnh trong cây con gốc $u$.
+
+    \item \textbf{Cách thực hiện:}
+    \begin{itemize}
+        \item Đầu tiên ta sẽ bắt đầu duyệt $DFS$ từ đỉnh gốc. Khi duyệt tới đỉnh $u$ ta sẽ cập nhật thời điểm duyệt tới. Lúc này $low[u] = num[u] =$ \textit{thứ tự duyệt DFS}. Ta sẽ duyệt tất cả các con $v$ trong gốc $u$.
+        \item \textbf{Trường hợp 1:} Nếu đỉnh $v$ chưa được thăm thì sau khi hoàn thành $DFS$ của $v$ thì ta sẽ cập nhật lại giá trị của $low[u]$: $low[u] = \min(low[u], low[v])$;
+        \item \textbf{Trường hợp 2:} Nếu đỉnh $v$ đã được thăm, thì ta sẽ cập nhật lại giá trị cho $low[u]$: $low[u] = \min(low[u], num[v])$;
+        \item Ở trường hợp này ta không thể cập nhật $low[u] = \min(low[u], low[v])$ được. Vì khi ta thăm đến đỉnh $u$ mà đỉnh $v$ đã được thăm thì tức là $(u, v)$ là một cạnh nét đứt, do đó khi đi từ $u$ ta đã sử dụng 1 cạnh nét đứt nên không thể tiếp tục di chuyển nữa (theo định nghĩa của mảng $low[]$) suy ra ta chỉ cập nhật $low[u] = \min(low[u], num[v])$.
+    \end{itemize}
+    \item \textbf{Chú ý:} \textit{Nếu v là cha trực tiếp của u thì ta bỏ qua không xét đến.}
+    \item Khi đã duyệt xong đỉnh $u$ và các nút trong cây con $DFS$ gốc $u$ ta sẽ tiến hành cập nhật giá trị $tail[u] =$ \textit{thời gian duyệt DFS hiện tại}.
+\end{itemize}
+
+\begin{lstlisting}[language=C++, caption={Cài đặt}]
+int timeDfs = 0; 
+
+void dfs(int u, int pre) {
+    num[u] = low[u] = ++timeDfs;
+    for (int v : g[u]){
+        if (v == pre) continue;
+        if (!num[v]) {
+            dfs(v, u);
+            low[u] = min(low[u], low[v]);
+        }
+        else low[u] = min(low[u], num[v]);
+    }
+    tail[u] = timeDfs;
+}
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{img/b3/Depth-First-Search-Tree_img3.png}  
+    \caption{Ví dụ minh họa}  
+\end{figure}
 
 \subsection{Khớp và Cầu (Joints and Brides)}
+\begin{dinhnghia}
+    
+    \item Trong đồ thị vô hướng, một đỉnh được gọi là đỉnh khớp nếu như loại bỏ đỉnh này và các cạnh liên thuộc với nó ra khỏi đồ thị thì số thành phần liên thông của đồ thị tăng lên.
+    
+    \item Trong đồ thị vô hướng, một cạnh được gọi là cạnh cầu nếu như loại bỏ cạnh này ra khỏi đồ thị thì số thành phần liên thông của đồ thị tăng lên.
+\end{dinhnghia}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/b4/Depth-First-Search-Tree_img4.png}   
+    \caption{Minh họa khớp và cầu} 
+\end{figure}
+
+\begin{baitap}
+    \href{https://oj.vnoi.info/problem/graph_}{GRAPH\_ - Tìm khớp và cầu (Cơ bản)}
+\end{baitap}
+
+Xét đơn đồ thị vô hướng $G = (V, E)$ có $N$ ($1 \leq N \leq 10000$) đỉnh và $M$ ($1 \leq M \leq 50000$) cạnh. Người ta định nghĩa một đỉnh gọi là khớp nếu như xóa đỉnh đó sẽ làm tăng số thành phần liên thông của đồ thị. Tương tự như vậy, một cạnh được gọi là cầu nếu xóa cạnh đó sẽ làm tăng số thành phần liên thông của đồ thị.
+
+Vấn đề đặt ra là cần đếm tất cả các khớp và cầu của đồ thị $G$.
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu: chứa hai số tự nhiên $N$, $M$.
+    \item $M$ dòng sau, mỗi dòng chứa một cặp số $(u, v)$ ($u \neq v$, $1 \leq u \leq N, 1 \leq v \leq N$) mô tả một cạnh của $G$.
+\end{itemize}
+
+\textbf{Output}
+\begin{itemize}
+    \item Gồm một dòng duy nhất ghi hai số, số thứ nhất là số khớp, số thứ hai là số cầu của $G$.
+\end{itemize}
+
+\textbf{Example}
+
+\begin{lstlisting}[caption={Input}]
+10 12
+1 10
+10 2
+10 3
+2 4
+4 5
+5 2
+3 6
+6 7
+7 3
+7 8
+8 9
+9 7
+\end{lstlisting}
+\begin{lstlisting}[caption={Output}]
+4 3 
+\end{lstlisting}
+
+\textbf{Note}
+\begin{itemize}
+    \item Các cạnh màu đỏ là cạnh cầu.
+    \item Các đỉnh màu xanh lá là đỉnh khớp.
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.3\textwidth]{img/b4/Depth-First-Search-Tree_img5.png}
+    \caption{Minh họa ví dụ}
+\end{figure}
+
+\subsubsection*{Phân tích}
+
+\textbf{Tìm cạnh cầu}
+\begin{itemize}
+    \item Dễ thấy rằng cạnh cầu của đồ thị không thể là cạnh nét đứt vì việc bỏ đi cạnh nét đứt sẽ không ảnh hưởng đến tính liên thông giữa các đỉnh của đồ thị. Do vậy, cạnh cầu chỉ có thể là cạnh nét liền.
+    \item Ta sẽ xét riêng từng thành phần liên thông của đồ thị. Xét vùng liên thông $G$ như sau:
+    \begin{itemize}
+        \item Xét cây con gốc $v$ trong cây $DFS$ của $G$ có $u$ là cha trực tiếp của $v$. Gọi tập hợp các đỉnh thuộc cây con gốc $v$ là $A$, tập hợp các đỉnh không thuộc cây con gốc $v$ là $B$. Khi xóa đi cạnh $(u, v)$ thì giữa 2 đỉnh bất kì thuộc cùng 1 tập hợp vẫn có thể đến với nhau bằng các cạnh nét liền. Một đỉnh thuộc $A$ với một đỉnh thuộc $B$ muốn đi đến với nhau bằng các \textbf{cạnh nét liền} thì đều phải thông qua cạnh $(u, v)$.
+        \item \textbf{Ví dụ minh họa:} Xét cạnh nét liền $(7, 9)$ với đỉnh $9$ là con trực tiếp của đỉnh $7$ trên cây $DFS$. Tập đỉnh $A$ là các đỉnh được đánh dấu màu hồng. Tập đỉnh $B$ là các đỉnh được đánh dấu màu vàng. Đỉnh $11$ thuộc tập $A$ muốn đi đến đỉnh $6$ thuộc tập $B$ bằng các cạnh nét liền thì đều phải thông qua cạnh $(7, 9)$.
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.3\textwidth]{img/b4/Depth-First-Search-Tree_img6.png}
+\end{figure}
+
+\begin{itemize}
+    \item Giả sử không có cạnh nét đứt nào nối giữa 1 đỉnh thuộc $A$ với 1 đỉnh thuộc $B$ thì khi xóa cạnh $(u, v)$, $G$ sẽ tách ra thành 2 vùng liên thông $A$ và $B$. Ngược lại nếu tồn tại cạnh nét đứt nối giữa 1 đỉnh thuộc $A$ và 1 đỉnh thuộc $B$ đồ thị vẫn liên thông. Do đó ta chỉ cần xét xem có tồn tại cạnh nét đứt nối giữa $A$ và $B$ hay không để kết luận $(u, v)$ có phải cầu không?
+    \item Ta có từ $v$ có thể đi đến một đỉnh $p$ nào đó có $num[p] = low[v]$ bằng cách đi theo các cung của cây $DFS$ và đi qua không quá 1 cạnh nét đứt và $p$ có thứ tự thăm sớm nhất khi $DFS$. Nếu $p$ nằm trong $B$ thì $p$ phải là tổ tiên của $v$ cũng đồng nghĩa với việc $num[p] < num[v]$ hay $low[v] < num[v]$ (\textbf{vì đồ thị không có cung chéo}), nghĩa là tồn tại 1 cạnh nét đứt nối giữa 1 đỉnh thuộc $A$ với 1 đỉnh thuộc $B$ (vì nếu chỉ đi bằng các cung của cây $DFS$ thì $v$ không thể tới một tổ tiên của nó).
+    \item Do đó nếu $low[v] \geq num[v]$ chắc chắn đỉnh $p$ thuộc cây con gốc $v$ hay $p$ thuộc tập hợp $A$ khi đó không tồn tại cạnh nét đứt nối giữa 1 đỉnh thuộc $A$ với 1 đỉnh thuộc $B$. Tuy nhiên, ta dễ dàng nhận thấy $low[v] \leq num[v]$ vì đỉnh $v$ luôn tới được chính nó.
+\end{itemize}
+
+\noindent\textbf{Kết luận:} Nếu $low[v] = num[v]$ thì $(u, v)$ là một cạnh cầu trong đồ thị.
+
+\textbf{Tìm đỉnh khớp}
+\begin{itemize}
+    \item Ta sẽ xét riêng từng thành phần liên thông của đồ thị. Xét vùng liên thông $G$ như sau:
+    \begin{itemize}
+        \item Xét cây con gốc $u$ trong cây $DFS$ của $G$, nếu mọi nhánh con của $u$ đều có cung ngược lên tới tổ tiên của $u$ ($low[v] < num[u]$, với $v$ là tất cả các con trực tiếp của $u$ trên cây $DFS$) thì đỉnh $u$ không thể là đỉnh khớp. Bởi trong đồ thị ban đầu, nếu ta loại bỏ đỉnh $u$ đi thì từ mỗi đỉnh bất kỳ thuộc nhánh con vẫn có thể đi lên một tổ tiên của $u$, rồi đi sang nhánh con khác hoặc đi sang tất cả những đỉnh còn lại của cây nên số thành phần liên thông của đồ thị không thay đổi.
+        \item \textbf{Ví dụ minh họa:} Xét đỉnh $9$ không phải là đỉnh khớp vì cả 2 nhánh con của nó là cây con gốc $10$ và cây con gốc $13$ trong cây $DFS$ đều có cung ngược lên tới đỉnh $7$ là tổ tiên của đỉnh $9$.
+    \end{itemize}
+\end{itemize}
+\begin{figure}[h]   
+    \centering
+    \includegraphics[width=0.3\textwidth]{img/b4/Depth-First-Search-Tree_img7.png}
+\end{figure}
+
+\begin{itemize}
+    \item Nếu $u$ không phải là đỉnh gốc của cây $DFS$, và tồn tại ít nhất một nhánh con trong cây con gốc $u$ không có cung ngược lên một tổ tiên của $u$ ($low[v] \geq num[u]$, với $v$ là một con trực tiếp bất kì của $u$ trên cây $DFS$) thì đỉnh $u$ là đỉnh khớp. Bởi khi đó, tất cả những cung xuất phát từ nhánh con đó chỉ có thể đi tới những đỉnh thuộc cây con gốc $u$ mà thôi, trên đồ thị ban đầu, không tồn tại cạnh nối từ những đỉnh thuộc nhánh con đó tới một tổ tiên của $u$. Vậy nên từ một đỉnh bất kì thuộc nhánh con đó muốn đi lên một tổ tiên của $u$ thì bắt buộc phải đi qua $u$ nên việc loại bỏ đỉnh $u$ ra khỏi đồ thị sẽ làm tăng số thành phần liên thông của đồ thị.
+    \item \textbf{Ví dụ minh họa:} Xét đỉnh $2$ là đỉnh khớp vì tồn tại 1 nhánh con của nó là cây con gốc $4$ không có cung ngược lên tới tổ tiên của đỉnh $2$.
+\end{itemize}
+
+\begin{figure}[h]   
+    \centering
+    \includegraphics[width=0.3\textwidth]{img/b4/Depth-First-Search-Tree_img8.png}
+\end{figure}
+
+\begin{itemize}
+    \item Nếu $u$ là đỉnh gốc của cây $DFS$, thì $u$ là đỉnh khớp khi và chỉ khi $u$ có ít nhất 2 nhánh con. Vì đồ thị không có cung chéo nên khi $u$ có 2 nhánh con thì đường đi giữa hai đỉnh thuộc hai nhánh con đó bắt buộc phải đi qua $u$. Việc loại bỏ đỉnh $u$ ra khỏi đồ thị sẽ làm tăng số thành phần liên thông của đồ thị.
+    \item \textbf{Ví dụ minh họa:} Xét đỉnh $1$ là đỉnh khớp vì đỉnh $1$ là đỉnh gốc của cây $DFS$ và có tới $3$ nhánh con.
+\end{itemize}
+
+\begin{figure}[h]   
+    \centering
+    \includegraphics[width=0.3\textwidth]{img/b4/Depth-First-Search-Tree_img9.png}
+\end{figure}
+
+\textbf{Kết luận:} Đỉnh $u$ là đỉnh khớp khi:
+\begin{itemize}
+    \item Đỉnh $u$ không phải là gốc của cây $DFS$ và $low[v] \geq num[u]$ (với $v$ là một con trực tiếp bất kì của $u$ trong cây $DFS$).
+    \item \textbf{Hoặc}
+    \item Đỉnh $u$ là gốc của cây $DFS$ và có ít nhất $2$ con trực tiếp trong cây $DFS$.
+\end{itemize}
+
+\subsubsection*{Cài đặt}
+
+\textbf{Cấu trúc dữ liệu:}
+\begin{itemize}
+    \item Hằng số \texttt{maxN = 10010}
+    \item Biến \texttt{timeDfs} -- Thứ tự $DFS$
+    \item Biến \texttt{bridge} -- Số lượng cạnh cầu
+    \item Mảng \texttt{low[]}, \texttt{num[]}
+    \item Mảng \texttt{joint[]} -- Đánh dấu đỉnh khớp
+    \item Vector \texttt{g[]} -- Danh sách cạnh kề của mỗi đỉnh
+\end{itemize}
+
+\begin{lstlisting}[language=C++]
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int maxN = 10010;
+
+int n, m;
+bool joint[maxN];
+int timeDfs = 0, bridge = 0;
+int low[maxN], num[maxN];
+vector <int> g[maxN];
+
+void dfs(int u, int pre) {
+    int child = 0; // So luong con truc tiep cua dinh u trong cay DFS
+    num[u] = low[u] = ++timeDfs;
+    for (int v : g[u]) {
+        if (v == pre) continue;
+        if (!num[v]) {
+            dfs(v, u);
+            low[u] = min(low[u], low[v]);
+            if (low[v] == num[v]) bridge++;
+            child++;
+            if (u == pre) { // Neu u la dinh goc cua cay DFS
+                if (child > 1) joint[u] = true;
+            }
+            else if (low[v] >= num[u]) joint[u] = true;
+        }
+        else low[u] = min(low[u], num[v]);
+    }
+}
+
+int main() {
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++) {
+        int u, v;
+        cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    for (int i = 1; i <= n; i++)
+        if (!num[i]) dfs(i, i);
+
+    int cntJoint = 0;
+    for (int i = 1; i <= n; i++) cntJoint += joint[i];
+
+    cout << cntJoint << ' ' << bridge;
+}
+\end{lstlisting}
 
 \subsection{Thành phần liên thông mạnh (Strongly Connected Components)}
-
-
 
 \subsection{Thuật toán BFS}
 
