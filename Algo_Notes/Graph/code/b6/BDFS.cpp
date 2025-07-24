@@ -3,7 +3,7 @@
 #define endl "\n"
 using namespace std;
 
-int n, m, componentNumber = 0; 
+int n, m, compCount = 0; 
 const int MAXN = 100005;
 vector<bool> visited(MAXN, false);
 vector <int> adj[MAXN];
@@ -24,7 +24,7 @@ void bfs(int s) {
             }
         }
     }
-    componentNumber++;
+    compCount++;
 }
 
 signed main() {
@@ -39,5 +39,5 @@ signed main() {
             bfs(u);
         }
     }
-    cout << componentNumber;
+    cout << compCount;
 }
