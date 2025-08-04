@@ -2334,9 +2334,10 @@ signed main() {
 
 \subsection{Thuật toán Dijkstra + Heap}
 
+Nội dung bài chủ yếu tham khảo/copy từ [VNOI WIKI] : \url{https://wiki.vnoi.info/algo/graph-theory/shortest-path}
+
 \subsubsection{Thuật toán Dijkstra}
 
-Nội dung bài chủ yếu tham khảo/copy từ [VNOI WIKI] : \url{https://wiki.vnoi.info/algo/graph-theory/shortest-path}\\
 
 Thuật toán Dijkstra dùng để giải quyết bài toán \textbf{đường đi ngắn nhất một nguồn} (Single-source shortest path) trên đồ thị có \textbf{trọng số không âm}.
 
@@ -2777,6 +2778,318 @@ signed main() {
 }
 \end{lstlisting}
 \subsection{Disjoint Set Union (DSU)}
+
+Nội dung bài chủ yếu tham khảo/copy từ [VNOI WIKI] : \url{https://wiki.vnoi.info/algo/data-structures/disjoint-set-union}
+
+\subsubsection{Giới thiệu}
+
+\textbf{Disjoint Set Union (DSU)} hay còn gọi là Cấu trúc tập hợp rời rạc, là một cấu trúc dữ liệu rất hữu ích và thường xuyên được sử dụng trong các bài toán lập trình thi đấu.
+
+Đúng như tên gọi, DSU giúp chúng ta quản lý hiệu quả các tập hợp mà không có phần tử chung, và hỗ trợ nhanh các thao tác như:
+\begin{itemize}
+    \item Kiểm tra xem hai phần tử có nằm trong cùng một tập hay không
+    \item Gộp hai tập thành một tập mới
+\end{itemize}
+
+\subsubsection{Bài toán}
+
+Cho một đồ thị có $n$ đỉnh, ban đầu không có cạnh nào. Chúng ta phải xử lý các truy vấn như sau:
+
+\begin{itemize}
+    \item Thêm một cạnh giữa đỉnh $x$ và đỉnh $y$ trong đồ thị.
+    \item In ra \texttt{YES} nếu như đỉnh $x$ và đỉnh $y$ nằm trong cùng một thành phần liên thông. In ra \texttt{NO} nếu ngược lại.
+\end{itemize}
+
+Một thành phần liên thông trong đồ thị là một đồ thị con trong đó giữa bất kỳ hai đỉnh nào đều có đường đi đến nhau, và không thể nhận thêm bất kỳ một đỉnh nào mà vẫn duy trì tính chất trên.
+
+\subsubsection{Cấu trúc dữ liệu Disjoint Set Union}
+
+Nếu ta coi mỗi đỉnh trong đồ thị là một phần tử và mỗi thành phần liên thông trong đồ thị là một tập hợp, truy vấn thứ nhất sẽ trở thành gộp hai tập hợp lại thành một và truy vấn thứ hai trở thành hỏi hai phần tử $x$ và $y$ có nằm trong cùng một tập hợp hay không.
+
+Để giải bài toán này, ta sẽ xây dựng một cấu trúc dữ liệu cơ bản thao tác như sau:
+\begin{itemize}
+    \item \texttt{make\_set(v)}: tạo ra một tập hợp mới chỉ chứa phần tử $v$.
+    \item \texttt{union\_sets(a, b)}: gộp tập hợp chứa phần tử $a$ và tập hợp chứa phần tử $b$ thành một.
+    \item \texttt{find\_set(v)}: cho biết \textbf{đại diện} của tập hợp có chứa phần tử $v$. Đại diện này sẽ là một phần tử của tập hợp đó và có thể thay đổi sau mỗi lần gọi thao tác \texttt{union\_sets}. Ta sẽ dựa vào đại diện để kiểm tra hai phần tử có nằm trong cùng một tập hợp hay không.
+\end{itemize}
+
+Ta có thể xử lý các thao tác này hiệu quả nhờ biểu diễn các tập hợp dưới dạng các cây, mỗi phần tử là một đỉnh và mỗi cây tương ứng với một tập hợp. Gốc của mỗi cây sẽ là đại diện của tập hợp đó.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/b8/disjoint-set-union_img1.png}
+\end{figure}
+
+Ví dụ:
+\begin{itemize}
+    \item Ban đầu, mỗi phần tử thuộc một tập hợp riêng biệt, vậy mỗi đỉnh là một cây riêng biệt (\texttt{make\_set(1...4)}).
+    \item Bước tiếp theo, gộp hai tập hợp chứa phần tử 1 và 2 (\texttt{union\_sets(1,2)}).
+    \item Sau đó, gộp hai tập hợp chứa phần tử 3 và 4 (\texttt{union\_sets(3,4)}).
+    \item Cuối cùng, gộp hai tập hợp chứa phần tử 1 và 3 (\texttt{union\_sets(1,3)}).
+\end{itemize}
+
+Với cách cài đặt này, ta sẽ lưu một mảng \texttt{parent} với \texttt{parent[v]} là cha của phần tử $v$.
+
+
+\subsubsection*{Cài đặt ``ngây thơ''}
+
+Để tạo một tập hợp mới gồm phần tử $v$ (hay \texttt{make\_set(v)}), ta chỉ cần tạo một cây có gốc là $v$, với \texttt{parent[v] = v}.
+
+Để gộp hai tập hợp lần lượt chứa phần tử $a$ và phần tử $b$ (hay \texttt{union\_sets(a, b)}), ta sẽ tìm gốc của cây có chứa phần tử $a$ và gốc của cây có chứa phần tử $b$. Nếu hai giá trị này giống nhau, ta sẽ không làm gì do hai phần tử này đã nằm trong cùng một tập hợp. Còn nếu không, ta sẽ đặt gốc cây này là cha của gốc cây còn lại. Dễ thấy điều này sẽ gộp hai cây lại thành một.
+
+Để tìm kí hiệu của một tập hợp có chứa phần tử $v$ (hay \texttt{find\_set(v)}), ta đơn giản nhảy lên các tổ tiên của đỉnh $v$ cho đến khi ta đến gốc của cây. Thao tác này có thể dễ dàng được cài đặt bằng đệ quy.
+
+\begin{lstlisting}[language=C++]
+void make_set(int v) {
+    parent[v] = v; 
+}
+
+int find_set(int v) {
+    if (v == parent[v]) return v;
+    return find_set(parent[v]); 
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) parent[b] = a;
+}
+\end{lstlisting}
+
+Như đã nói, đây là cách cài đặt ngây thơ, ta có thể dễ dàng tạo ra một ví dụ sao cho khi sử dụng cách cài đặt này, cây sẽ trở thành một đoạn thẳng gồm $n$ phần tử. Trong trường hợp này, độ phức tạp của thao tác \texttt{find\_set} sẽ là $\mathcal{O}(n)$.
+
+Điều này đương nhiên là không thể chấp nhận được, vì vậy ta sẽ tìm hiểu hai phương pháp tối ưu thuật toán dưới đây.
+
+\subsubsection*{Tối ưu 1 -- Gộp theo kích cỡ / độ cao}
+
+Phương pháp tối ưu này sẽ thay đổi thao tác \texttt{union\_sets}. Ta sẽ thay đổi cách xét trong hai cây đang gộp, gốc của cây nào sẽ là cha của gốc của cây còn lại.
+
+Có hai cách sử dụng phổ biến nhất:
+\begin{itemize}
+    \item Gộp theo kích cỡ: gốc của cây lớn sẽ là cha của gốc cây nhỏ.
+    \item Gộp theo độ cao: gốc của cây có độ cao lớn hơn sẽ là cha của gốc cây có độ cao nhỏ hơn.
+\end{itemize}
+
+\paragraph{Gộp theo kích cỡ:}
+\begin{lstlisting}[language=C++]
+void make_set(int v) {
+    parent[v] = v;
+    sz[v] = 1;
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        if (sz[a] < sz[b]) swap(a, b);
+        parent[b] = a;
+        sz[a] += sz[b];
+    }
+}
+\end{lstlisting}
+
+\paragraph{Gộp theo độ cao:}
+\begin{lstlisting}[language=C++]
+void make_set(int v) {
+    parent[v] = v;
+    rank[v] = 0;
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        if (rank[a] < rank[b]) swap(a, b);
+        parent[b] = a;
+        if (rank[a] == rank[b]) rank[a]++;
+    }
+}
+\end{lstlisting}
+
+Chỉ cần sử dụng phương pháp tối ưu này, độ phức tạp của thao tác \texttt{find\_set} sẽ trở thành $\mathcal{O}(\log n)$. Tuy nhiên, ta vẫn còn có thể làm tốt hơn nữa khi kết hợp với phương pháp tối ưu tiếp theo.
+
+\subsubsection*{Tối ưu 2 -- Nén đường đi}
+
+Phương pháp tối ưu này nhằm tăng tốc thao tác \texttt{find\_set}.
+
+Giả sử ta gọi \texttt{find\_set(v)} với một đỉnh $v$ bất kỳ, chúng ta tìm được $p$ là gốc của cây. Đồng thời, mọi hàm \texttt{find\_set(u)} với $u$ là một đỉnh nằm trên đường đi từ $u$ đến $p$, sẽ trả về $p$. Cách tối ưu ở đây chính là làm cho đường đi đến gốc của các đỉnh $u$ ngắn đi bằng cách gán trực tiếp cha của các đỉnh $u$ này thành $p$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{img/b8/disjoint-set-union_img2.png}
+\end{figure}
+
+Sau khi thực hiện tối ưu này, cấu trúc cây có thể thay đổi: các đỉnh nằm trên đường đi đến gốc sẽ nối trực tiếp với gốc.
+
+\paragraph{Cài đặt thao tác \texttt{find\_set} có nén đường đi:}
+\begin{lstlisting}[language=C++]
+int find_set(int v) {
+    if (v == parent[v]) return v;
+    int p = find_set(parent[v]);
+    parent[v] = p;
+    return p;
+}
+\end{lstlisting}
+
+\paragraph{Hoặc phiên bản ngắn gọn:}
+\begin{lstlisting}[language=C++]
+int find_set(int v) {
+    return v == parent[v] ? v : parent[v] = find_set(parent[v]);
+}
+\end{lstlisting}
+
+\subsubsection*{Một cách cài đặt khác: DSU chỉ dùng mảng \texttt{lab[]}}
+
+Ở một số tài liệu như \textit{Giải thuật và lập trình} (thầy Lê Minh Hoàng) hay thư viện Atcoder, cấu trúc DSU (Disjoint Set Union) có thể được cài đặt chỉ với một mảng duy nhất là \texttt{lab[]} thay vì hai mảng \texttt{parent[]} và \texttt{sz[]}.
+
+\textbf{Ý tưởng:}
+\begin{itemize}
+    \item Nếu \texttt{lab[v]} là một số âm, thì $-lab[v]$ là số lượng đỉnh của cây có gốc $v$ (tức $v$ là gốc của cây).
+    \item Nếu \texttt{lab[v]} là một số dương, thì \texttt{lab[v]} chính là cha của $v$.
+\end{itemize}
+
+\paragraph{Cài đặt:}
+\begin{lstlisting}[language=C++]
+void make_set(int v) {
+    lab[v] = -1;
+}
+
+int find_set(int v) {
+    return lab[v] < 0 ? v : lab[v] = find_set(lab[v]);
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        if (lab[a] > lab[b]) swap(a, b);
+        lab[a] += lab[b];
+        lab[b] = a;
+    }
+}
+\end{lstlisting}
+
+\textbf{Giải thích:}
+\begin{itemize}
+    \item \texttt{make\_set(v)}: Khởi tạo một cây mới gồm phần tử $v$, lúc này $v$ là gốc, và cây có đúng 1 phần tử nên \texttt{lab[v] = -1}.
+    \item \texttt{find\_set(v)}: Trả về gốc của cây chứa $v$, đồng thời tối ưu bằng nén đường đi (path compression).
+    \item \texttt{union\_sets(a, b)}: Gộp hai cây chứa $a$ và $b$ lại, gốc của cây nhỏ hơn (tức có kích thước lớn hơn về giá trị âm) sẽ nhận cây còn lại. Cụ thể, nếu \texttt{lab[a] > lab[b]} thì hoán vị $a, b$ để luôn gộp cây $b$ vào cây $a$.
+    \item Sau khi gộp, cập nhật lại kích thước: \texttt{lab[a] += lab[b]} và gán \texttt{lab[b] = a} (gốc mới của $b$).
+\end{itemize}
+
+\subsection{Một số ứng dụng của DSU}
+
+\subsubsection*{Lưu thêm thông tin khác cho mỗi tập hợp}
+
+Ngoài việc lưu các thông tin về cấu trúc cây, ta có thể lưu các hàm có tính chất giao hoán và kết hợp của từng tập hợp. Ví dụ, ta có thể lưu tổng các phần tử/giá trị phần tử bé nhất của từng tập hợp. Lúc này, các thao tác của DSU sẽ được cài đặt như sau:
+
+\begin{lstlisting}[language=C++]
+void make_set(int v) {
+    parent[v] = v;
+    sz[v] = 1;
+    mn[v] = value[v];
+    sum[v] = value[v];
+}
+
+int find_set(int v) {
+    return v == parent[v] ? v : parent[v] = find_set(parent[v]);
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        if (sz[a] < sz[b]) swap(a, b);
+        parent[b] = a;
+        sz[a] += sz[b];
+        sum[a] += sum[b];
+        mn[a] = min(mn[a], mn[b]);
+    }
+}
+\end{lstlisting}
+
+Có thể thấy rằng, tương tự như thông tin về độ lớn của cây (\texttt{sz}) hay độ cao của cây (\texttt{rank}), ta sẽ lưu các hàm này tại gốc của từng cây.
+
+\begin{lstlisting}[language=C++]
+int find_sum(int v) {
+    v = find_set(v);
+    return sum[v];
+}
+
+int find_min(int v) { 
+    v = find_set(v);
+    return mn[v];
+}
+\end{lstlisting}
+
+\subsection*{Bài toán xếp hàng}
+
+\subsubsection*{Bài toán}
+
+Cho \( n \) người đang xếp hàng ở các vị trí từ 1 đến \( n \). Viết chương trình xử lý các truy vấn:
+
+\begin{itemize}
+    \item Người đứng ở vị trí thứ \( i \) rời khỏi hàng.
+    \item Tìm người gần nhất về bên phải vị trí \( p \) mà chưa rời khỏi hàng.
+\end{itemize}
+
+\subsubsection*{Lời giải}
+
+Với mỗi vị trí, ta sẽ có một con trỏ. Nếu người đứng ở vị trí này vẫn đang đứng trong hàng, con trỏ trỏ vào vị trí đó, nếu không thì con trỏ này sẽ trỏ vào vị trí ngay bên phải.
+
+Xét ví dụ sau với \( n = 5 \), ban đầu ta có:
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/b8/disjoint-set-union_img3.png}
+\end{figure}
+
+Giả dụ người đứng ở vị trí 2 và 3 rời khỏi hàng:
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/b8/disjoint-set-union_img4.png}
+\end{figure}
+
+Ta thấy để tìm người gần nhất bên phải mà chưa rời khỏi hàng, ta đi dần dần sang phải cho đến khi gặp một vị trí có con trỏ đến chính nó.
+
+Chúng ta có thể sử dụng cấu trúc dữ liệu DSU để lưu trữ các thông tin trên và sử dụng phương pháp tối ưu nén đoạn để đạt được độ phức tạp trung bình \(O(\log n)\) với mỗi truy vấn.
+
+Để ý kĩ hơn, ta thấy vị trí ta cần tìm chính là vị trí có thứ tự lớn nhất trong tập hợp. Ta có thể lưu phần tử lớn nhất trong một tập hợp như đã nói ở phần trên, qua đó đạt được độ phức tạp trung bình \(O(\alpha(n))\) với mỗi truy vấn.
+
+%\subsection*{Code mẫu}
+\paragraph{Cài đặt}
+\begin{lstlisting}[language=C++]
+void make_set(int v) {
+    parent[v] = v;
+    sz[v] = 1;
+    mx[v] = v;
+}
+
+int find_set(int v) {
+    return v == parent[v] ? v : parent[v] = find_set(parent[v]);
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        if (sz[a] < sz[b]) swap(a, b);
+        parent[b] = a;
+        sz[a] += sz[b];
+        mx[a] = max(mx[a], mx[b]);
+    }
+}
+
+void leave(int v) { 
+    union_sets(v, v + 1);
+}
+
+int find_next(int p) { 
+    p = find_set(p);
+    return mx[p];
+}
+\end{lstlisting}
 
 \subsection{Maximum Flow and Maximum Matching}
 
