@@ -3424,6 +3424,94 @@ signed main() {
 }
 \end{lstlisting}
 
+\begin{baitap}
+    \href{https://codeforces.com/contest/1559/problem/D1}{Mocha and Diana (Easy Version)}
+\end{baitap}
+
+Một \emph{forest} (rừng) là một đồ thị vô hướng không có chu trình (không nhất thiết phải liên thông).  
+
+Mocha và Diana là bạn bè ở Zhijiang, cả hai đều có một forest với các đỉnh được đánh số từ $1$ đến $n$, và họ muốn thêm các cạnh vào rừng của mình sao cho:  
+
+\begin{itemize}
+    \item Sau khi thêm các cạnh, cả hai đồ thị của họ vẫn là forest.
+    \item Họ thêm cùng một tập cạnh. Nghĩa là nếu cạnh $(u,v)$ được thêm vào rừng của Mocha thì cạnh $(u,v)$ cũng được thêm vào rừng của Diana, và ngược lại.
+\end{itemize}
+
+Mocha và Diana muốn biết số lượng cạnh tối đa mà họ có thể thêm, và những cạnh nào sẽ được thêm.  
+
+\textbf{Input}  
+
+Dòng đầu tiên chứa ba số nguyên $n, m_1, m_2$ $(1 \leq n \leq 1000, 0 \leq m_1, m_2 < n)$ — số lượng đỉnh và số cạnh ban đầu trong rừng của Mocha và Diana.  
+
+Mỗi dòng trong $m_1$ dòng tiếp theo chứa hai số nguyên $u, v$ $(1 \leq u, v \leq n, u \neq v)$ — biểu diễn một cạnh trong rừng của Mocha.  
+
+Mỗi dòng trong $m_2$ dòng tiếp theo chứa hai số nguyên $u, v$ $(1 \leq u, v \leq n, u \neq v)$ — biểu diễn một cạnh trong rừng của Diana.
+
+\textbf{Output}
+
+Dòng đầu tiên in ra một số nguyên $h$, là số cạnh tối đa mà Mocha và Diana có thể thêm (vào mỗi rừng).  
+
+Mỗi dòng trong $h$ dòng tiếp theo in ra hai số nguyên $u, v$ $(1 \leq u, v \leq n, u \neq v)$ — biểu diễn cạnh được thêm vào.  
+
+Nếu có nhiều đáp án đúng, bạn có thể in ra bất kỳ một đáp án nào.
+
+\textbf{Ví dụ}
+\paragraph{Input}
+\begin{lstlisting}
+5 3 2
+5 4
+2 1
+4 3
+4 3
+1 4
+\end{lstlisting}
+
+\paragraph{Output}
+\begin{lstlisting}
+1
+2 4
+\end{lstlisting}
+
+\textbf{Phân tích}
+
+Ta gọi forest của Mocha và Diana lần lượt là $f_1$ và $f_2$.\\
+
+Để không mất tính chất forest, ta xét lần lượt cặp đỉnh $(u, v)$. Nếu $(u, v)$ đều là 2 đỉnh không thuộc cùng một TPLT trong cả $f_1$ và $f_2$, ta chọn $(u, v)$ là cạnh được thêm vào, đồng thời union\_sets$(u, v)$ trong $f_1$ và $f_2$.\\
+
+\textbf{[Groot]:} ê kiểu tao nghe nó ``tham lam'' quá, liệu cứ thêm vô tội vạ như vậy thì liệu kết quả có tối ưu không? Ý tao là tại vì sao mày chắc chắn cái cách làm của mày là đúng, lỡ như thêm $(u,v)$ vào thì sẽ hạn chế các lần thêm sau ấy? Mày hiểu ý tao không??
+
+\textbf{[vuivethoima]:} Ờ dù *éo hiểu câu hỏi ngu ngu của mày cho lắm, nhưng mày thắc mắc vậy là đúng. Nhưng ở đây cái ``tham lam'' này thực ra \textbf{không làm mất đi tối ưu}. Lý do là:
+
+\begin{enumerate}
+    \item    Một cạnh $(u,v)$ chỉ được chọn nếu nó nối hai TPLT \emph{khác nhau} trong cả $f_1$ lẫn $f_2$.  
+    Nghĩa là khi thêm cạnh này, số TPLT trong $f_1$ giảm ít nhất $1$ và số TPLT trong $f_2$ cũng giảm ít nhất $1$.
+
+    \item Vì nó giảm số TPLT đồng thời trong cả hai đồ thị, cạnh này không thể gây cản trở cho việc thêm cạnh khác sau này.  
+    Nếu không chọn cạnh này ngay thì sau này cũng không thể chọn lại được (do DSU chỉ hợp nhất, không bao giờ tách ra).  
+    Do đó, việc ``chần chừ'' không mang lại lợi ích gì.
+
+    \item Một forest trên $n$ đỉnh có nhiều nhất $n-1$ cạnh.  
+    Ban đầu $f_1$ có $m_1$ cạnh, $f_2$ có $m_2$ cạnh.  
+    Sau khi thêm, số cạnh tối đa có thể đạt được lần lượt là $n-1-m_1$ đối với $f_1$ và $n-1-m_2$ đối với $f_2$.  
+    Do đó, tổng số cạnh thêm được tối đa là:
+    \[
+        \min\bigl((n-1-m_1),\,(n-1-m_2)\bigr).
+    \]
+    Thuật toán tham lam này sẽ luôn đạt được ngưỡng tối đa đó, vì nó không bỏ sót bất kỳ cạnh hợp lệ nào.
+\end{enumerate}
+
+\noindent
+Vì vậy mỗi khi thêm được một cạnh hợp lệ thì cứ thêm, vì:
+\begin{itemize}
+    \item Nó chắc chắn có lợi (giảm số TPLT ở cả hai forest).
+    \item Nếu không thêm thì sau này cũng không thêm được.
+    \item Không tồn tại trường hợp ``thêm bây giờ làm hỏng cơ hội về sau''.
+\end{itemize}
+
+Do đó, chiến lược tham lam ở đây là \textbf{tối ưu}. Mày thấy tao nêu những lý do vậy có thuyết phục mày không??
+
+\textbf{[Groot]:} méo.
+ 
 
 \subsection{Maximum Flow and Maximum Matching}
 
