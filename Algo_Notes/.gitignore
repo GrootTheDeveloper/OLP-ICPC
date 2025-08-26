@@ -1,4 +1,3 @@
-# Bỏ qua các file phụ của LaTeX
 *.aux
 *.log
 *.out
