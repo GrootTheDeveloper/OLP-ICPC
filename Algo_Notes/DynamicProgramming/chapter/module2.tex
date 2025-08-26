@@ -2,3 +2,543 @@
 
 \minitoc
 
+\begin{baitap}{Vacation}{https://oj.vnoi.info/problem/atcoder\_dp\_c}
+
+Kỳ nghỉ hè của Taro bắt đầu vào ngày mai, nên anh ấy đã quyết định lên kế hoạch cho nó ngay bây giờ.  
+
+Kỳ nghỉ bao gồm $N$ ngày. Vào ngày thứ $i$ $(1 \leq i \leq N)$, Taro sẽ chọn và tham gia một trong các hoạt động sau:
+\begin{itemize}
+    \item A: Bơi ở biển – nhận được $a_i$ điểm hạnh phúc.
+    \item B: Bắt bọ trên núi – nhận được $b_i$ điểm hạnh phúc.
+    \item C: Làm bài tập ở nhà – nhận được $c_i$ điểm hạnh phúc.
+\end{itemize}
+
+Vì Taro dễ cảm thấy buồn chán nên anh không thể tham gia cùng một hoạt động trong hai ngày liên tiếp.  
+
+\textbf{Input}
+\begin{itemize}[noitemsep]
+    \item Dòng đầu tiên chứa số nguyên $N$ $(1 \leq N \leq 10^5)$.
+    \item $N$ dòng tiếp theo, mỗi dòng gồm ba số nguyên $a_i, b_i, c_i$ $(1 \leq a_i, b_i, c_i \leq 10^4)$ – lần lượt là điểm hạnh phúc nếu Taro chọn hoạt động A, B, C trong ngày thứ $i$.
+\end{itemize}
+
+\textbf{Output}  
+In ra tổng số điểm hạnh phúc tối đa mà Taro có thể đạt được.
+
+\textbf{Ví dụ}
+
+\begin{sampleio}
+3 & 210 \\
+10 40 70 & \\
+20 50 80 & \\
+30 60 90 & \\
+\end{sampleio}
+
+\end{baitap}
+
+\textbf{Phân tích bài toán}
+
+Gọi $f[i][j]$ là tổng số điểm hạnh phúc tối đa ngày $i$ có thể đạt được khi tham gia hoạt động $j$ $(0 \leq j \leq 2)$ trong ngày đó (0 là hoạt động A, 1 là hoạt động B, 2 là hoạt động C).\\
+
+\textbf{Trường hợp cơ sở:} $f[1][0] = a_1$, $f[1][1] = b_1$, $f[1][2] = c_1$\\
+
+Vì không được tham gia cùng 1 hoạt động 2 ngày liên tiếp nhau, nên với ngày thứ $i$ $(i \geq 2)$ tổng điểm hạnh phúc có thể đạt được là tổng điểm lớn nhất ngày hôm trước (hoạt động khác hôm nay) và hôm nay. Tức: 
+\[
+f[i][j] = \max_{k \ne j} \left( f[i-1][k] \right) + \text{điểm hạnh phúc của hoạt động $j$ ở ngày $i$}
+\]
+Hay:
+\[
+\begin{aligned}
+f[i][0] &= \max \left( f[i-1][1],\ f[i-1][2] \right) + a_i \\
+f[i][1] &= \max \left( f[i-1][0],\ f[i-1][2] \right) + b_i \\
+f[i][2] &= \max \left( f[i-1][0],\ f[i-1][1] \right) + c_i \\
+\end{aligned}
+\]
+
+Sau khi tính hết \( f[N][0],\ f[N][1],\ f[N][2] \), ta được kết quả bài toán là:
+
+\[
+\text{Đáp án} = \max \left( f[N][0],\ f[N][1],\ f[N][2] \right)
+\]
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+
+signed main() {
+    int n; cin >> n;
+    vector<int> a(n + 1), b(n + 1), c(n + 1);
+    vector<vector<int>>f(n + 1, vector<int>(3, 0));
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i] >> b[i] >> c[i];
+    }
+    f[1][0] = a[1];
+    f[1][1] = b[1];
+    f[1][2] = c[1];
+
+    for (int i = 2; i <= n; i++) {
+        f[i][0] = max(f[i-1][1], f[i - 1][2]) + a[i];
+        f[i][1] = max(f[i-1][0], f[i - 1][2]) + b[i];
+        f[i][2] = max(f[i-1][0], f[i - 1][1]) + c[i];
+    }
+
+    int ans = max({f[n][0], f[n][1], f[n][2]});
+    cout << ans;
+}
+\end{lstlisting}
+\begin{baitap}{Little Shop of Flowers}{https://dmoj.ca/problem/ioi99p1}
+
+Bạn muốn sắp xếp cửa sổ trưng bày của cửa hàng hoa sao cho đẹp nhất có thể.  
+
+Có $F$ bó hoa, mỗi bó hoa thuộc một loại khác nhau, và có ít nhất $V$ bình hoa được đặt thành một hàng.  
+
+Các bình hoa được cố định trên giá và đánh số từ $1$ đến $V$ từ trái sang phải. Các bó hoa có thể di chuyển, được đánh số từ $1$ đến $F$. Thứ tự số hiệu bó hoa có ý nghĩa: bạn phải đặt các bó hoa sao cho bó hoa số $i$ nằm ở bên trái bó hoa số $j$ nếu $i < j$.  
+
+Mỗi bình hoa có một đặc tính riêng – khi đặt một bó hoa vào một bình hoa thì sẽ có một điểm thẩm mỹ $A_{ij}$ (có thể âm hoặc dương). Bình hoa để trống có điểm $0$.  
+
+Bạn cần sắp xếp các bó hoa vào các bình hoa (theo đúng thứ tự yêu cầu), sao cho tổng điểm thẩm mỹ là lớn nhất có thể. Nếu có nhiều cách sắp xếp đạt cùng giá trị tối đa, bạn chỉ cần in ra một cách hợp lệ bất kỳ.  
+
+\textbf{Input}
+\begin{itemize}[noitemsep]
+    \item Dòng đầu tiên chứa hai số nguyên $F, V$ $(1 \leq F \leq 100,\; F \leq V \leq 100)$.
+    \item $F$ dòng tiếp theo, mỗi dòng chứa $V$ số nguyên $A_{ij}$ $(-50 \leq A_{ij} \leq 50)$ – điểm thẩm mỹ khi đặt bó hoa thứ $i$ vào bình hoa thứ $j$.
+\end{itemize}
+
+\textbf{Output}
+\begin{itemize}[noitemsep]
+    \item Dòng đầu tiên in tổng điểm thẩm mỹ tối đa.
+    \item Dòng thứ hai in $F$ số nguyên – thứ tự các bình hoa đã chọn cho từng bó hoa (theo thứ tự từ bó hoa $1$ đến bó hoa $F$).
+\end{itemize}
+
+\textbf{Ví dụ}
+
+\begin{sampleio}
+3 5 & 53 \\
+7 23 -5 -24 16 & 2 4 5 \\
+5 21 -4 10 23 & \\
+-21 5 -4 -20 20 & \\
+\end{sampleio}
+
+\end{baitap}
+\textbf{Phân tích bài toán}  
+
+Gọi $f[i][j]$ là tổng điểm tối đa khi xét bó hoa thứ $i$ đặt vào bình hoa thứ $j$.\\
+
+Với bó hoa thứ $i$, ta có thể đặt từ chậu $j$ trong khoảng từ  $i$ đến $V - F + i$. Xét chậu $j$, ta có thể chọn bó hoa thứ $i$ cùng với bó hoa thứ $i - 1$ trong các chậu $k$ trong khoảng từ $i - 1$ đến $V - F + i - 1$.\\
+
+\textbf{Trường hợp cơ sở:} Xét bó hoa đầu tiên, ta có thể chọn $V - F + 1$ bình hoa đầu tiên, tức là:
+
+\[
+f[1][j] = A[1][j], \quad \forall j \in [1,\ V - F + 1]
+\]
+
+Với $\forall i \geq 2$, ta có công thức truy hồi tổng quát:
+
+\[
+f[i][j] = \max_{k < j} \left( f[i-1][k] \right) + A[i][j], \quad \forall j \in [i,\ V - F + i]
+\]
+
+\textbf{Kết quả bài toán:}
+
+\[
+\text{Kết quả = } \max \left( f[F][j] \right), \forall j \in [V, F]
+\]
+
+\textbf{Truy vết:}
+
+Sau khi có kết quả bài toán là tổng điểm tối đa, kí hiệu: answer.\\
+
+Xét $i = F \rightarrow 1$, với $i$ ta tìm $f[i][j] == \text{answer}, \forall j \in [i, V - F + i]$. Khi tìm được $f[i][j]$ thỏa mãn, ta đồng thời tìm được bó hoa thứ $i$ được đặt ở chậu $j$. Sau đó lấy kết quả answer $-= f[i][j]$ để dịch về tổng điểm tối đa khi xét bó hoa thứ $i - 1$, đồng thời giảm $i$ đi 1 đơn vị. Lặp lại đến khi $i < 1$, ta sẽ tìm được các chậu hoa đặt bó hoa tương ứng thỏa mãn yêu cầu bài toán.\\
+
+\textbf{[Groot]:} Ê, tao thắc mắc chỗ này. Trong công thức mày chỉ cho $j$ chạy từ $i$ tới $V - F + i$. 
+Ủa sao không để $j$ từ $1$ tới $V$ cho tiện? 
+Tự nhiên lại giới hạn nhìn hơi kì.\\
+
+\textbf{[vuivethoima]:} À, cái này là do ràng buộc thứ tự. 
+Bó hoa thứ $i$ bắt buộc phải nằm bên phải bó hoa thứ $i-1$, nên chắc chắn bình hoa nó chọn phải có chỉ số ít nhất là $i$.  
+Còn bên phải thì cũng không thể chọn quá xa, vì phải chừa chỗ cho những bó hoa còn lại. 
+Nên giới hạn trên là $V - F + i$.\\
+
+\textbf{[Groot]:} À, tức là để đảm bảo cuối cùng $F$ bó hoa đều đặt vừa trong $V$ bình. 
+Nếu cho $j$ rộng ra thì sẽ bị tình huống ``dồn không kịp'' cho mấy bó sau.\\
+
+\textbf{[vuivethoima]:} Chuẩn rồi. Giới hạn đoạn $[i, V-F+i]$ là để đảm bảo tính hợp lệ, chứ không thì DP có thể tính ra mấy phương án ``không thể xếp'' được.\\
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h>
+#define int long long
+const int oo = 1e9 + 7;
+using namespace std;
+
+signed main() {
+    int F, V; cin >> F >> V;
+    vector<vector<int>> a(F + 1, vector<int>(V + 1)), f(F + 1, vector<int>(V + 1, -oo));
+
+    for (int i = 1; i <= F; i++) {
+        for (int j = 1; j <= V; j++) {
+            cin >> a[i][j];
+        }
+    }
+
+    for (int j = 1; j <= V - F + 1; j++) {
+        f[1][j] = a[1][j];
+    }
+
+    for (int i = 2; i <= F; i++) {
+        for(int j = i; j <= V - F + i; j++) {
+            for (int k = i - 1; k < j; k++) {
+                f[i][j] = max(f[i][j], f[i - 1][k]);
+            }
+            f[i][j] += a[i][j];
+        }
+    }
+
+    int ans = INT_MIN;
+    for (int j = 1; j <= V; j++) {
+        ans = max(ans, f[F][j]);
+    }
+    cout << ans;
+
+    int i = F;
+    vector<int> res;
+
+    while (i >= 1) {
+        for (int j = i; j <= V - F + i; j++) {
+            if (f[i][j] == ans) {
+                res.push_back(j);
+                ans -= a[i][j];
+                i--;
+                break;
+            }
+        }
+    }
+    cout << endl;
+    reverse(res.begin(), res.end());
+    for (auto p : res) {
+        cout << p << " ";
+    }
+}
+\end{lstlisting}
+
+\begin{baitap}{Palindrome 2000}{https://www.spoj.com/problems/IOIPALIN/}
+
+Ta được cho một chuỗi $S[1..N]$, cần biến chuỗi thành Palindrome (chuỗi đối xứng) bằng cách chèn thêm ký tự với số lần ít nhất.
+
+\textbf{Input}
+\begin{itemize}[noitemsep]
+    \item Dòng đầu tiên chứa số nguyên $N$ $(3 \leq N \leq 5000)$ — độ dài chuỗi.
+    \item Dòng tiếp theo chứa chuỗi $S$ độ dài $N$.
+\end{itemize}
+
+\textbf{Output}  
+In ra số lần chèn ít nhất để biến $S$ thành palindrome.
+
+\textbf{Ví dụ}
+
+\begin{sampleio}
+5 & 2 \\
+Ab3bd & \\
+\end{sampleio}
+\end{baitap}
+
+\textbf{Phân tích bài toán}
+
+Gọi $f[i][j]$ là số thao tác ít nhất để biến chuỗi $S[i..j]$ thành chuỗi đối xứng.\\
+
+\textbf{Trường hợp cơ sở:}
+\begin{itemize}
+    \item Với $i == j$, chuỗi có độ dài 1 luôn là chuỗi đối xứng, vậy $f[i][j] = 0$
+    \item Với $i > j$, không có chuỗi nào có chỉ số $i > j$ được, tức là chuỗi rỗng. Vậy số thao tác $f[i][j] = 0$
+\end{itemize}
+
+\textbf{Truy hồi:}
+\begin{itemize}
+    \item Nếu $s[i] == s[j]$, 2 đầu chuỗi đã đối xứng, không cần insert gì cả. Vậy chỉ cần xét chuỗi $s[i + 1 .. j - 1]$ để tính số insert tối thiểu để biến nó thành đối xứng. Tức là: $f[i][j] = f[i + 1][j - 1]$
+    \item Nếu $s[i] \neq s[j]$, ta có 2 thao tác:
+    \begin{itemize}
+        \item Insert $s[j]$ vào trước $s[i]$, chuỗi hiện tại sẽ là $s[j]s[i..j]s[j]$, sau đó xử lý đoạn $s[i..j]$ sau khi insert $\rightarrow s[i + 1..j]$
+        \item Insert $s[i]$ vào sau $s[j]$, chuỗi hiện tại sẽ là $s[i..j]s[i]$, sau đó xử lý đoạn $s[i..j-1]$.
+    \end{itemize}
+    \item Vậy số thao tác trong trường hợp này: $f[i][j] = \min(f[i + 1][j], f[i][j - 1]) + 1$
+\end{itemize}
+
+Tóm lại, công thức truy hồi tổng quát là:
+\[
+f[i][j] =
+\begin{cases}
+0 & \text{nếu } i \geq j \\
+f[i+1][j-1] & \text{nếu } s[i] = s[j] \\
+\min \left( f[i+1][j],\ f[i][j-1] \right) + 1 & \text{nếu } s[i] \neq s[j]
+\end{cases}
+\]
+
+\textbf{Kết quả bài toán:} $f[1][n]$ 
+
+Lưu ý với $f[i][j]$, để biết $f[i + 1][j - 1]$ là gì thì ta cần phải tính $f[i + 1][j - 1]$ trước, tương tự với $f[i + 1][j]$ hay $f[i][j - 1]$. Tức là ta cần phải tính lần lượt các chuỗi con có độ dài tăng dần lên, hay xét lần lượt các chuỗi có độ dài length từ 2 đến $N$ và tính $f[i][j]$ với $j - i + 1$ = length \\
+
+\textbf{[Groot]:} Ủa, mày nói phải tính $f[i][j]$ theo độ dài tăng dần. 
+Sao vậy? Không lẽ không thể tính kiểu đệ quy từ trên xuống hả?\\
+
+\textbf{[vuivethoima]:} Thật ra làm đệ quy top–down có memo vẫn được, 
+nhưng dễ bị chậm vì số lời gọi hàm rất lớn. 
+Làm bottom–up theo độ dài tăng dần thì mình chắc chắn khi tính $f[i][j]$ 
+các trạng thái nhỏ hơn như $f[i+1][j-1], f[i+1][j], f[i][j-1]$ đã có sẵn, 
+đỡ phải gọi đi gọi lại.\\
+
+\textbf{[Groot]:} À ha. Rồi còn cái đoạn $s[i] \neq s[j]$ đó, 
+mày bảo chỉ có 2 cách insert thôi. Biết đâu còn cách khác thì sao?\\
+
+\textbf{[vuivethoima]:} Thực ra bản chất chỉ có 2. 
+Hoặc tao làm cho $s[i]$ “có đôi” bằng cách chèn thêm một ký tự $s[i]$ bên phải, 
+hoặc tao làm cho $s[j]$ “có đôi” bằng cách chèn thêm một ký tự $s[j]$ bên trái. 
+Ngoài ra thì cũng quy về hai tình huống này thôi, 
+chứ không còn nước đi nào khác.\\
+
+\textbf{[Groot]:} Hmmm, tao vẫn hơi mù mờ. 
+Tại sao insert $s[j]$ trước $s[i]$ thì lại biến bài toán thành $f[i+1][j]$?\\
+
+\textbf{[vuivethoima]:} Nghĩ thế này nè: 
+giả sử $s[i] \neq s[j]$, tao chèn thêm $s[j]$ vào trước $s[i]$. 
+Lúc này $s[j]$ mới chèn khớp với $s[j]$ cũ ở cuối, 
+coi như cặp này xong xuôi. 
+Phần còn lại cần xử lý chỉ còn đoạn $s[i..j-1]$, 
+mà bỏ ký tự đầu $s[i]$ đi là ra $s[i+1..j]$. 
+Thế nên nó rút gọn thành $f[i+1][j]$.\\
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h>
+#define int long long
+const int oo = 1e9 + 7;
+using namespace std;
+
+signed main() {
+    int n; cin >> n;
+    string s;
+    cin >> s;
+    s = " " + s + " ";
+
+    vector<vector<int>>f(n + 2, vector<int>(n + 2, oo));
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (i >= j) {
+                f[i][j] = 0;
+            } 
+        }
+    }
+
+    for (int len = 2; len <= n; len++) {
+        for (int i = 1; i <= n - len + 1; i++) {
+            int j = i + len - 1;
+            if (s[i] == s[j]) {
+                f[i][j] = f[i + 1][j - 1];
+            } else {
+                f[i][j] = min(f[i + 1][j], f[i][j - 1]) + 1;
+            }
+        }
+    }
+
+    cout << f[1][n];
+}
+\end{lstlisting}
+
+\begin{baitap}{BLAST}{https://oj.vnoi.info/problem/mblast}
+
+Cho 2 chuỗi $S_1$ và $S_2$ lần lượt gồm $n$ ký tự và $m$ ký tự.  
+Cho một số nguyên dương $k$, ta có thể mở rộng 2 chuỗi $S_1$ và $S_2$ bằng cách chèn một vài dấu ``\_'' và sau khi chèn, độ dài 2 chuỗi phải bằng nhau.  
+
+Tìm tổng khoảng cách nhỏ nhất giữa 2 chuỗi, biết rằng:  
+
+- Nếu $S_1[i]$ và $S_2[j]$ có ít nhất 1 ký tự là ``\_'' thì khoảng cách giữa chúng là $k$.  
+
+- Ngược lại, khoảng cách là $|S_1[i] - S_2[j]|$.
+
+\textbf{Input}
+\begin{itemize}[noitemsep]
+    \item Dòng đầu tiên chứa chuỗi $S_1$ độ dài $n$ $(n \leq 2000)$.
+    \item Dòng thứ hai chứa chuỗi $S_2$ độ dài $m$ $(m \leq 2000)$.
+    \item Dòng thứ ba chứa số nguyên $k$ $(1 \leq k \leq 100)$.
+\end{itemize}
+
+\textbf{Output}  
+In ra tổng khoảng cách nhỏ nhất giữa 2 chuỗi sau khi chèn.
+
+\textbf{Ví dụ}
+
+\begin{sampleio}
+cmc & 10 \\
+snmn & \\
+2 & \\
+\end{sampleio}
+
+\end{baitap}
+
+\textbf{Phân tích bài toán}
+
+Gọi $f[i][j]$ là khoảng cách nhỏ nhất khi xét $S_1[1..i]$ và $S_2[1..j]$. \\
+
+\textbf{Trường hợp cơ sở:} Khi chuỗi $S_1$ rỗng, để 2 chuỗi bằng nhau, ta phải insert các ký tự $"\_"$ vào $S_1$ để độ dài 2 chuỗi bằng nhau, khoảng cách giữa nó và các xâu con trong $S_2$ lần lượt là $f[0][j] = j * k$. Tương tự với $S_2$ : $f[i][0] = i * k$ \\
+
+Với $S_1[1..i]$ và $S_2[1..j]$, ta có 3 lựa chọn: 
+\begin{itemize}
+    \item Tính khoảng cách giữa $|S_1[i] - S_2[j]|$
+    \item Chèn $"\_"$ vào ngay vị trí $i$ để ghép với $S_2[j]$, vậy tất nhiên lúc này ta chỉ cần tính tổng khoảng cách giữa $S_1[1..i-1]$ và $S_2[1..j]$ với $k$ : $f[i][j] = f[i - 1][j] + k$
+    \item Tương tự, chèn $"\_"$ vào vị trí $j$ để ghép với $S_1[i]$: $f[i][j] = f[i][j - 1] + k$
+\end{itemize}
+
+Từ đó, ta rút ra được công thức truy hồi tổng quát:
+\[
+f[i][j] = \min
+\begin{cases}
+    f[i - 1][j - 1] + |S_1[i] - S_2[j]| \\
+    f[i - 1][j] + k \\
+    f[i][j - 1] + k \\
+\end{cases}
+\]
+
+\textbf{Kết quả bài toán:} $f[m][n]$
+
+
+\textbf{[Groot]:} Ủa, tao thấy trong công thức mày chỉ cho 3 lựa chọn thôi. 
+Chẳng lẽ không còn cách ghép nào khác hả?  
+Lỡ tao muốn vừa chèn ở $S_1$, vừa chèn ở $S_2$ cùng lúc thì sao?\\
+
+\textbf{[vuivethoima]:} Nếu mày chèn cả hai bên cùng lúc thì 
+thực chất mày chỉ đang tăng thêm độ dài cả hai chuỗi bằng dấu ``\_''. 
+Khoảng cách giữa ``\_'' và ``\_'' bằng 0, 
+mà làm vậy thì vô nghĩa vì không thay đổi gì cả.  
+Thế nên không cần xét thêm tình huống này.
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h>
+#define int long long
+const int oo = 1e9 + 7;
+using namespace std;
+
+signed main() {
+    string S1, S2;
+    cin >> S1 >> S2;
+    int m = S1.size();
+    int n = S2.size();
+    S1 = " " + S1;
+    S2 = " " + S2;
+
+    int k; cin >> k;
+
+    vector<vector<int>> f(m + 1, vector<int>(n + 1, oo));
+    for (int i = 0; i <= m; i++) {
+        f[i][0] = i * k;
+    }
+    for (int j = 0; j <= n; j++) {
+        f[0][j] = j * k;
+    }
+
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            f[i][j] = min(f[i][j], f[i - 1][j - 1] + abs(S1[i] - S2[j]));
+            f[i][j] = min(f[i][j], f[i - 1][j] + k);
+            f[i][j] = min(f[i][j], f[i][j - 1] + k);
+        }
+    }
+    cout << f[m][n];
+}
+
+\end{lstlisting}
+
+\begin{baitap}{Rectangle Cutting}{https://cses.fi/problemset/task/1744}
+
+Cho hình chữ nhật kích thước $a \times b$, cần cắt nó thành các hình vuông.  
+Ở mỗi lượt, ta có thể chọn một hình chữ nhật bất kỳ và cắt nó thành hai hình chữ nhật (các cạnh sau khi cắt đều là số nguyên dương).  
+
+Hãy tính số thao tác cắt tối thiểu để cắt hình chữ nhật $a \times b$ thành các hình vuông.
+
+\textbf{Input}
+\begin{itemize}[noitemsep]
+    \item Dòng duy nhất chứa hai số nguyên $a, b$ $(1 \leq a, b \leq 500)$.
+\end{itemize}
+
+\textbf{Output}  
+In ra số thao tác cắt tối thiểu.
+
+\textbf{Ví dụ}
+
+\begin{sampleio}
+3 5 & 3 \\
+\end{sampleio}
+
+\end{baitap}
+
+\textbf{Phân tích bài toán}
+
+Gọi $f[a][b]$ là số thao tác tối thiểu để cắt hình chữ nhật $a \times b$ thành các hình vuông. \\
+
+\textbf{Trường hợp cơ sở:}
+\begin{itemize}
+    \item Với các hình chữ nhật có cạnh $i = j$, nó đã là một hình vuông, không cần tốn thao tác nào cả, vậy: 
+    \[
+        f[i][i] = 0, \forall i \in [1..\min(a, b)]
+    \]
+    \item Với các hình chữ nhật có cạnh $i$ x $j$ $(i \neq j)$, ta có 2 cách cắt:
+    \begin{itemize}
+        \item Cắt dọc: chọn $k \in [1..j - 1]$, ta chia được hình chữ nhật thành:
+        \begin{itemize}
+            \item Hình chữ nhật $i \times k$ và hình chữ nhật $i$ x ($j - k$)
+            \item Tổng số bước sẽ là: $f[i][j] = min(f[i][j], f[i][k] + f[i][j - k] + 1)$
+        \end{itemize} 
+        \item Cắt ngang: chọn $k \in [1..i - 1]$, ta chia được hình chữ nhật thành:
+        \begin{itemize}
+            \item Hình chữ nhật $k \times j$ và hình chữ nhật ($i - k$) $\times$ $j$
+            \item Tổng số bước sẽ là: $f[i][j] = min(f[i][j], f[k][j] + f[i - k][j] + 1)$
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+Từ những tính toán trên, ta rút ra được công thức truy hồi tổng quát:
+\[
+    f[i][j] = 
+    \begin{cases}
+        0, & i == j \\
+        \min(\min^{j - 1}_{k = 1}(f[i][k] + f[i][j - k] + 1), \min^{i - 1}_{k = 1}(f[k][j] + f[i - k][j] + 1)), & \forall i \in [1..a], \forall j \in [1..b], i \neq j
+    \end{cases}
+\]
+
+\textbf{Kết quả bài toán:} $f[a][b]$
+
+\textbf{[Groot]:} Ủa, sao công thức chỉ xét cắt ngang với cắt dọc thôi? 
+Có khi nào cắt chéo ra hình vuông nhanh hơn không?\\
+
+\textbf{[vuivethoima]:} Vãi cả l**, mày nghiêm túc à? Cắt chéo thì hai phần không còn là hình chữ nhật nữa?\\
+
+\textbf{[Groot]:} Rồi đùa thôi đừng nóng, nhưng tao thấy trong công thức mày cộng thêm ``+1''. Tại sao vậy? Không phải mình đã tính $f[\cdot][\cdot]$ cho hai mảnh nhỏ rồi sao?\\
+
+\textbf{[vuivethoima]:} ``+1'' là chi phí của lần cắt hiện tại. 
+Mỗi lần chia ra hai mảnh thì dù mảnh nào cũng tính riêng, 
+nhưng thao tác cắt vẫn phải đếm thêm một bước nữa.\\
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h>
+#define int long long
+const int oo = 1e9 + 7;
+using namespace std;
+ 
+signed main() {
+    int a, b; cin >> a >> b;
+    vector<vector<int>> f(a + 1, vector<int>(b + 1, po));
+    for (int i = 1; i <= min(a,b); i++) {
+        f[i][i] = 0;
+    }
+ 
+    for (int i = 1; i <= a; i++) {
+        for (int j = 1; j <= b; j++) {
+            if (i == j) continue;
+            for (int k = 1; k <= i - 1; k++) {
+                f[i][j] = min(f[i][j], f[k][j] + f[i - k][j] + 1);
+            }
+            for (int k = 1; k <= j - 1; k++) {
+                f[i][j] = min(f[i][j], f[i][k] + f[i][j - k] + 1);
+            }
+        }
+    }
+    cout << f[a][b];
+}
+\end{lstlisting}

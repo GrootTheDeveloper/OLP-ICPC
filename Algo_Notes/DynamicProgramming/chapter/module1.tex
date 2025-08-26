@@ -2,3 +2,566 @@
 
 \minitoc
 
+\section{Giới thiệu}
+\textbf{Quy hoạch động (Dynamic Programming, DP)} là kỹ thuật thiết kế thuật toán nhằm giải các bài toán tối ưu hoặc đếm bằng cách:
+\begin{itemize}[noitemsep,topsep=2pt]
+  \item Chia bài toán thành các \emph{bài toán con} có cấu trúc tương tự.
+  \item Tận dụng tính \emph{chồng lặp} của các bài toán con bằng cách \textit{ghi nhớ} (memoization) hoặc \textit{lập bảng} (tabulation).
+  \item Dựa vào \emph{tính tối ưu con} (optimal substructure) để xây dựng \emph{công thức truy hồi} (recurrence).
+\end{itemize}
+Lợi ích chính: giảm độ phức tạp từ hàm mũ/đệ quy thuần xuống đa thức/ giả đa thức bằng cách tránh tính lặp.
+
+\section{Cơ sở lý thuyết}
+\subsection*{Khi nào dùng DP?}
+\begin{enumerate}[label=\arabic*.,noitemsep,topsep=2pt]
+  \item \textbf{Bài toán con chồng lặp:} nhiều lời gọi lặp lại cùng trạng thái.
+  \item \textbf{Tối ưu con:} nghiệm tối ưu toàn cục được ghép từ nghiệm tối ưu của các phần.
+\end{enumerate}
+
+\subsection*{Hai hướng tiếp cận}
+\begin{description}[noitemsep,topsep=2pt]
+  \item[Top-down (Memoization):] Viết đệ quy theo công thức truy hồi, lưu kết quả trạng thái đã tính để dùng lại.
+  \item[Bottom-up (Tabulation):] Xác định \emph{thứ tự} tính các trạng thái từ nhỏ đến lớn, điền vào bảng.
+\end{description}
+
+\subsection*{Quy trình thiết kế DP (tư duy theo bước)}
+\begin{enumerate}[label=\textbf{Bước \arabic*.},leftmargin=*,itemsep=2pt]
+  \item \textbf{Xác định trạng thái} $dp[\cdot]$: mỗi trạng thái mã hoá “bài toán con” gì?
+  \item \textbf{Công thức chuyển (recurrence)}: từ trạng thái nhỏ hơn suy ra trạng thái hiện tại.
+  \item \textbf{Điều kiện biên} (base cases): giá trị khởi đầu.
+  \item \textbf{Thứ tự tính / hướng duyệt}: để mọi phụ thuộc đã sẵn sàng khi cần.
+  \item \textbf{Kết quả} cần lấy ở đâu (ô nào trong bảng)?
+  \item \textbf{Phân tích độ phức tạp} thời gian/bộ nhớ; cân nhắc tối ưu hoá không gian nếu được.
+\end{enumerate}
+
+\section{Ví dụ minh hoạ}
+\subsection{Fibonacci}
+\textbf{Bài toán:} Tính $F(n)$ với $F(0)=0$, $F(1)=1$, $F(n)=F(n-1)+F(n-2)$.\par
+\textbf{Thiết kế:}
+\begin{itemize}[noitemsep]
+  \item Trạng thái: $dp[i]=F(i)$.
+  \item Biên: $dp[0]=0$, $dp[1]=1$.
+  \item Chuyển: $dp[i]=dp[i-1]+dp[i-2]$.
+  \item Thứ tự: $i=2\to n$.
+\end{itemize}
+
+\noindent\textbf{Pseudocode:}
+\begin{lstlisting}
+function Fibonacci(n):
+    if n <= 1: return n
+    a <- 0; b <- 1          # a = F(0), b = F(1)
+    for i from 2 to n:
+        c <- a + b          # c = F(i)
+        a <- b
+        b <- c
+    return b
+\end{lstlisting}
+
+\section{Bài tập}
+
+\begin{baitap}{A - Frog 1}{https://atcoder.jp/contests/dp/tasks/dp\_a}
+Cho $N$ tảng đá được đánh số từ 1 đến $N$, mỗi đá có độ cao $h_i$. 
+Ếch ban đầu đứng ở đá số 1 và muốn đến đá số $N$. 
+Từ đá $i$, ếch có thể nhảy đến đá $i+1$ hoặc đá $i+2$. 
+Chi phí khi ếch nhảy từ đá $i$ đến đá $j$ là 
+\[
+    |h_i - h_j|.
+\]
+Hãy tính chi phí nhỏ nhất để ếch đi từ đá 1 đến đá $N$.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item Tất cả số trong input đều là số nguyên.
+    \item $2 \leq N \leq 10^5$
+    \item $1 \leq h_i \leq 10^4$
+\end{itemize}
+
+\textbf{Ví dụ}
+
+\begin{sampleio}
+4 & 30 \\ 
+10 30 40 20 &  \\
+\end{sampleio}
+
+\end{baitap}
+
+\textbf{Phân tích bài toán}
+
+Gọi \( f[i] \) là chi phí nhỏ nhất để ếch đi từ đá 1 đến đá \( i \).
+
+\textbf{Trường hợp cơ sở:} $f[1] = 0$ (chi phí để ếch đi từ đá 1 đến đá 1 là 0, vì nó đứng tại chỗ). 
+
+Khi ếch đứng tại đá 2, trước đó nó chỉ có 1 cách nhảy là từ đá 1 sang.  
+Vậy: $f[2] = f[1] + |h[2] - h[1]|$
+
+
+Khi ếch đứng tại đá 3, có 2 cách có thể nhảy trước đó:
+
+\begin{itemize}
+    \item Nhảy từ đá 1 sang đá 3, hoặc
+    \item Nhảy từ đá 2 sang đá 3.
+\end{itemize}
+
+Đương nhiên ta sẽ chọn cách tốn ít chi phí nhất.  
+Vậy: $ f[3] = \min \left( f[2] + |h[3] - h[2]|, \; f[1] + |h[3] - h[1]| \right)$
+
+Tương tự, khi ếch đứng tại đá 4, có 2 cách nhảy có thể nhảy:
+
+\begin{itemize}
+    \item Nhảy từ đá 2 sang đá 4, hoặc
+    \item Nhảy từ đá 3 sang đá 4.
+\end{itemize}
+
+Vậy: $ f[4] = \min \left( f[2] + |h[4] - h[2]|, \; f[3] + |h[4] - h[3]| \right) $
+
+
+Từ những tính toán trên, ta rút ra được công thức truy hồi tổng quát:
+
+\[
+\text{Với } i \geq 3: \quad f[i] = \min \left( f[i - 2] + |h[i] - h[i-2]|, \; f[i - 1] + |h[i] - h[i-1]| \right)
+\]
+
+\textbf{Kết quả bài toán:} $f[n]$\\
+
+\textbf{[Groot]:} Quá hay, người tạch giải 2 OLP'24 viết có khác. Mà đột nhiên tao nãy ra suy nghĩ là cái công thức này dựa trên việc ếch chỉ được nhảy 1 hoặc 2 bước. Nếu lỡ tao thay đổi luật cho nhảy từ $i$ đến $i + 3$ thì sao?\\
+
+\textbf{[vuivethoima]:} Tập trung vào bài tập đi thằng chó. À thì nếu thay đổi luật thì tao chỉ cần mở rộng công thức thành:
+\[
+f[i] = \min \Big( 
+    f[i-1] + |h[i] - h[i-1]|,\;
+    f[i-2] + |h[i] - h[i-2]|,\;
+    f[i-3] + |h[i] - h[i-3]|
+\Big).
+\]
+Ý tưởng không đổi, chỉ khác ở tập trạng thái chuyển tiếp thôi.\\
+
+\textbf{[Groot]:} À tao hiểu rồi, vậy là quan trọng không phải học vẹt cái công thức mà phải hiểu cách nó sinh ra, để khi thay đổi đề thì vẫn ứng biến được.\\
+
+\textbf{[vuivethoima]:} Bingo!!! Cái đó mới là tinh thần ``học DP'': nắm nguyên lý chứ không chỉ chép công thức. 
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+
+signed main() {
+    int n; cin >> n;
+    vector<int> h(n + 1), f(n + 1);
+
+    for (int i = 1; i <= n; i++) cin >> h[i];
+
+    f[1] = 0;
+    f[2] = abs(h[2] - h[1]);
+
+    for (int i = 3; i <= n; i++) {
+        f[i] = min(f[i - 1] + abs(h[i] - h[i - 1]),
+                   f[i - 2] + abs(h[i] - h[i - 2]));
+    }
+
+    cout << f[n];
+    return 0;
+}
+\end{lstlisting}
+
+%------------------------%
+\begin{baitap}{Xếp hàng mua vé}{https://oj.vnoi.info/problem/nktick}
+
+Có $N$ người mua vé dự concert, đánh số từ $1$ đến $N$ theo thứ tự đứng trong hàng.  
+Mỗi người cần mua một vé, song người bán vé được phép bán cho mỗi người tối đa 2 vé.  
+Vì vậy, một số người có thể rời hàng và nhờ người đứng trước mình mua hộ vé.  
+
+Biết $t_i$ là thời gian cần thiết để người $i$ mua xong vé cho mình.  
+Nếu người $i + 1$ rời khỏi hàng và nhờ người $i$ mua hộ vé thì thời gian để người $i$ mua vé cho cả hai là $r_i$.  
+
+\textbf{Yêu cầu:} Hãy xác định tổng thời gian phục vụ cho $N$ người là thấp nhất.
+
+\textbf{Input}
+\begin{itemize}[noitemsep]
+    \item Dòng đầu tiên chứa số $N$ ($1 \leq N \leq 6 \cdot 10^4$)
+    \item Dòng thứ hai ghi $N$ số nguyên dương $t_1, t_2, \dots, t_N (1 \leq t_i \leq 3 \cdot 10^4)$
+    \item Dòng thứ ba ghi $N - 1$ số nguyên dương $r_1, r_2, \dots, r_{N - 1} (1 \leq r_i \leq 3 \cdot 10^4)$
+\end{itemize}
+
+\textbf{Output}
+In ra tổng thời gian phục vụ nhỏ nhất.
+
+\end{baitap}
+
+\begin{sampleio}
+5 & 18 \\
+2 5 7 8 4 & \\
+4 9 10 10 & \\
+\end{sampleio}
+\textbf{Phân tích bài toán.}  
+
+Gọi $f[i]$ là tổng thời gian phục vụ thấp nhất đến người thứ $i$.  
+
+\textbf{Trường hợp cơ sở:} $f[1] = t[1]$
+
+
+Với $i = 2$: người thứ 2 có thể nhờ người thứ 1 mua vé, hoặc cả hai mua độc lập: $f[2] = \min \left( r[1], \; t[1] + t[2] \right)$
+
+Với $i = 3$: người thứ 3 có thể nhờ người 2 mua vé hộ, hoặc tự mua: $f[3] = \min \left( f[1] + r[2], \; f[2] + t[3] \right)$
+
+Với $i = 4$: tương tự $f[4] = \min \left( f[2] + r[3], \; f[3] + t[4] \right)$
+
+Từ những tính toán trên, ta rút ra được công thức truy hồi tổng quát:  
+\[
+\text{Với } i \geq 3: \quad f[i] = \min \left( f[i-2] + r[i-1], \; f[i-1] + t[i] \right)
+\]
+
+\textbf{Kết quả bài toán:} $f[N]$.\\
+
+\textbf{[Groot]:} Ủa, bài Ếch thì tao còn hình dung được: nhảy 1 bước hoặc 2 bước, công thức thấy rõ ràng.  
+Còn bài xếp hàng mua vé này sao mày lại nảy ra được cái công thức DP nghe hợp lý vậy? Tao thấy giống như mày bịa ra mà nó lại đúng ấy? \\
+
+\textbf{[vuivethoima]:} Cái thằng ngoo này, phân tích quá rõ ràng ở trên mà còn không hiểu. Thôi để tao cho mày xem lại cái luồng suy nghĩ của tao. Tao nghĩ thử: để phục vụ tới người thứ $i$, thì có 2 tình huống thôi.  
+Một là thằng $i$ tự mua vé $\Rightarrow f[i] = f[i-1] + t[i]$.  
+Hai là nó nhờ thằng $i-1$ mua hộ $\Rightarrow f[i] = f[i-2] + r[i-1]$.  
+Hết phim, không có lựa chọn nào khác nữa.\\
+
+\textbf{[Groot]:} À, tức là bản chất nó vẫn là ``chia trường hợp'' hả? Giống bài Ếch mà mỗi lần tới đá mới thì coi xem bước từ đâu tới.\\
+
+\textbf{[vuivethoima]:} Đúng rồi, y chang. Chỉ khác là ở đây ``bước nhảy'' không phải 1 hay 2 đá, mà là ``tự mua'' hoặc ``nhờ thằng trước mua hộ''. Nhiều khi DP nó vậy đó, nhìn thì ảo ma vcl nhưng bản chất chỉ là liệt kê hết trường hợp hợp lệ rồi chọn cái tối ưu thôi.
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h>
+#define int long long
+const int oo = 1e9 + 7;
+using namespace std;
+
+signed main() {
+    int N; cin >> N;
+    vector<int> t(N + 1), r(N);
+
+    for (int i = 1; i <= N; i++) cin >> t[i];
+    for (int i = 1; i < N; i++) cin >> r[i];
+
+    vector<int> f(N + 1, oo);
+
+    f[1] = t[1];
+    if (N >= 2) f[2] = min(t[1] + t[2], r[1]);
+
+    for (int i = 3; i <= N; i++) {
+        f[i] = min(f[i - 1] + t[i],
+                   f[i - 2] + r[i - 1]);
+    }
+
+    cout << f[N];
+    return 0;
+}
+\end{lstlisting}
+
+
+%------------------------%
+\begin{baitap}{Dãy con tăng dài nhất (bản dễ)}{https://oj.vnoi.info/problem/liq}
+
+Cho một dãy số nguyên gồm $N$ phần tử $A_1, A_2,...,A_N$.
+
+Biết rằng dãy con tăng đơn điệu là một dãy $A_{i_1},...,A_{i_k}$ thỏa mãn $i_1 < i_2 <...<i_k$ và $A_{i_1} < A_{i_2} <...<A_{i_k}$. 
+
+Hãy cho biết dãy con tăng đơn điệu dài nhất của dãy này có bao nhiêu phần tử.
+\textbf{Input}
+\begin{itemize}[noitemsep]
+  \item Dòng 1 gồm 1 số nguyên là số $N$ $(1 \leq N \leq 1000)$.
+  \item Dòng thứ 2 ghi $N$ số nguyên $A_1, A_2, \dots, A_N (1 \leq A_i \leq 1000)$.
+\end{itemize}
+
+\textbf{Output}
+Ghi ra độ dài của dãy con tăng đơn điệu dài nhất.
+
+\end{baitap}
+
+\begin{sampleio}
+6 & 4 \\
+1 2 5 4 6 2 & \\
+\end{sampleio}
+
+\textbf{Phân tích bài toán}
+
+Gọi \( f[i] \) là dãy con tăng đơn điệu dài nhất khi xét phần tử thứ $i$.
+
+Ta thấy được ban đầu tất cả mọi dãy con đều có độ dài là 1 vì chỉ có chính nó, hay $\forall i, f[i] = 1$.
+
+Khi dãy chỉ có 2 phần tử, độ dài tối đa là 2 nếu $a[2] > a[1]$, hay $f[2] = f[1] + 1$ nếu $a[2] > a[1]$. Ngược lại, nếu $a[2] \leq a[1]$ thì $f[2]$ vẫn giữ nguyên độ dài là 1.
+
+Khi dãy có 3 phần tử, độ dài tối đa là 3 nếu $a[3] > a[2] > a[1]$, hay $f[3] = f[2] + 1$. Hoặc độ dài tối đa là 2 trong trường hợp:
+\begin{itemize}
+    \item $a[3] > a[2]$ và $a[3] \leq a[1]$, hay $f[3] = f[2] + 1$ $(f[2] = 1)$
+    \item $a[3] > a[1]$ và $a[3] \leq a[2]$, hay $f[3] = f[1] + 1$ $f[1] = 1$
+\end{itemize}
+Nếu không có phần tử $a[j]$ nào thỏa mãn $a[i] > a[j]$ thì độ dài lớn nhất tại $i$ sẽ là $f[i] =  1$.
+
+
+Từ những tính toán trên, ta rút ra được công thức truy hồi tổng quát:
+\[
+    f[i] = \max \left( 1,\ \max_{\substack{1 \leq j < i, a[i] > a[j]}} \left( f[j] + 1 \right) \right)
+\]
+
+\textbf{Kết quả bài toán:} $\max_{\substack{1 \leq i \leq N}} f[i]$\\
+
+\textbf{[Groot]:} Ủa tự nhiên ở đâu lòi ra cái $\max\limits_{j<i, a[i]>a[j]} (f[j]+1)$ vậy? 
+
+\textbf{[vuivethoima]:} Mày nghĩ coi, muốn có dãy tăng kết thúc ở $a[i]$ thì trước đó phải có thằng nào nhỏ hơn $a[i]$ chứ. 
+Nối $a[i]$ vô sau nó thì độ dài tăng thêm 1, thành $f[j]+1$.\\
+
+\textbf{[Groot]:} Ờ, nghe hợp lý... Nhưng mày nói rõ ràng hơn cái vụ max đi.\\
+
+\textbf{[vuivethoima]:} Vì đâu chỉ có một thằng nối được. 
+Có khi $a[i]$ lớn hơn nhiều thằng trước đó, mỗi thằng cho ra một độ dài khác nhau. 
+Thì mình phải chọn cái dài nhất trong mớ đó chứ.\\
+
+\textbf{[Groot]:} À à, hiểu rồi. Tức là “thử nối với tất cả đứa trước đó, lấy cái lời nhất”. 
+Nếu không nối được với ai thì tự đứng một mình, $f[i]=1$.\\
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+
+signed main() {
+    int N; cin >> N;
+    vector<int> A(N + 1), f(N + 1, 1);
+
+    for (int i = 1; i <= N; i++) cin >> A[i];
+
+    int ans = 1;
+    for (int i = 2; i <= N; i++) {
+        for (int j = 1; j < i; j++) {
+            if (A[i] > A[j]) {
+                f[i] = max(f[i], f[j] + 1);
+            }
+        }
+        ans = max(ans, f[i]);
+    }
+
+    cout << ans;
+    return 0;
+}
+\end{lstlisting}
+
+
+%----------------------------%
+\begin{baitap}{Longest Common Subsequence}{https://oj.vnoi.info/problem/atcoder\_dp\_f}
+
+Bạn được cho hai xâu $s$ và $t$. Hãy tìm xâu con chung dài nhất của 2 xâu đó.
+
+\textbf{Lưu ý: }Xâu con của xâu $x$ là xâu được tạo bằng cách xóa $0$ hoặc một số kí tự thuộc xâu $x$ và nối các ký tự còn lại mà không thay đổi vị trí của chúng.
+
+\textbf{Input}
+\begin{itemize}[noitemsep]
+  \item Dòng 1 gồm 1 số nguyên là số $N$ $(1 \leq N \leq 1000)$.
+  \item Dòng thứ 2 ghi $N$ số nguyên $A_1, A_2, \dots, A_N (1 \leq A_i \leq 1000)$.
+\end{itemize}
+
+\textbf{Output}
+Ghi ra xâu con chung dài nhất của 2 xâu $s$ và $t$.
+
+\end{baitap}
+
+\begin{sampleio}
+axyb & axb\\ 
+abyxb &  \\ 
+\end{sampleio}
+
+\textbf{Phân tích bài toán}
+
+Gọi \(f[i][j]\) là độ dài xâu con chung dài nhất khi xét xâu $s[1..i]$ và xâu $t[1..j]$.\\
+
+\textbf{Trường hợp cơ sở:} \(f[0][j] = 0\) và \(f[i][0] = 0\) vì xâu con chung dài nhất giữa xâu rỗng và một xâu bất kỳ đương nhiên là rỗng (độ dài = 0).
+
+\[
+f[0][j] = 0, \quad f[i][0] = 0 \quad \forall i,j
+\]
+
+Khi xét xâu $s[1..i]$ và $t[1..j]$, ta có 2 trường hợp xảy ra:
+\begin{itemize}
+    \item Nếu kí tự cuối cùng trùng nhau $(s[i] == t[j])$, độ dài xâu con dài nhất lúc này sẽ là: $f[i][j] = f[i - 1][j - 1] + 1$, tức là độ dài xâu con chung dài nhất hiện tại sẽ bằng độ xài xâu con liền trước và cộng thêm kí tự trùng nhau hiện tại.
+    \item Ngược lại, nếu kí từ cuối cùng khác nhau $s[i] \neq t[j]$, ta có 2 cách là bỏ bớt 1 kí tự ở $s$ hoặc $t$ hiện tại để lấy độ dài xâu con lớn nhất giữa hai xâu con đó, hay $f[i][j] = \max (f[i - 1][j], f[i][j - 1])$.
+\end{itemize}
+
+Từ những tính toán trên, ta rút ra được công thức truy hồi tổng quát:
+
+\[
+f[i][j] =
+\begin{cases}
+    f[i - 1][j - 1] + 1 & \text{nếu } s[i] = t[j] \\
+    \max(f[i - 1][j],\ f[i][j - 1]) & \text{nếu } s[i] \neq t[j]
+\end{cases}
+\]
+
+\textbf{Kết quả bài toán:} $f[|s|][|t|]$
+
+\textbf{Truy vết:}
+
+Sau khi tính xong bảng $f$, ta có $f[|s|][|t|]$ là độ dài xâu con chung dài nhất.  
+Để dựng lại xâu này, ta bắt đầu từ ô $(|s|, |t|)$ và đi ngược lại:
+
+\begin{itemize}
+    \item Nếu $s[i] = t[j]$: ký tự này thuộc LCS.  
+    Ta thêm $s[i]$ vào kết quả và chuyển về ô $(i-1, j-1)$.
+    \item Nếu $s[i] \neq t[j]$:  
+    \begin{itemize}
+        \item Nếu $f[i][j] = f[i-1][j]$ thì đi lên ô $(i-1, j)$.
+        \item Ngược lại, đi sang trái ô $(i, j-1)$.
+    \end{itemize}
+\end{itemize}
+
+Tiếp tục như vậy cho đến khi $i=0$ hoặc $j=0$.  
+Lúc này ta thu được xâu LCS theo thứ tự ngược, vì ta đi từ cuối về đầu.  
+Đảo ngược lại sẽ ra xâu con chung dài nhất cần tìm.\\
+
+\textbf{[Groot]:} Nếu có nhiều xâu con chung dài nhất thì sao? Ví dụ như cùng độ dài 4 mà ra tới 2–3 xâu khác nhau thì mày in cái nào?\\
+
+\textbf{[vuivethoima]:} Hỏi đỡ ngu rồi đó, thì cái câu mày thắc mắc là chuyện hay gặp. Thuật toán truy vết bình thường chỉ lần theo một nhánh, nên kết quả sẽ là một xâu LCS bất kỳ. 
+Nếu đề chỉ cần ``một đáp án đúng'' thì vậy là đủ.\\
+
+\textbf{[Groot]:} Còn nếu đề bắt in ra hết mọi xâu LCS thì?\\
+
+\textbf{[vuivethoima]:} Thì rắc rối hơn nhiều. Mày phải duyệt hết các nhánh có cùng độ dài, dùng backtracking hoặc DFS. 
+Số lượng nghiệm có thể rất lớn nên thường đề bài không yêu cầu. 
+Người ta chỉ cần một nghiệm đại diện thôi.\\
+
+\textbf{[Groot]:} Vậy mày trình bày chi tiết cho tao phần liệt kê này đi. \\
+
+\textbf{[vuivethoima]:} Muốn biết thì liên hệ \textbf{Bruce}.
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+
+signed main() {
+    string s, t;
+    cin >> s >> t;
+
+    s = " " + s;
+    t = " " + t;
+
+    int m = s.size() - 1;
+    int n = t.size() - 1;
+    vector<vector<int>> f(m + 1, vector<int>(n + 1, 0));
+
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (s[i] == t[j]) {
+                f[i][j] = f[i - 1][j - 1] + 1;
+            } else {
+                f[i][j] = max(f[i - 1][j], f[i][j - 1]);
+            }
+        }
+    }
+
+    int i = m, j = n;
+    string ans;
+    while (i > 0 && j > 0) {
+        if (s[i] == t[j]) {
+            ans.push_back(s[i]);
+            --i; --j;
+        } else if (f[i - 1][j] >= f[i][j - 1]) {
+            --i;
+        } else {
+            --j;
+        }
+    }
+
+    reverse(ans.begin(), ans.end());
+    cout << ans << "\n";
+    return 0;
+}
+\end{lstlisting}
+
+
+\begin{baitap}{Knapsack}{https://atcoder.jp/contests/dp/tasks/dp\_d}
+
+Có $N$ vật phẩm được đánh số $1, 2, ..., N$. Với mỗi $i$ $(1 \leq i \leq N)$, vật phẩm $i$ có khối lượng $w_i$ và giá trị $v_i$.  
+Taro có một cái túi, anh được chọn vài món trong $N$ vật phẩm và mang về nhà. Sức chứa của cái túi là $W$, nghĩa là tổng khối lượng vật phẩm được chứa trong túi tối đa $W$.  
+Hãy tìm tổng giá trị lớn nhất các vật phẩm mà Taro có thể đem về.
+
+\textbf{Input}
+\begin{itemize}[noitemsep]
+    \item Dòng đầu tiên chứa hai số nguyên $N, W$ $(1 \leq N \leq 10^2, \; 1 \leq W \leq 10^5)$.
+    \item $N$ dòng tiếp theo, mỗi dòng chứa hai số nguyên $w_i, v_i$ $(1 \leq w_i \leq W, \; 1 \leq v_i \leq 10^9)$.
+\end{itemize}
+
+\textbf{Output}  
+In ra tổng giá trị lớn nhất mà Taro có thể mang về.
+
+\textbf{Ví dụ}
+
+\begin{sampleio}
+3 8 & 90 \\ 
+3 30 &  \\ 
+4 50 &  \\ 
+5 60 &  \\
+\end{sampleio}
+
+\end{baitap}
+
+\textbf{Phân tích bài toán}
+
+Gọi \(f[i][j]\) là tổng giá trị lớn nhất khi xét vật phẩm thứ $i$ và sức chứa hiện tại của túi là $j$. \\
+
+\textbf{Trường hợp cơ sở:} $f[i][0] = 0$ và $f[0][j] = 0$, vì ta không thể mang theo được vật phẩm nào khi sức chứa của túi là 0, hoăc bất kể sức chứa của túi là bao nhiêu thì khi xét vật phẩm thứ 0, nó không tồn tại nên không thể chứa được. \\
+
+Khi xét $f[i][j]$ ta có 2 trường hợp xảy ra:
+\begin{itemize}
+    \item Nếu vật phẩm $i$ hiện tại (\(w_i, v_i\)) chứa được trong túi có sức chứa $j$, hay $j - w_i \geq 0$, tổng giá trị lớn nhất hiện tại có 2 lựa chọn là không chọn vật phẩm đang xét, hoặc chọn vật phẩm đang xét và cộng giá trị vật phẩm. Hay:
+    \[
+    f[i][j] = max(f[i - 1][j], f[i - 1][j - w_i] + v_i)
+    \]
+    \item Ngược lại nếu không chứa được, tổng giá trị lớn nhất hiện tại (xét vật phẩm thứ $i$) sẽ là tổng giá trị lớn nhất khi xét vật phẩm thứ $i - 1$, với cùng sức chứa túi hiện tại. Hay:
+    \[
+    f[i][j] = f[i - 1][j]
+    \]
+\end{itemize}
+
+Từ những tính toán trên, ta rút ra được công thức truy hồi tổng quát:
+\[
+f[i][j] =
+\begin{cases}
+    f[i - 1][j] & \text{nếu } j < w_i \\
+    \max(f[i - 1][j],\ f[i - 1][j - w_i] + v_i) & \text{nếu } j \geq w_i
+\end{cases}
+\]
+
+\textbf{Kết quả bài toán:} $f[n][W]$ - Sau khi xét toàn bộ vật phẩm vói tất cả sức chứa mà túi có thể chứa được.\\
+
+\textbf{[Groot]:} Ủa, công thức mày ghi là $f[i][j] = \max(f[i-1][j], f[i-1][j-w_i] + v_i)$. Tại sao không phải $f[i][j-w_i]$ mà là $f[i-1][j-w_i]$?\\
+
+\textbf{[vuivethoima]:} À, cái này quan trọng lắm.  
+Nếu mày dùng $f[i][j-w_i]$ thì hóa ra trong cùng một bước tính, mày cho phép chọn đi chọn lại vật phẩm $i$ nhiều lần.  
+Mà đề Knapsack 0/1 thì mỗi vật phẩm chỉ được lấy tối đa một lần thôi.
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+
+
+signed main() {
+    int N, W; cin >> N >> W;
+    vector<int> w(N + 1), v(N + 1);
+
+    for (int i = 1; i <= N; i++) {
+        cin >> w[i] >> v[i];
+    }
+
+    vector<vector<int>> f(N + 1, vector<int>(W + 1, 0));
+
+    for (int i = 1; i <= N; i++) {
+        for (int j = 0; j <= W; j++) {
+            if (j < w[i]) {
+                f[i][j] = f[i - 1][j];
+            } else {
+                f[i][j] = max(f[i - 1][j],
+                              f[i - 1][j - w[i]] + v[i]);
+            }
+        }
+    }
+
+    cout << f[N][W];
+    return 0;
+}
+
+\end{lstlisting}
