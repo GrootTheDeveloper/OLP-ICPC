@@ -2,3 +2,148 @@
 
 \minitoc
 
+\section{Vấn đề}
+
+\subsection{Bài toán Knapsack}
+
+\begin{baitap}{Knapsack 2}{https://atcoder.jp/contests/dp/tasks/dp\_e}
+
+Có $N$ đồ vật, được đánh số từ $1,2,\ldots,N$. Với mỗi đồ vật $i \ (1 \leq i \leq N)$, đồ vật $i$ có trọng lượng $w_i$ và giá trị $v_i$.  
+
+Taro muốn chọn một số đồ vật trong $N$ đồ vật này và mang về bằng một chiếc ba lô. Chiếc ba lô có sức chứa $W$, nghĩa là tổng trọng lượng các đồ vật được chọn không được vượt quá $W$.  
+
+\textbf{Yêu cầu}  
+
+Hãy tìm tổng giá trị lớn nhất của các đồ vật mà Taro có thể mang về.  
+
+\textbf{Giới hạn}  
+\begin{itemize}[noitemsep]
+  \item $1 \leq N \leq 100$
+  \item $1 \leq W \leq 10^9$
+  \item $1 \leq w_i \leq W$
+  \item $1 \leq v_i \leq 10^3$
+\end{itemize}
+
+\textbf{Input}  
+\begin{itemize}[noitemsep]
+  \item Dòng đầu tiên chứa hai số nguyên $N, W$ — số lượng đồ vật và sức chứa của ba lô.
+  \item Trong $N$ dòng tiếp theo, dòng thứ $i$ chứa hai số $w_i, v_i$ — trọng lượng và giá trị của đồ vật $i$.
+\end{itemize}
+
+\textbf{Output}  
+In ra một số nguyên duy nhất — tổng giá trị lớn nhất có thể.  
+
+\textbf{Ví dụ}  
+
+\begin{sampleio}
+3 8 & 90 \\
+3 30 & \\
+4 50 & \\
+5 60 & \\
+\end{sampleio}
+
+\textbf{Giải thích}  
+
+Trong ví dụ, chọn đồ vật 1 và 3. Khi đó tổng trọng lượng $3+5=8$, và tổng giá trị $30+60=90$.  
+
+\end{baitap}
+
+\subsection{Nhận xét}
+
+Bài toán khác với Knapsack cổ điển ở chỗ giới hạn tải trọng rất lớn ($W \le 10^9$), nên không thể quy hoạch động theo \emph{trọng lượng} như thường lệ (vì chiều theo $W$ sẽ quá lớn).
+
+Ta có thể tư duy rằng \textbf{đảo chiều} quy hoạch động theo \emph{giá trị}: đặt
+\[
+f[i][j] = \text{khối lượng nhỏ nhất có thể đạt được khi xét } i \text{ đồ vật đầu tiên và tổng giá trị đúng bằng } j,
+\]
+và quy ước $f[i][j]=+\infty$ nếu không thể đạt tổng giá trị $j$.
+
+\textbf{Trường hợp cơ sở:}
+\[
+f[0][0] = 0,\qquad f[0][j] = +\infty, \ \forall j>0.
+\]
+
+\textbf{Chuyển trạng thái:} với đồ vật $i$ có trọng lượng $w_i$ và giá trị $v_i$,
+\[
+f[i][j] =
+\begin{cases}
+\min\big(f[i-1][j],\ f[i-1][j - v_i] + w_i\big), & \text{nếu } j \ge v_i,\\[4pt]
+f[i-1][j], & \text{nếu } j < v_i.
+\end{cases}
+\]
+
+\textbf{Đáp án bài toán:} $\max \{\, j \mid f[n][j] \le W \,\}.$\\
+
+
+Vì $j$ chỉ cần chạy đến $V_{\max}=\sum_{i=1}^N v_i \le 10^5$, độ phức tạp là $O(N\,V_{\max})$, phù hợp  với giới hạn bài toán. 
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h>
+#define int long long
+const int oo = 1e18 + 7;
+using namespace std;
+
+struct item {
+    int w, v;
+};
+
+signed main() {
+    int n, w; cin >> n >> w;
+    vector<item> a(n + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i].w >> a[i].v;
+    }    
+    int MAXV = 1e5;
+    vector<vector<int>> dp(n + 1, vector<int>(MAXV + 5, oo));
+
+    dp[0][0] = 0;
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j <= MAXV; j++) {
+            dp[i][j] = dp[i - 1][j];
+            if (j - a[i].v < 0) continue;
+            dp[i][j] = min(dp[i][j], dp[i - 1][j - a[i].v] + a[i].w);
+        }
+    }
+
+    int ans = 0;
+    for (int j = 0; j <= MAXV; j++) {
+        if (dp[n][j] <= w)
+            ans = j;
+    }
+    cout << ans;
+}
+\end{lstlisting}
+
+
+\subsection{Bài toán Dãy con tăng dài nhất}
+
+\begin{baitap}{Dãy con tăng dài nhất}{https://oj.vnoi.info/problem/lis}
+
+Cho một dãy gồm $N$ số nguyên $(1 \leq N \leq 30000)$. Hãy tìm dãy con tăng dài nhất trong dãy đó. In ra số lượng phần tử của dãy con. Các số trong phạm vi longint.
+
+\textbf{Input}  
+\begin{itemize}[noitemsep]
+  \item Dòng đầu tiên chứa số nguyên $N$.
+  \item Dòng thứ hai gồm $N$ số mô tả dãy.
+\end{itemize}
+
+\textbf{Output}  
+In ra một số nguyên duy nhất là đáp số bài toán.
+
+\textbf{Ví dụ}  
+
+\begin{sampleio}
+5 & 3 \\
+2 1 4 3 5 & \\
+\end{sampleio}
+
+\end{baitap}
+
+\subsection{Nhận xét}
+
+Với bài toán LIS cơ bản, ta có thể đặt 
+$f[i] = \text{độ dài dãy con tăng dài nhất kết thúc tại vị trí } i,$
+và duyệt hai vòng \texttt{for} để tính toán. Tuy nhiên, với ràng buộc $N \leq 30000,$thì cách làm này có độ phức tạp $O(N^2) \approx 30000^2 = 9 \times 10^8$ phép toán, chắc chắn sẽ bị \texttt{TLE}. \\
+
+Do đó, ta chuyển sang cách định nghĩa khác. Gọi $f[\texttt{len}]$ là \textbf{chỉ số} của phần tử có giá trị nhỏ nhất trong tất cả những dãy con tăng có độ dài bằng \texttt{len} tính đến \textbf{thời điểm hiện tại}.
