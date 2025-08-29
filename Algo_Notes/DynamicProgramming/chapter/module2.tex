@@ -41,6 +41,8 @@ Gọi $f[i][j]$ là tổng số điểm hạnh phúc tối đa ngày $i$ có th�
 
 \textbf{Trường hợp cơ sở:} $f[1][0] = a_1$, $f[1][1] = b_1$, $f[1][2] = c_1$\\
 
+\textbf{Kết quả bài toán:} $\max \left( f[N][0],\ f[N][1],\ f[N][2] \right)$\\
+
 Vì không được tham gia cùng 1 hoạt động 2 ngày liên tiếp nhau, nên với ngày thứ $i$ $(i \geq 2)$ tổng điểm hạnh phúc có thể đạt được là tổng điểm lớn nhất ngày hôm trước (hoạt động khác hôm nay) và hôm nay. Tức: 
 \[
 f[i][j] = \max_{k \ne j} \left( f[i-1][k] \right) + \text{điểm hạnh phúc của hoạt động $j$ ở ngày $i$}
@@ -54,11 +56,6 @@ f[i][2] &= \max \left( f[i-1][0],\ f[i-1][1] \right) + c_i \\
 \end{aligned}
 \]
 
-Sau khi tính hết \( f[N][0],\ f[N][1],\ f[N][2] \), ta được kết quả bài toán là:
-
-\[
-\text{Đáp án} = \max \left( f[N][0],\ f[N][1],\ f[N][2] \right)
-\]
 
 \begin{lstlisting}[title=\centering \textbf{Cài đặt}]
 #include <bits/stdc++.h>
@@ -132,16 +129,12 @@ Với bó hoa thứ $i$, ta có thể đặt từ chậu $j$ trong khoảng từ
 f[1][j] = A[1][j], \quad \forall j \in [1,\ V - F + 1]
 \]
 
+\textbf{Kết quả bài toán:} $\max \left( f[F][j] \right), \forall j \in [V, F]$\\
+
 Với $\forall i \geq 2$, ta có công thức truy hồi tổng quát:
 
 \[
 f[i][j] = \max_{k < j} \left( f[i-1][k] \right) + A[i][j], \quad \forall j \in [i,\ V - F + i]
-\]
-
-\textbf{Kết quả bài toán:}
-
-\[
-\text{Kết quả = } \max \left( f[F][j] \right), \forall j \in [V, F]
 \]
 
 \textbf{Truy vết:}
@@ -251,6 +244,8 @@ Gọi $f[i][j]$ là số thao tác ít nhất để biến chuỗi $S[i..j]$ th�
     \item Với $i > j$, không có chuỗi nào có chỉ số $i > j$ được, tức là chuỗi rỗng. Vậy số thao tác $f[i][j] = 0$
 \end{itemize}
 
+\textbf{Kết quả bài toán:} $f[1][n]$ \\
+
 \textbf{Truy hồi:}
 \begin{itemize}
     \item Nếu $s[i] == s[j]$, 2 đầu chuỗi đã đối xứng, không cần insert gì cả. Vậy chỉ cần xét chuỗi $s[i + 1 .. j - 1]$ để tính số insert tối thiểu để biến nó thành đối xứng. Tức là: $f[i][j] = f[i + 1][j - 1]$
@@ -271,8 +266,6 @@ f[i+1][j-1] & \text{nếu } s[i] = s[j] \\
 \min \left( f[i+1][j],\ f[i][j-1] \right) + 1 & \text{nếu } s[i] \neq s[j]
 \end{cases}
 \]
-
-\textbf{Kết quả bài toán:} $f[1][n]$ 
 
 Lưu ý với $f[i][j]$, để biết $f[i + 1][j - 1]$ là gì thì ta cần phải tính $f[i + 1][j - 1]$ trước, tương tự với $f[i + 1][j]$ hay $f[i][j - 1]$. Tức là ta cần phải tính lần lượt các chuỗi con có độ dài tăng dần lên, hay xét lần lượt các chuỗi có độ dài length từ 2 đến $N$ và tính $f[i][j]$ với $j - i + 1$ = length \\
 
@@ -379,6 +372,8 @@ Gọi $f[i][j]$ là khoảng cách nhỏ nhất khi xét $S_1[1..i]$ và $S_2[1.
 
 \textbf{Trường hợp cơ sở:} Khi chuỗi $S_1$ rỗng, để 2 chuỗi bằng nhau, ta phải insert các ký tự $"\_"$ vào $S_1$ để độ dài 2 chuỗi bằng nhau, khoảng cách giữa nó và các xâu con trong $S_2$ lần lượt là $f[0][j] = j * k$. Tương tự với $S_2$ : $f[i][0] = i * k$ \\
 
+\textbf{Kết quả bài toán:} $f[m][n]$\\
+
 Với $S_1[1..i]$ và $S_2[1..j]$, ta có 3 lựa chọn: 
 \begin{itemize}
     \item Tính khoảng cách giữa $|S_1[i] - S_2[j]|$
@@ -395,8 +390,6 @@ f[i][j] = \min
     f[i][j - 1] + k \\
 \end{cases}
 \]
-
-\textbf{Kết quả bài toán:} $f[m][n]$
 
 
 \textbf{[Groot]:} Ủa, tao thấy trong công thức mày chỉ cho 3 lựa chọn thôi. 

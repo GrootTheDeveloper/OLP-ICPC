@@ -89,7 +89,9 @@ Hãy tính chi phí nhỏ nhất để ếch đi từ đá 1 đến đá $N$.
 
 Gọi \( f[i] \) là chi phí nhỏ nhất để ếch đi từ đá 1 đến đá \( i \).
 
-\textbf{Trường hợp cơ sở:} $f[1] = 0$ (chi phí để ếch đi từ đá 1 đến đá 1 là 0, vì nó đứng tại chỗ). 
+\textbf{Trường hợp cơ sở:} $f[1] = 0$ (chi phí để ếch đi từ đá 1 đến đá 1 là 0, vì nó đứng tại chỗ). \\
+
+\textbf{Kết quả bài toán:} $f[n]$\\
 
 Khi ếch đứng tại đá 2, trước đó nó chỉ có 1 cách nhảy là từ đá 1 sang.  
 Vậy: $f[2] = f[1] + |h[2] - h[1]|$
@@ -121,7 +123,6 @@ Từ những tính toán trên, ta rút ra được công thức truy hồi tổ
 \text{Với } i \geq 3: \quad f[i] = \min \left( f[i - 2] + |h[i] - h[i-2]|, \; f[i - 1] + |h[i] - h[i-1]| \right)
 \]
 
-\textbf{Kết quả bài toán:} $f[n]$\\
 
 \textbf{[Groot]:} Đột nhiên tao nãy ra suy nghĩ là cái công thức này dựa trên việc ếch chỉ được nhảy 1 hoặc 2 bước. Nếu lỡ tao thay đổi luật cho nhảy từ $i$ đến $i + 3$ thì sao?\\
 
@@ -196,8 +197,9 @@ In ra tổng thời gian phục vụ nhỏ nhất.
 
 Gọi $f[i]$ là tổng thời gian phục vụ thấp nhất đến người thứ $i$.  
 
-\textbf{Trường hợp cơ sở:} $f[1] = t[1]$
+\textbf{Trường hợp cơ sở:} $f[1] = t[1]$\\
 
+\textbf{Kết quả bài toán:} $f[N]$.\\
 
 Với $i = 2$: người thứ 2 có thể nhờ người thứ 1 mua vé, hoặc cả hai mua độc lập: $f[2] = \min \left( r[1], \; t[1] + t[2] \right)$
 
@@ -210,7 +212,6 @@ Từ những tính toán trên, ta rút ra được công thức truy hồi tổ
 \text{Với } i \geq 3: \quad f[i] = \min \left( f[i-2] + r[i-1], \; f[i-1] + t[i] \right)
 \]
 
-\textbf{Kết quả bài toán:} $f[N]$.\\
 
 \textbf{[Groot]:} Ủa, bài Ếch thì tao còn hình dung được: nhảy 1 bước hoặc 2 bước, công thức thấy rõ ràng.  
 Còn bài xếp hàng mua vé này sao mày lại nảy ra được cái công thức DP nghe hợp lý vậy? Tao thấy giống như mày bịa ra mà nó lại đúng ấy? \\
@@ -281,7 +282,10 @@ Ghi ra độ dài của dãy con tăng đơn điệu dài nhất.
 
 Gọi \( f[i] \) là dãy con tăng đơn điệu dài nhất khi xét phần tử thứ $i$.
 
-Ta thấy được ban đầu tất cả mọi dãy con đều có độ dài là 1 vì chỉ có chính nó, hay $\forall i, f[i] = 1$.
+Ta thấy được ban đầu tất cả mọi dãy con đều có độ dài là 1 vì chỉ có chính nó, hay \textbf{Trường hợp cơ sở:} $\forall i, f[i] = 1$.\\
+
+\textbf{Kết quả bài toán:} $\max_{\substack{1 \leq i \leq N}} f[i]$\\
+
 
 Khi dãy chỉ có 2 phần tử, độ dài tối đa là 2 nếu $a[2] > a[1]$, hay $f[2] = f[1] + 1$ nếu $a[2] > a[1]$. Ngược lại, nếu $a[2] \leq a[1]$ thì $f[2]$ vẫn giữ nguyên độ dài là 1.
 
@@ -298,7 +302,6 @@ Từ những tính toán trên, ta rút ra được công thức truy hồi tổ
     f[i] = \max \left( 1,\ \max_{\substack{1 \leq j < i, a[i] > a[j]}} \left( f[j] + 1 \right) \right)
 \]
 
-\textbf{Kết quả bài toán:} $\max_{\substack{1 \leq i \leq N}} f[i]$\\
 
 \textbf{[Groot]:} Ủa tự nhiên ở đâu lòi ra cái $\max\limits_{j<i, a[i]>a[j]} (f[j]+1)$ vậy? 
 
@@ -374,6 +377,8 @@ Gọi \(f[i][j]\) là độ dài xâu con chung dài nhất khi xét xâu $s[1..
 f[0][j] = 0, \quad f[i][0] = 0 \quad \forall i,j
 \]
 
+\textbf{Kết quả bài toán:} $f[|s|][|t|]$\\
+
 Khi xét xâu $s[1..i]$ và $t[1..j]$, ta có 2 trường hợp xảy ra:
 \begin{itemize}
     \item Nếu kí tự cuối cùng trùng nhau $(s[i] == t[j])$, độ dài xâu con dài nhất lúc này sẽ là: $f[i][j] = f[i - 1][j - 1] + 1$, tức là độ dài xâu con chung dài nhất hiện tại sẽ bằng độ xài xâu con liền trước và cộng thêm kí tự trùng nhau hiện tại.
@@ -389,8 +394,6 @@ f[i][j] =
     \max(f[i - 1][j],\ f[i][j - 1]) & \text{nếu } s[i] \neq t[j]
 \end{cases}
 \]
-
-\textbf{Kết quả bài toán:} $f[|s|][|t|]$
 
 \textbf{Truy vết:}
 
@@ -504,6 +507,8 @@ Gọi \(f[i][j]\) là tổng giá trị lớn nhất khi xét vật phẩm thứ
 
 \textbf{Trường hợp cơ sở:} $f[i][0] = 0$ và $f[0][j] = 0$, vì ta không thể mang theo được vật phẩm nào khi sức chứa của túi là 0, hoăc bất kể sức chứa của túi là bao nhiêu thì khi xét vật phẩm thứ 0, nó không tồn tại nên không thể chứa được. \\
 
+\textbf{Kết quả bài toán:} $f[n][W]$ - Sau khi xét toàn bộ vật phẩm vói tất cả sức chứa mà túi có thể chứa được.\\
+
 Khi xét $f[i][j]$ ta có 2 trường hợp xảy ra:
 \begin{itemize}
     \item Nếu vật phẩm $i$ hiện tại (\(w_i, v_i\)) chứa được trong túi có sức chứa $j$, hay $j - w_i \geq 0$, tổng giá trị lớn nhất hiện tại có 2 lựa chọn là không chọn vật phẩm đang xét, hoặc chọn vật phẩm đang xét và cộng giá trị vật phẩm. Hay:
@@ -525,7 +530,7 @@ f[i][j] =
 \end{cases}
 \]
 
-\textbf{Kết quả bài toán:} $f[n][W]$ - Sau khi xét toàn bộ vật phẩm vói tất cả sức chứa mà túi có thể chứa được.\\
+
 
 \textbf{[Groot]:} Ủa, công thức mày ghi là $f[i][j] = \max(f[i-1][j], f[i-1][j-w_i] + v_i)$. Tại sao không phải $f[i][j-w_i]$ mà là $f[i-1][j-w_i]$?\\
 

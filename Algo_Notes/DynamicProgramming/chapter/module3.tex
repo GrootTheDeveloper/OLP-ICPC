@@ -63,6 +63,8 @@ Gọi $f[i][j][k]$ là tổng chi phí nhỏ nhất khi trộn $X[1..i]$ và $Y[
     \item $f[0][j][1] = 0$, $\forall j \geq 2$
 \end{itemize}
 
+\textbf{Kết quả bài toán:} $\min(f[M][N][0], f[M][N][1])$\\
+
 Xét $X[1..i]$ và $Y[1..j]$, nếu ký tự cuối cùng thuộc $X$, ta có 2 trường hợp xảy ra:
 
 \begin{itemize}
@@ -87,8 +89,6 @@ f[i][j][k] = \min \Big(
     \end{cases}
     \Big)
 \]
-
-\textbf{Kết quả bài toán:} $\min(f[M][N][0], f[M][N][1])$
 
 \textbf{[Groot]:} Ủa, tao để ý nè. Mấy bài trước thì toàn $f[i]$ hay $f[i][j]$ thôi, 
 tức là 1 chiều, 2 chiều. Mà qua bài này tự nhiên lại mọc thêm cái $k$, 
@@ -194,7 +194,9 @@ Gọi $f[i][k]$ là số điểm lớn nhất có thể đạt được khi xét
     \item $k = 1$: ô $i$ được chọn và đóng vai trò dấu $-$.
 \end{itemize}
 
-\textbf{Trường hợp cơ sở:} $f[1][0] = a[1], \quad f[1][1] = -a[1], \quad f[0][0] = f[0][1] = 0$
+\textbf{Trường hợp cơ sở:} $f[1][0] = a[1], \quad f[1][1] = -a[1], \quad f[0][0] = f[0][1] = 0$.\\
+
+\textbf{Kết quả bài toán:}  $\max(f[n][0],\ f[n][1])$\\
 
 Xét ô $i$, ta có các lựa chọn như sau:
 
@@ -216,7 +218,6 @@ Xét ô $i$, ta có các lựa chọn như sau:
     Vậy: $f[i][1] = \max \big( f[i-1][0] - a[i],\ -a[i],\ f[i-1][1] \big)$
 \end{itemize}
 
-\textbf{Kết quả bài toán:}  $\max(f[n][0],\ f[n][1])$
 
 \begin{lstlisting}[title=\centering\textbf{Cài đặt}]
 #include <bits/stdc++.h>
@@ -297,7 +298,10 @@ $\text{step} = x + y - 2$ bước, trong đó:
 
 Tổng số bước di chuyển là $n + m - 2$, do đó ta duyệt lần lượt các bước $\text{step} = 1 \rightarrow n + m - 2$.
 
-\textbf{Trường hợp cơ sở:} $f[0][1][1] = 0$
+\textbf{Trường hợp cơ sở:} $f[0][1][1] = 0$\\
+
+\textbf{Kết quả bài toán:} $f[n + m - 2][n][n]$\\
+
 \textbf{Công thức truy hồi:}  
 Tại mỗi bước, giá trị $f[\text{step}][x_1][x_2]$ được cập nhật từ 4 trạng thái trước đó, ứng với việc An/Bình đi xuống hoặc sang phải:
 \[
@@ -325,7 +329,6 @@ Ngoài ra, cần đảm bảo các điều kiện sau:
     \item Nếu $(x_1, y_1) = (x_2, y_2)$ thì đó chỉ có thể là ô đích $(n,m)$.
 \end{itemize}
 
-\textbf{Kết quả bài toán:} $f[n + m - 2][n][n]$\\
 
 \textbf{[Groot]:} Ê sao phức tạp vậy, tao vừa nghĩ ra cái này. Sao không chơi thẳng $f[x_1][y_1][x_2][y_2]$ luôn?  
 Hai thằng đi đâu thì mình lưu hết bốn toạ độ, rõ ràng dễ hiểu, hạnh phúc, thành công, khai phóng vcđ.\\
@@ -450,6 +453,11 @@ f[1][t][0][0][0] &= 1 \quad \text{(gửi đến mỏ 1)} \\
 f[1][0][0][t][0] &= 1 \quad \text{(gửi đến mỏ 2)}
 \end{align*}
 
+\textbf{Kết quả bài toán:} 
+\[
+\max_{a,b,c,d \in \{0,1,2,3\}} f[n][a][b][c][d]
+\]
+
 Với $i \geq 2$, giả sử loại thực phẩm hiện tại là $c = \texttt{code}(s[i])$, ta có hai lựa chọn:
 
 \begin{itemize}
@@ -469,11 +477,6 @@ Trong đó, hàm \texttt{energy}(a, b, c) là hàm đếm số loại thực ph�
 \texttt{energy}(a, b, c) = \left| \{a, b, c\} \setminus \{0\} \right|
 \]
 
-
-\textbf{Kết quả bài toán:} 
-\[
-\max_{a,b,c \in \{0,1,2,3\}} f[n][a][b][c]
-\]
 
 \begin{lstlisting}[title=\centering\textbf{Cài đặt}]
 #include <bits/stdc++.h>
@@ -558,6 +561,13 @@ Gọi $f[i][a][b][c]$ là tổng lượng than lớn nhất có thể sản xu�
 Với đợt vận chuyển đầu tiên có loại $t = \texttt{code}(s[1])$, ta có: $f[1][0][0][0] = 1$
 vì $\texttt{energy}(t,0,0) = 1$.
 
+
+\textbf{Kết quả bài toán:} 
+\[
+\max_{a,b,c \in \{0,1,2,3\}} f[n][a][b][c]
+\]
+
+
 \textbf{Công thức chuyển:}
 
 Giả sử ở đợt $i$ hiện tại loại thực phẩm là $c = \texttt{code}(s[i])$, khi xét đến đợt tiếp theo $s[i+1]$ có loại $t = \texttt{code}(s[i+1])$, ta có hai lựa chọn:
@@ -578,11 +588,6 @@ Giả sử ở đợt $i$ hiện tại loại thực phẩm là $c = \texttt{cod
     f[i+1][b][s[i]][a] = \max\Big(f[i+1][b][s[i]][a],\; f[i][a][b][c] + \texttt{energy}(t, b, c)\Big)
     \]
 \end{itemize}
-
-\textbf{Kết quả bài toán:} 
-\[
-\max_{a,b,c \in \{0,1,2,3\}} f[n][a][b][c]
-\]
 
 
 
