@@ -23,20 +23,6 @@ Với $n\in\mathbb{N}$, \textbf{giai thừa} $n! = 1\cdot 2\cdot \cdots \cdot n$
 \]
 \end{tinhchat}
 
-\begin{dinhly}[Nhị thức Newton]
-Với $n\in\mathbb{N}$,
-\[
-(x+y)^n = \sum_{k=0}^n \binom{n}{k}x^k y^{\,n-k}.
-\]
-\end{dinhly}
-
-\begin{dinhnghia}[Nguyên lý bao hàm--loại trừ (PIE)]
-Với các tập $A_1,\dots,A_m$ trong không gian hữu hạn $U$,
-\[
-\left|U\setminus\bigcup_{i=1}^{m}A_i\right|
-= \sum_{J\subseteq[m]}(-1)^{|J|}\left|\bigcap_{j\in J}A_j\right|.
-\]
-\end{dinhnghia}
 
 
 \subsection{Kỹ thuật tính toán trong lập trình thi đấu}
@@ -98,7 +84,6 @@ int C(int n, int k){
     return (long long)fact[n]*invfact[k]%MOD*invfact[n-k]%MOD;
 }
 \end{lstlisting}
-
 
 \section{Bài tập}
 
@@ -197,4 +182,182 @@ signed main() {
         cout << ans << endl;
     }
 }
+\end{lstlisting}
+
+\begin{baitap}{Binomial Coefficients}{https://cses.fi/problemset/task/1079}
+
+\textbf{Đề bài:}  
+
+Nhiệm vụ của bạn là tính $n$ hệ số nhị thức theo modulo $10^9+7$.  
+Hệ số nhị thức $\binom{a}{b}$ được tính theo công thức:
+\[
+\binom{a}{b} = \frac{a!}{b!(a-b)!}.
+\]
+Giả sử $a, b$ là số nguyên và $0 \le b \le a$.
+
+\textbf{Input}
+\begin{itemize}[noitemsep]
+    \item Dòng đầu chứa một số nguyên $n$: số lượng phép tính cần thực hiện.
+    \item Sau đó là $n$ dòng, mỗi dòng gồm hai số nguyên $a$ và $b$.
+\end{itemize}
+
+\textbf{Output} \\
+In ra kết quả của từng hệ số nhị thức theo modulo $10^9+7$.
+
+\textbf{Ràng buộc}
+\begin{itemize}[noitemsep]
+    \item $1 \le n \le 10^5$
+    \item $0 \le b \le a \le 10^6$
+\end{itemize}
+
+\textbf{Ví dụ}
+
+\begin{sampleio}
+3 & \\
+5 3 & 10 \\
+8 1 & 8 \\
+9 5 & 126 \\
+\end{sampleio}
+
+\end{baitap}
+
+\textbf{Phân tích bài toán}
+
+Bài toán yêu cầu tính $\binom{a}{b} \pmod{10^9+7}$ với nhiều truy vấn.
+
+Với giá trị $a$ có thể lên tới $10^6$, và số truy vấn $n$ có thể tới $10^5$. Nếu mỗi lần tính giai thừa lại từ đầu thì quá chậm với độ phức tạp tệ nhất là $10^5 \cdot (10^6 + 10^6)$.
+
+\textbf{Ý tưởng tối ưu:}
+\begin{itemize}
+    \item Tiền xử lý mảng giai thừa \texttt{fact[i]} = $i! \pmod{MOD}$ với $i$ từ $0 \to N$, $N = 10^6$.
+    \item Cần thêm nghịch đảo giai thừa. Vì $MOD$ là số nguyên tố, áp dụng định lý Fermat:
+    \[
+    x^{-1} \equiv x^{MOD-2} \pmod{MOD}.
+    \]
+    \item Trước tiên, tính \texttt{invfact[N]} = $(N!)^{-1} \pmod{MOD}$ bằng một lần lũy thừa nhanh.
+    \item Sau đó xây dựng toàn bộ mảng \texttt{invfact} bằng công thức:
+    \[
+    invfact[i-1] = invfact[i] \cdot i \pmod{MOD}, \quad 1 \le i \le N.
+    \]
+    \item Khi đó, với mỗi truy vấn:
+    \[
+    \binom{a}{b} = \texttt{fact}[a] \cdot \texttt{invfact}[b] \cdot \texttt{invfact}[a-b] \pmod{MOD}.
+    \]
+\end{itemize}
+
+\textbf{Độ phức tạp:}
+\begin{itemize}
+    \item Tính \texttt{fact}: $O(N)$.
+    \item Tính một lần lũy thừa nhanh: $O(\log MOD)$.
+    \item Xây dựng \texttt{invfact}: $O(N)$.
+    \item Mỗi truy vấn trả lời trong $O(1)$.
+\end{itemize}
+
+Vậy tổng độ phức tạp: $O(N + \log MOD + n)$
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h> 
+#define int long long
+using namespace std;
+const int MOD = 1e9 + 7;
+ 
+int quick_mod(int a, int n) {
+	if (n == 0) return 1;
+	int x = quick_mod(a, n / 2);
+	x = x * x % MOD;
+	if (n % 2 == 1) x = x * a % MOD;
+	return x;
+}
+ 
+signed main() {
+	vector<int> fact(1e6 + 1), inv_fact(1e6+1);
+	fact[0] = 1;
+	for (int i = 1; i <= 1e6; i++) {
+		fact[i] = (fact[i - 1] * i) % MOD;
+	}
+	inv_fact[0] = 1;
+	for (int i = 1; i <= 1e6; i++) {
+		inv_fact[i] = quick_mod(fact[i], MOD - 2) % MOD;
+	}
+ 
+	int n; cin >> n;
+	while (n--) {
+		int n, k; cin >> n >> k;
+		cout << (fact[n] % MOD * inv_fact[k] % MOD * inv_fact[n - k] % MOD) % MOD << endl;
+	}
+}
+\end{lstlisting}
+
+
+
+\begin{baitap}{Distributing Apples}{https://cses.fi/problemset/task/1716}
+
+\textbf{Đề bài:}  
+
+Có $n$ đứa trẻ và $m$ quả táo sẽ được phân phát cho chúng. Nhiệm vụ của bạn là đếm số cách phân phát.  
+Ví dụ, nếu $n=3$ và $m=2$, có 6 cách:  
+\[
+[0,0,2], [0,1,1], [0,2,0], [1,0,1], [1,1,0], [2,0,0].
+\]
+
+\textbf{Input}
+\begin{itemize}[noitemsep]
+    \item Dòng duy nhất chứa hai số nguyên $n$ và $m$.
+\end{itemize}
+
+\textbf{Output} \\
+In ra số cách phân phát modulo $10^9+7$.
+
+\textbf{Ràng buộc}
+\begin{itemize}[noitemsep]
+    \item $1 \le n,m \le 10^6$
+\end{itemize}
+
+\textbf{Ví dụ}
+
+\begin{sampleio}
+3 2 & 6 \\
+\end{sampleio}
+
+\end{baitap}
+
+
+\textbf{Phân tích bài toán}
+
+Xét bài toán chia kẹo Euler: Có $N$ viên kẹo, $K$ đứa trẻ, hãy đếm số cách chia sao cho \textbf{mỗi đứa phải có ít nhất 1} viên kẹo.
+
+\textbf{Ví dụ chia kẹo Euler:} $N=4$, $K=3$. Những cách chia thỏa là: $[1,1,2], [1,2,1], [2,1,1]$.
+
+Để trực quan hơn, tưởng tượng 4 viên kẹo được minh họa như sau (ký tự ``o'' đại diện 1 viên kẹo):
+\[
+o\ \ o\ \ o\ \ o
+\]
+Việc chia kẹo cho 3 đứa trẻ giống như đặt $K-1=2$ vách ngăn vào các \emph{khe} giữa các viên kẹo; mỗi cách đặt cho ta một cách chia khác nhau. Ký hiệu ``|'' là vách ngăn:
+\[
+o\ \mid\ o\ \mid\ o\ o
+\]
+\[
+o\ o\ \mid\ o\ \mid\ o
+\]
+\[
+o\ \mid\ o\ o\ \mid\ o
+\]
+Như vậy, bài toán chia kẹo Euler đưa về: đếm số cách đặt $K-1$ vách ngăn vào $N-1$ khe kẹo. Suy ra đáp án là
+\[
+\binom{N-1}{K-1}.
+\]
+
+\medskip
+Quay lại \textbf{bài toán hiện tại} (mỗi đứa có thể nhận $0$): với ví dụ $N=4$, $K=3$, ta có thể hình dung như sau.
+
+Ta \emph{tạm} chia $(N+K)$ quả táo cho $K$ đứa trẻ sao cho \textbf{mỗi đứa có ít nhất 1} quả. Sau khi chia xong, ta \emph{lấy lại} mỗi đứa 1 quả. Rõ ràng phép “cộng mỗi đứa 1 rồi trừ đi 1” này là tương ứng 1–1 với các cách chia ban đầu có thể nhận $0$.
+
+Do đó số cách cần tìm là số cách chia dương của tổng $N+K$, tức:
+\[
+\binom{N+K-1}{K-1}
+\]
+(tương đương \(\binom{N+K-1}{N}\)).
+
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
 \end{lstlisting}
