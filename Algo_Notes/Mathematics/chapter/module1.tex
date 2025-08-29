@@ -2,3 +2,199 @@
 
 \minitoc
 
+\section{Lý thuyết}
+
+Tổ hợp là một ngành nghiên cứu toán học chuyên nghiên cứu về các trạng thái, các cấu hình của một sự vật, sự việc hoặc phương pháp nào đó.
+
+\subsection{Công cụ toán học cơ bản}
+\label{subsec:comb-basic}
+
+\begin{dinhnghia}[Giai thừa, chỉnh hợp, tổ hợp]
+Với $n\in\mathbb{N}$, \textbf{giai thừa} $n! = 1\cdot 2\cdot \cdots \cdot n$ (quy ước $0!=1$).\\
+\textbf{Chỉnh hợp} $P(n,k)=\dfrac{n!}{(n-k)!}$: số cách chọn \emph{có thứ tự} $k$ phần tử từ $n$ phần tử phân biệt.\\
+\textbf{Tổ hợp} $C(n,k)=\binom{n}{k}=\dfrac{n!}{k!(n-k)!}$: số cách chọn \emph{không thứ tự} $k$ phần tử từ $n$ phần tử phân biệt ($0\le k\le n$).
+\end{dinhnghia}
+
+\begin{tinhchat}[Một số tính chất cơ bản]
+\[
+\binom{n}{0}=\binom{n}{n}=1,\qquad
+\binom{n}{k}=\binom{n}{n-k},\qquad
+\binom{n}{k}=\binom{n-1}{k}+\binom{n-1}{k-1}.
+\]
+\end{tinhchat}
+
+\begin{dinhly}[Nhị thức Newton]
+Với $n\in\mathbb{N}$,
+\[
+(x+y)^n = \sum_{k=0}^n \binom{n}{k}x^k y^{\,n-k}.
+\]
+\end{dinhly}
+
+\begin{dinhnghia}[Nguyên lý bao hàm--loại trừ (PIE)]
+Với các tập $A_1,\dots,A_m$ trong không gian hữu hạn $U$,
+\[
+\left|U\setminus\bigcup_{i=1}^{m}A_i\right|
+= \sum_{J\subseteq[m]}(-1)^{|J|}\left|\bigcap_{j\in J}A_j\right|.
+\]
+\end{dinhnghia}
+
+
+\subsection{Kỹ thuật tính toán trong lập trình thi đấu}
+\label{subsec:comb-impl}
+
+\paragraph{Số học modulo (MOD nguyên tố)}
+Trong đa số bài, MOD là số nguyên tố (ví dụ $10^9{+}7$ hoặc $998\,244\,353$). Với $p$ nguyên tố và $a\not\equiv 0\pmod p$:
+\[
+a^{-1}\bmod p \equiv a^{\,p-2}\ (\text{Fermat nhỏ}).
+\]
+Chuẩn hoá số âm: \texttt{((x \% MOD) + MOD) \% MOD}.
+
+\begin{lstlisting}[caption={Lũy thừa nhanh và nghịch đảo modulo (C++)}]
+const long long MOD = 1000000007LL;
+
+long long modpow(long long a, long long e){
+    long long r = 1 % MOD;
+    a %= MOD;
+    while(e){
+        if(e & 1) r = (r * a) % MOD;
+        a = (a * a) % MOD;
+        e >>= 1;
+    }
+    return r;
+}
+
+long long modinv(long long a){
+    a %= MOD; if(a < 0) a += MOD;
+    return modpow(a, MOD - 2);
+}
+\end{lstlisting}
+
+\paragraph{Tiền xử lý giai thừa \& nghịch đảo giai thừa}
+Sau $O(N)$ chuẩn bị, tính $\binom{n}{k}$ trong $O(1)$.
+
+\begin{lstlisting}[caption={Precompute factorial / invfactorial; tính C(n,k)}]
+const int MOD = 1000000007;
+const int MAXN = 2000000; 
+
+int fact[MAXN+1], invfact[MAXN+1];
+
+int modpow_int(int a, long long e){
+    long long r = 1, b = (a % MOD + MOD) % MOD;
+    while(e){
+        if(e & 1) r = (r * b) % MOD;
+        b = (b * b) % MOD;
+        e >>= 1;
+    }
+    return (int)r;
+}
+void init_fact(){
+    fact[0] = 1;
+    for(int i=1;i<=MAXN;i++) fact[i] = (long long)fact[i-1]*i % MOD;
+    invfact[MAXN] = modpow_int(fact[MAXN], MOD-2);
+    for(int i=MAXN;i>=1;i--) invfact[i-1] = (long long)invfact[i]*i % MOD;
+}
+int C(int n, int k){
+    if(k < 0 || k > n) return 0;
+    return (long long)fact[n]*invfact[k]%MOD*invfact[n-k]%MOD;
+}
+\end{lstlisting}
+
+
+\section{Bài tập}
+
+\begin{baitap}{Ball in Berland}{https://codeforces.com/problemset/problem/1475/C}
+
+
+Ở trường của Vasya đang chuẩn bị cho lễ tốt nghiệp. Một trong những tiết mục là buổi dạ hội, nơi các cặp nam–nữ sẽ khiêu vũ.
+
+Mỗi lớp phải cử \textit{hai} cặp tham dự. Ở lớp của Vasya có $a$ bạn nam và $b$ bạn nữ muốn tham gia, nhưng không phải tất cả đều sẵn sàng nhảy cặp.
+
+Cụ thể, bạn biết $k$ cặp nam–nữ có thể ghép được. Hãy chọn \textbf{hai} cặp trong số đó sao cho \textbf{không người nào xuất hiện trong quá một cặp}.
+
+Ví dụ, nếu $a=3$, $b=4$, $k=4$ và các cặp $ (1,2), (1,3), (2,2), (3,4) $ sẵn sàng nhảy (trong mỗi cặp, số của bạn nam đứng trước, rồi đến số của bạn nữ) thì các cách chọn hợp lệ gồm, chẳng hạn: $(1,3)$ và $(2,2)$; $(3,4)$ và $(1,3)$. Những cách không hợp lệ: $(1,3)$ và $(1,2)$ — nam số $1$ xuất hiện hai lần; $(1,2)$ và $(2,2)$ — nữ số $2$ xuất hiện hai lần.
+
+Hãy đếm số cách chọn hai cặp thỏa điều kiện trên. Hai cách được coi là khác nhau nếu chúng gồm các cặp khác nhau.
+
+\textbf{Input}
+\begin{itemize}[noitemsep]
+    \item Dòng đầu chứa một số nguyên $t$ ($1 \le t \le 10^4$) — số bộ test. 
+    \item Với mỗi bộ test: dòng đầu chứa ba số nguyên $a$, $b$, $k$ ($1 \le a,b,k \le 2\cdot 10^5$) — số bạn nam, số bạn nữ và số cặp có thể ghép.
+    \item Dòng thứ hai chứa $k$ số $a_1,a_2,\ldots,a_k$ ($1 \le a_i \le a$), trong đó $a_i$ là số của bạn nam ở cặp thứ $i$.
+    \item Dòng thứ ba chứa $k$ số $b_1,b_2,\ldots,b_k$ ($1 \le b_i \le b$), trong đó $b_i$ là số của bạn nữ ở cặp thứ $i$.
+    \item Bảo đảm tổng các giá trị $a$, $b$ và $k$ qua tất cả các test không vượt quá $2\cdot 10^5$.
+    \item Bảo đảm mỗi cặp $(a_i,b_i)$ xuất hiện nhiều nhất một lần trong một test.
+\end{itemize}
+
+\textbf{Output} \\
+Với mỗi bộ test, in ra một số nguyên — số cách chọn hai cặp thỏa điều kiện.
+
+
+
+\end{baitap}
+
+\textbf{Ví dụ}
+\begin{sampleio}
+3 & 4 \\
+3 4 4 & 0 \\
+1 1 2 3 & 2 \\
+2 3 2 4 & \\
+1 1 1 & \\
+1 & \\
+1 & \\
+2 2 4 & \\
+1 1 2 2 & \\
+1 2 1 2 & \\
+\end{sampleio}
+
+\textbf{Phân tích bài toán}
+
+Gọi \texttt{boy[i]} và \texttt{girl[i]} lần lượt là chỉ số của bạn nam và bạn nữ trong cặp thứ $i$.
+
+Bài toán yêu cầu đếm số cặp $(i, j)$ với $i \neq j$ sao cho \texttt{boy[i]} $\neq$ \texttt{boy[j]} và \texttt{girl[i]} $\neq$ \texttt{girl[j]}.  
+Nếu làm trực tiếp bằng cách duyệt tất cả các cặp $(i, j)$ thì độ phức tạp $O(k^2)$, quá lớn khi $k \leq 2 \cdot 10^5$.
+
+Ý tưởng tối ưu như sau:
+
+\begin{itemize}
+    \item Khi đang xét cặp thứ $i$, rõ ràng có $i-1$ cặp trước đó có thể kết hợp với nó.
+    \item Ta phải loại bỏ những cặp trùng bạn nam hoặc bạn nữ:
+    \begin{itemize}
+        \item Có \texttt{mb[boy[i]]} cặp trước đó có cùng bạn nam.
+        \item Có \texttt{mg[girl[i]]} cặp trước đó có cùng bạn nữ.
+    \end{itemize}
+    \item Như vậy sau khi loại bỏ, ta còn $M$ cặp thỏa mãn. Với mỗi cặp trong $M$ cặp, ta đều ghép được với cặp thứ $i$. Vậy số cặp hợp lệ có thể ghép với $i$ là: $(i - 1) - \texttt{mb[boy[i]]} - \texttt{mg[girl[i]]}$
+\end{itemize}
+
+Độ phức tạp mỗi test là $O(k \log k)$, phù hợp với ràng buộc đề bài.
+
+\begin{lstlisting}[title=\centering \textbf{Cài đặt}]
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+
+signed main() {
+    int t; cin >> t;
+    while (t--) {
+        int a, b, k; cin >> a >> b >> k;
+        vector<int> boy(k + 1), girl(k + 1);
+        for (int i = 1; i <= k; i++) {
+            cin >> boy[i];
+        }
+        for (int i = 1; i <= k; i++) {
+            cin >> girl[i];
+        }
+        map<int,int> mb, mg;
+        mb[boy[1]]++, mg[girl[1]]++;
+        int ans = 0;
+        for (int i = 2; i <= k; i++) {
+            int group = i - 1;
+            group -= mb[boy[i]];
+            group -= mg[girl[i]];
+            ans += group;
+            mb[boy[i]]++;
+            mg[girl[i]]++;
+        }
+        cout << ans << endl;
+    }
+}
+\end{lstlisting}
