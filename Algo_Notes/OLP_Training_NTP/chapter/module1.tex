@@ -1,4 +1,63 @@
-\chapter{Hai con trỏ (Two Pointers)}
+\chapter{String (Xâu ký tự)}
+
 
 \minitoc
 
+\section{Các hàm phải biết}
+
+\subsection{Khởi tạo và độ dài}
+\begin{itemize}
+    \item \texttt{string s = "hello";}
+    \item \texttt{s.size()} hoặc \texttt{s.length()} $\to$ độ dài chuỗi.
+\end{itemize}
+
+\subsection{Truy cập và thao tác ký tự}
+\begin{itemize}
+    \item \texttt{s.front()}, \texttt{s.back()} $\to$ ký tự đầu/cuối.
+    \item \texttt{s.push\_back(`a')}, \texttt{s.pop\_back()} $\to$ thêm / xóa ký tự cuối.
+\end{itemize}
+
+\subsection{Chuyển đổi}
+\begin{itemize}
+    \item \texttt{stoi("123")} $\to$ Chuyển string sang int.
+    \item \texttt{stoll("123456789")} $\to$ Chuyển string sang long long.
+    \item \texttt{to\_string(12345)} $\to$ Chuyển số sang string.
+\end{itemize}
+
+\subsection{Biến đổi chuỗi}
+\begin{itemize}
+    \item \texttt{reverse(s.begin(), s.end())} $\to$ đảo chuỗi.
+    \item \texttt{sort(s.begin(), s.end())} $\to$ sắp xếp ký tự.
+\end{itemize}
+
+\subsection{Một số cái khác}
+\begin{itemize}
+    \item \texttt{getline(cin, s)} $\to$ nhập cả dòng.
+    \item \texttt{isalpha(c)}, \texttt{isdigit(c)}, \texttt{islower(c)}, \texttt{isupper(c)} $\to$ kiểm tra ký tự.
+    \item \texttt{tolower(c)}, \texttt{toupper(c)} $\to$ đổi ký tự.
+\end{itemize}
+
+\section{Bài tập}
+
+\begin{baitap}{Xâu đẹp (OLP23KC)}{https://oj.vnoi.info/problem/olp\_kc23\_beastr}
+\end{baitap}
+
+
+
+\begin{baitap}{VCA (OLP20CT)}{https://oj.vnoi.info/problem/olp\_ct20\_vca}
+\end{baitap}
+
+
+\begin{baitap}{Chỉ số hấp dẫn (OLP23CT)}{https://oj.vnoi.info/problem/olp\_ct23\_attindex}
+
+\end{baitap}
+
+
+
+\begin{baitap}{Chuỗi hạt (OLP22CT)}{https://oj.vnoi.info/problem/olp\_ct22\_cutstr}
+
+\end{baitap}
+
+\begin{baitap}{Dãy chữ số (OLP22CT)}{https://oj.vnoi.info/problem/olp\_ct22\_digits}
+
+\end{baitap}
