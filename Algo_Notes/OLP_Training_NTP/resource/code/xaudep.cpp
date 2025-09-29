@@ -1,61 +1,62 @@
 #include <bits/stdc++.h>
-#define int long long
 using namespace std;
 
 int n, q;
 string s;
 
-void subtask1() {
-    int l, r; cin >> l >> r;
-    l++, r++;
-    vector<int> freq(26, 0);
-    for (int i = l; i <= r; i++) {
-        freq[s[i] - 'a']++;
-    }
-        
-    int odd = 0;
-
-    for (int i = 0; i < 26; i++) {
-        if (freq[i] % 2 == 1) odd++;
-    }
-    int ans = odd / 2;
-    cout << ans << endl;
+bool checkSubtask1() {
+    return q == 1;
 }
 
-void subtask2() {
-    
-    vector<vector<int>> freq(n + 1, vector<int>(26, 0));
+void doSubtask1() {
+    int l, r; cin >> l >> r;
+    l++, r++;
+    vector<int> cnt(26, 0);
+    for (int i = l; i <= r; i++) {
+        cnt[s[i] - 'a']++;
+    }
 
+    int res = 0;
+    for (int i = 0; i < 26; i++) {
+        if (cnt[i] % 2 == 1) res++;
+    }
+    int ans = res / 2;
+    cout << ans;
+}
+
+void doSubtask2() {
+    vector<vector<int>> f(n + 1, vector<int>(26, 0));
+    // int f[n + 1][26];
+    // f[i]['a'..'z'] số lần xuất của [a..z] trong i phần tử đầu tiên
+    
     for (int i = 1; i <= n; i++) {
-        freq[i] = freq[i - 1];
-        freq[i][s[i] - 'a']++;
+        f[i] = f[i - 1];
+        f[i][s[i] - 'a']++;
     }
 
     while (q--) {
         int l, r; cin >> l >> r;
         l++, r++;
-        vector<int> cur(26, 0);
+        vector<int> cnt(26, 0);
 
         for (int i = 0; i < 26; i++) {
-            cur[i] = freq[r][i] - freq[l - 1][i];
+            cnt[i] = f[r][i] - f[l - 1][i];
         }
-    
-        int odd = 0;
+        
+        int res = 0;
         for (int i = 0; i < 26; i++) {
-            if (cur[i] % 2 == 1) odd++;
+            if (cnt[i] % 2 == 1) res++;
         }
-
-        int ans = odd / 2;
-
+        int ans = res / 2;
         cout << ans << endl;
     }
 }
 
 signed main() {
-
     cin >> n >> q;
     cin >> s;
     s = " " + s;
-    if (q == 1) return subtask1(), 0;
-    else return subtask2(), 0;
+
+    if (checkSubtask1()) return doSubtask1(), 0;
+    return 0;
 }
