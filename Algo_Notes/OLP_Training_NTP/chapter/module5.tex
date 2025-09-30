@@ -1,4 +1,389 @@
-\chapter{Đệ quy \& Quay lui}
+\chapter{TÌM KIẾM NHỊ PHÂN}
 
 \minitoc
 
+\section{Lý thuyết}
+
+\subsection{Khái niệm}
+Tìm kiếm nhị phân là \textbf{thuật toán tìm kiếm trên mảng đã được sắp xếp} (theo thứ tự tăng dần hoặc giảm dần).  
+Ý tưởng chính: \textbf{chia đôi khoảng tìm kiếm} sau mỗi bước, từ đó giảm số lượng phần tử cần xét xuống một nửa.
+
+\begin{itemize}
+    \item Nếu giá trị cần tìm \textbf{nhỏ hơn} giá trị giữa $\rightarrow$ tìm ở \textbf{nửa trái}.
+    \item Nếu giá trị cần tìm \textbf{lớn hơn} giá trị giữa $\rightarrow$ tìm ở \textbf{nửa phải}.
+    \item Nếu bằng giá trị giữa $\rightarrow$ \textbf{tìm thấy} phần tử.
+\end{itemize}
+
+\textbf{Điều kiện bắt buộc:} Mảng phải được \textbf{sắp xếp trước} khi áp dụng tìm kiếm nhị phân.
+
+\subsection{Độ phức tạp}
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Bước phân tích} & \textbf{Giá trị} \\
+\hline
+Thời gian & $O(\log_2 n)$ \\
+\hline
+Không gian & $O(1)$ (phiên bản lặp) hoặc $O(\log n)$ (phiên bản đệ quy) \\
+\hline
+\end{tabular}
+\end{center}
+
+Vì mỗi lần chia đôi số phần tử, nên số bước lặp tỷ lệ với $\log_2 n$.
+
+
+\subsection{Ý tưởng thuật toán}
+Giả sử mảng $a$ có $n$ phần tử, tìm số $x$:
+
+\begin{enumerate}
+    \item \textbf{Khởi tạo:} 
+    \begin{itemize}
+        \item \texttt{left = 0}, \texttt{right = n-1}.
+    \end{itemize}
+    
+    \item \textbf{Trong khi} \texttt{left <= right}:
+    \begin{itemize}
+        \item \texttt{mid = (left + right) / 2}
+        \item Nếu \texttt{a[mid] == x} $\rightarrow$ tìm thấy $\rightarrow$ trả về vị trí.
+        \item Nếu \texttt{a[mid] < x} $\rightarrow$ tìm ở \textbf{nửa phải} $\rightarrow$ \texttt{left = mid + 1}.
+        \item Nếu \texttt{a[mid] > x} $\rightarrow$ tìm ở \textbf{nửa trái} $\rightarrow$ \texttt{right = mid - 1}.
+    \end{itemize}
+    
+    \item Nếu vòng lặp kết thúc mà chưa tìm thấy $\rightarrow$ $x$ không tồn tại trong mảng.
+\end{enumerate}
+
+\section{Bài tập tìm kiếm nhị phân}
+
+\begin{baitap}{Tìm kiếm nhị phân}{https://marisaoj.com/problem/515}
+Cho mảng $A$ được sắp xếp tăng dần gồm $n$ số nguyên khác nhau.  
+Có $q$ truy vấn, mỗi truy vấn là một số nguyên $x$.  
+Hãy xác định xem giá trị $x$ nằm ở vị trí nào trong mảng $A$.
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu tiên gồm hai số nguyên $n, q$ --- số phần tử của mảng và số lượng truy vấn. 
+    \item Dòng thứ hai gồm $n$ số nguyên $A_i$ $(1 \leq i \leq n)$.
+    \item $q$ dòng tiếp theo, mỗi dòng gồm một số nguyên $x$, biểu thị một truy vấn.
+\end{itemize}
+
+\textbf{Output}
+Với mỗi truy vấn, in ra vị trí của số nguyên $x$ trong mảng $A$.  
+Đảm bảo rằng $x$ luôn tồn tại trong mảng $A$.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item $1 \leq n, q \leq 10^5$
+    \item $1 \leq A_i, x \leq 10^9$
+\end{itemize}
+
+\begin{simple_example}
+5 3 & 2 \\
+1 4 6 8 10 & 5 \\
+4 & 1 \\
+10 & \\
+1 & \\
+\end{simple_example}
+
+Mảng được đánh chỉ số bắt đầu từ 1. \\
+
+\end{baitap}
+
+\begin{baitap}{Tìm kiếm nhị phân 2}{https://marisaoj.com/problem/76}
+Cho mảng $A$ \textbf{không giảm} gồm $n$ số nguyên. Có $q$ truy vấn, mỗi truy vấn cho một số nguyên $x$.  
+Hãy tìm chỉ số nhỏ nhất $i$ sao cho $A_i = x$. Nếu không tồn tại, in ra $-1$.
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu tiên gồm hai số nguyên $n, q$.
+    \item Dòng thứ hai gồm $n$ số nguyên $A_i$ $(1 \le i \le n)$.
+    \item $q$ dòng tiếp theo, mỗi dòng gồm một số nguyên $x$ (một truy vấn).
+\end{itemize}
+
+\textbf{Output}
+In ra $q$ dòng, dòng thứ $i$ là kết quả cho truy vấn thứ $i$:  
+chỉ số nhỏ nhất $i$ sao cho $A_i = x$, hoặc $-1$ nếu không tìm thấy.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item $1 \le n, q \le 10^5$
+    \item $1 \le A_i, x \le 10^9$
+\end{itemize}
+
+\begin{simple_example}
+5 3 & 1 \\     
+1 2 3 3 9 & 5 \\ 
+1 & 3 \\        
+9 & \\     
+3 & \\         
+\end{simple_example}
+
+\end{baitap}
+
+\begin{baitap}{Tìm kiếm nhị phân 3}{https://marisaoj.com/problem/77}
+Cho mảng $A$ \textbf{không giảm} gồm $n$ số nguyên. Có $q$ truy vấn, mỗi truy vấn cho một số nguyên $x$.  
+Hãy tìm chỉ số lớn nhất $i$ sao cho $A_i \leq x$. Nếu không tồn tại, in ra $-1$.
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu tiên gồm hai số nguyên $n, q$.
+    \item Dòng thứ hai gồm $n$ số nguyên $A_i$ $(1 \le i \le n)$.
+    \item $q$ dòng tiếp theo, mỗi dòng gồm một số nguyên $x$ (một truy vấn).
+\end{itemize}
+
+\textbf{Output}
+In ra $q$ dòng, dòng thứ $i$ là kết quả cho truy vấn thứ $i$:  
+chỉ số lớn nhất $i$ sao cho $A_i \leq x$, hoặc $-1$ nếu không tìm thấy.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item $1 \le n, q \le 10^5$
+    \item $1 \le A_i, x \le 10^9$
+\end{itemize}
+
+\begin{simple_example}
+5 3 & 1 \\        
+1 2 3 3 9 & 4 \\ 
+1 & 4 \\   
+5 & \\          
+3 & \\  
+\end{simple_example}
+
+\end{baitap}
+
+\begin{baitap}{Mảng con lớn}{https://marisaoj.com/problem/78}
+Cho mảng $A$ gồm $n$ số nguyên dương. Hãy đếm số lượng dãy con liên tiếp có tổng không nhỏ hơn $k$.
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu tiên gồm hai số nguyên $n, k$.
+    \item Dòng thứ hai gồm $n$ số nguyên $A_i$ ngăn cách bởi dấu cách.
+\end{itemize}
+
+\textbf{Output}
+In ra một số nguyên là số lượng dãy con liên tiếp có tổng không nhỏ hơn $k$.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item $1 \le n \le 10^5$
+    \item $1 \le A_i, k \le 10^9$
+\end{itemize}
+
+\begin{simple_example}
+5\ 6 & 6 \\
+1\ 2\ 1\ 4\ 5 & \\
+\end{simple_example}
+\end{baitap}
+
+\begin{baitap}{Truy vấn đếm}{https://marisaoj.com/problem/79}
+Cho mảng $A$ gồm $n$ số nguyên. Có $q$ truy vấn dạng $(l, r, x)$, hãy đếm số lượng giá trị $x$ trong đoạn $A_l, A_{l+1}, \ldots, A_r$.
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu tiên gồm hai số nguyên $n, q$.
+    \item Dòng thứ hai gồm $n$ số nguyên $A_i$ cách nhau bởi dấu cách.
+    \item $q$ dòng tiếp theo, mỗi dòng gồm ba số nguyên $l, r, k$ cách nhau bởi dấu cách.
+\end{itemize}
+
+\textbf{Output}
+In ra $q$ dòng, dòng thứ $i$ là kết quả của truy vấn thứ $i$.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item $1 \leq n, q, k, A_i \leq 10^5$
+    \item $1 \leq l \leq r \leq n$
+\end{itemize}
+
+\begin{simple_example}
+7 3 & 2 \\
+1 2 1 4 2 4 2 & 3 \\
+1 4 1 & 1 \\
+2 7 2 & \\
+3 5 4 & \\
+\end{simple_example}
+\end{baitap}
+
+\begin{baitap}{Đếm cặp}{https://marisaoj.com/problem/80}
+Cho mảng $A$ gồm $n$ số nguyên. Hãy đếm số cặp $(i,j)$ với $i<j$ sao cho $l \le A_i + A_j \le r$.
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu tiên gồm ba số nguyên $n, l, r$.
+    \item Dòng thứ hai gồm $n$ số nguyên $A_i$ cách nhau bởi dấu cách.
+\end{itemize}
+
+\textbf{Output}
+In ra một số nguyên là số cặp $(i,j)$ thỏa mãn $i<j$ và $l \le A_i + A_j \le r$.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item $1 \le n \le 10^5$
+    \item $1 \le A_i, l, r \le 10^9$
+\end{itemize}
+
+\begin{simple_example}
+3\ 2\ 4 & 2 \\
+1\ 2\ 3 & \\
+\end{simple_example}
+\end{baitap}
+
+
+\begin{baitap}{Viên kẹo thứ k}{https://marisaoj.com/problem/81}
+Có $n$ loại kẹo. Loại $i$ có $a_i$ viên và mỗi viên nặng $w_i$. Không có hai loại kẹo có cùng khối lượng. Tất cả kẹo được đổ lên bàn và sắp xếp thành một hàng theo \textbf{khối lượng không giảm}. Với mỗi truy vấn $k$, hãy cho biết viên kẹo thứ $k$ trên bàn nặng bao nhiêu.
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu tiên gồm hai số nguyên $n, q$.
+    \item $n$ dòng tiếp theo, dòng thứ $i$ gồm hai số nguyên $a_i, w_i$.
+    \item $q$ dòng tiếp theo, mỗi dòng gồm một số nguyên $k$.
+\end{itemize}
+
+\textbf{Output}
+In ra $q$ dòng, dòng thứ $i$ là khối lượng của viên kẹo thứ $k$ ở truy vấn thứ $i$.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item $1 \le n, q \le 10^5$
+    \item $1 \le a_i, w_i \le 10^9$
+    \item $1 \le k \le \sum_{i=1}^{n} a_i \le 10^{14}$
+\end{itemize}
+
+\begin{simple_example}
+3\ 3 & 1 \\
+2\ 2 & 2 \\
+1\ 1 & 3 \\
+3\ 3 & \\
+1 & \\
+3 & \\
+5 & \\
+\end{simple_example}
+\end{baitap}
+
+\begin{baitap}{Cạnh tam giác}{https://marisaoj.com/problem/85}
+Cho mảng $A$ gồm $n$ phần tử nguyên. Hãy đếm số lượng bộ $3$ số $(i, j, k)$ với $i<j<k$ sao cho $A_i, A_j, A_k$ có thể tạo thành một bộ cạnh của tam giác.
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu tiên gồm một số nguyên $n$.
+    \item Dòng thứ hai gồm $n$ số nguyên $A_i$.
+\end{itemize}
+
+\textbf{Output}
+In ra một số nguyên là số bộ $(i, j, k)$ thỏa mãn điều kiện đề bài.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item $1 \leq n \leq 1500$
+    \item $1 \leq A_i \leq 10^9$
+\end{itemize}
+
+\begin{simple_example}
+4 & 1 \\
+1\ 2\ 3\ 4 & \\
+\end{simple_example}
+\end{baitap}
+
+\begin{baitap}{Số Hamming}{https://marisaoj.com/problem/82}
+Số Hamming là các số nguyên dương chỉ có các ước nguyên tố là $2$, $3$, $5$ (nó không chia hết cho số nguyên tố nào ngoài $2$, $3$, $5$).
+
+Cho $q$ truy vấn, mỗi truy vấn là một số nguyên $m$. Viết tất cả các số Hamming theo thứ tự tăng dần và tìm vị trí của số $m$ trong dãy (dãy được đánh số từ $1$).
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu tiên gồm số nguyên $q$.
+    \item $q$ dòng tiếp theo, mỗi dòng gồm một số nguyên $m$.
+\end{itemize}
+
+\textbf{Output}
+In ra $q$ dòng, dòng thứ $i$ là kết quả của truy vấn thứ $i$.  
+Nếu $m$ không phải số Hamming, in ra \texttt{-1}.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item $1 \leq q \leq 10^5$
+    \item $1 \leq m \leq 10^{18}$
+\end{itemize}
+
+\begin{simple_example}
+5 & 1 \\
+1 & 2 \\
+2 & 3 \\
+3 & 4 \\
+4 & -1 \\
+7 & \\
+\end{simple_example}
+\end{baitap}
+
+\begin{baitap}{Số nguyên liên tiếp}{https://marisaoj.com/problem/197}
+Cho mảng $A$ gồm $n$ số nguyên. Hãy tìm số lượng phần tử ít nhất cần thay đổi để mảng $A$ chỉ gồm các số nguyên liên tiếp.
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu tiên gồm một số nguyên $n$.
+    \item Dòng thứ hai gồm $n$ số nguyên $A_i$.
+\end{itemize}
+
+\textbf{Output}
+In ra một số nguyên là số lượng phần tử ít nhất phải thay.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item $1 \le n \le 10^5$
+    \item $1 \le A_i \le 10^9$
+\end{itemize}
+
+\begin{simple_example}
+3 & 1 \\
+4\ 10\ 5 & \\
+\end{simple_example}
+\end{baitap}
+
+\section{Bài tập tìm kiếm nhị phân kết quả}
+
+\begin{baitap}{Đọc sách}{https://marisaoj.com/problem/86}
+Marisa có $n$ cuốn sách, cuốn thứ $i$ nằm ở vị trí $A_i$. Cô muốn lấy ra $k$ cuốn để đọc. Hãy chọn $k$ vị trí sao cho \textbf{khoảng cách nhỏ nhất giữa hai cuốn liên tiếp được lấy ra} là lớn nhất có thể, và in ra giá trị khoảng cách lớn nhất đó.
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu tiên gồm hai số nguyên $n, k$.
+    \item Dòng thứ hai gồm $n$ số nguyên $A_i$ (không có hai vị trí trùng nhau).
+\end{itemize}
+
+\textbf{Output}
+In ra một số nguyên là khoảng cách lớn nhất sao cho có thể chọn đủ $k$ cuốn sách.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item $1 \le n \le 10^5$
+    \item $1 \le A_i, k \le 10^9$
+\end{itemize}
+
+\begin{simple_example}
+5\ 3 & 3 \\
+10\ 4\ 2\ 3\ 1 & \\
+\end{simple_example}
+\end{baitap}
+
+\begin{baitap}{Giá trị lớn nhất nhỏ nhất}{https://marisaoj.com/problem/87}
+Cho mảng $A$ gồm $n$ phần tử. Hãy tìm giá trị nguyên $x$ nhỏ nhất sao cho có thể chia mảng $A$ thành chính xác $k$ mảng con liên tiếp mà tổng của từng mảng con không vượt quá $x$.
+
+\textbf{Input}
+\begin{itemize}
+    \item Dòng đầu tiên gồm hai số nguyên $n, k$.
+    \item Dòng thứ hai gồm $n$ số nguyên $A_i$.
+\end{itemize}
+
+\textbf{Output}
+In ra một số nguyên $x$ là đáp án.
+
+\textbf{Giới hạn}
+\begin{itemize}
+    \item $1 \le k \le n \le 10^5$
+    \item $1 \le A_i \le 10^9$
+\end{itemize}
+
+\begin{simple_example}
+5\ 2 & 9 \\
+5\ 4\ 3\ 2\ 1 & \\
+\end{simple_example}
+\end{baitap}

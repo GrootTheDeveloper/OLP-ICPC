@@ -103,7 +103,6 @@
 \newtheorem{definition}{Definition}
 \newtheorem{dinhly}{Định lý}
 \newtheorem{dinhnghia}{Định nghĩa}
-\newtheorem{example}{Example}
 \newtheorem{ghichu}{Ghi chú}
 \newtheorem{hequa}{Hệ quả}
 \newtheorem{tinhchat}{Tính chất}
@@ -138,4 +137,36 @@
   \begin{itemize}
 }{%
   \end{itemize}\par
+}
+
+\usepackage{array}
+
+\newenvironment{example}{%
+%  \par\noindent\textbf{Ví dụ:}\par % in đậm và xuống dòng
+  \par
+  \vspace{2pt}
+  \centering 
+  \begin{tabular}{|p{0.2\linewidth}|p{0.20\linewidth}|>{\centering\arraybackslash}p{0.5\linewidth}|}
+  \hline
+  \textbf{\texttt{Dữ liệu vào}} & \textbf{\texttt{Kết quả ra}} & \textbf{\texttt{Giải thích}} \\
+  \hline
+}{
+  \hline
+  \end{tabular}
+  \par\vspace{6pt}
+}
+
+\newenvironment{simple_example}{%
+%  \par\noindent\textbf{Ví dụ:}\par % in đậm và xuống dòng
+  \par
+  \vspace{2pt}
+  \centering 
+  \begin{tabular}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+  \hline
+  \textbf{\texttt{Dữ liệu vào}} & \textbf{\texttt{Kết quả ra}} \\
+  \hline
+}{
+  \hline
+  \end{tabular}
+  \par\vspace{6pt}
 }
