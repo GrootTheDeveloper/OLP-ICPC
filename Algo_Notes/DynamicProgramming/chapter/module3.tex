@@ -90,26 +90,6 @@ f[i][j][k] = \min \Big(
     \Big)
 \]
 
-\textbf{[Groot]:} Ủa, tao để ý nè. Mấy bài trước thì toàn $f[i]$ hay $f[i][j]$ thôi, 
-tức là 1 chiều, 2 chiều. Mà qua bài này tự nhiên lại mọc thêm cái $k$, 
-thành 3 chiều. Sao biết được bao nhiêu chiều mới đủ? 
-Lỡ bài khác phải tới 4–5 chiều thì sao?\\
-
-\textbf{[vuivethoima]:} Vậy nên tao mới đặt bài này trong chương ``QHĐ Nâng cao''. Nói chứ chiều của DP không phải ``càng nhiều càng xịn'', mà là đủ để mô tả trạng thái cần nhớ thôi.  
-Ví dụ: 
-\begin{itemize}
-    \item Bài Ếch chỉ cần nhớ vị trí hiện tại $\Rightarrow$ 1 chiều.
-    \item Bài LCS phải nhớ 2 con trỏ đang đứng ở đâu trong $s$ và $t$ $\Rightarrow$ 2 chiều.
-    \item Bài này ngoài số ký tự đã dùng ở $X$ và $Y$, 
-    còn phải nhớ thêm ký tự cuối cùng thuộc chuỗi nào để tính phí đổi chuỗi $\Rightarrow$ thêm 1 chiều nữa.
-\end{itemize}
-
-\textbf{[Groot]:} Vậy tức là số chiều DP = số ``thông tin'' mình cần nhớ lại để tính tiếp hả?\\
-
-\textbf{[vuivethoima]:} Ừ thông minh hơn rồi đó. Mày cần nhớ cái gì thì định nghĩa thêm một chiều cho nó, chứ không phải thích nhét thêm bao nhiêu chiều thì nhét.  
-Có mấy bài ``hardcore'' thì thật sự cần 4–5 chiều hay nhiều hơn thiệt, nhưng lúc code người ta hay tìm cách nén trạng thái hoặc rút gọn lại cho nhẹ, bấn quá mới phải đẻ ra nhiều chiều. Hoặc mày cảm thấy cái nhiều chiều đó ngầu thì cứ việc, rồi nộp bài ăn quả TLE xong tạch giải OLP thì đừng có khóc với tao.\\
-
-\textbf{[Groot]:} À hiểu rồi. Không phải ngồi đoán mò số chiều cho vui mà phải xem bài toán bắt mình nhớ những thông tin nào để đi tiếp. Rồi từ đó mới quyết định cần mấy chiều. \\
 
 \begin{lstlisting}[title=\centering\textbf{Cài đặt}]
 #include <bits/stdc++.h>
@@ -330,29 +310,6 @@ Ngoài ra, cần đảm bảo các điều kiện sau:
 \end{itemize}
 
 
-\textbf{[Groot]:} Ê sao phức tạp vậy, tao vừa nghĩ ra cái này. Sao không chơi thẳng $f[x_1][y_1][x_2][y_2]$ luôn?  
-Hai thằng đi đâu thì mình lưu hết bốn toạ độ, rõ ràng dễ hiểu, hạnh phúc, thành công, khai phóng vcđ.\\
-
-\textbf{[vuivethoima]:} Ừ, ý tưởng đó là cách tự nhiên nhất, cũng đúng luôn.  
-Nhưng nó hoang dã vl, mày thử coi: $N, M$ tối đa 200.  
-Nếu làm 4D thì số trạng thái là $200^4 \approx 1.6 \times 10^9$.  
-Với mỗi trạng thái lại duyệt 4 cách đi tiếp, thì TLE chếc cụ ấy.\\
-
-\textbf{[Groot]:} À, tức là dễ viết nhưng chậm. Vậy thì cái trick ở đây là gì?\\
-
-\textbf{[vuivethoima]:} Trick là ``đồng bộ bước đi''.  
-Mỗi lần cả An lẫn Bình đi thêm 1 bước, thì tổng chỉ số $x+y$ của họ đều tăng lên đúng 1.  
-Nói cách khác, sau $\text{step}$ bước thì $x_1+y_1 = x_2+y_2 = \text{step}+2$.  
-Vậy là từ 4 toạ độ $(x_1,y_1,x_2,y_2)$ mình rút gọn còn 3 thông tin: $(\text{step}, x_1, x_2)$.  
-Khi đó $y_1, y_2$ tính lại được từ $\text{step}$.\\
-
-\textbf{[Groot]:} À ha, nên mới có công thức $y_1 = \text{step} - x_1 + 2$,  
-$y_2 = \text{step} - x_2 + 2$ đó hả. Nhờ vậy bộ nhớ giảm từ $O(N^2M^2)$ xuống $O((N+M)N^2)$, đủ chơi với cái giới hạn bài cho.\\
-
-\textbf{[Groot]:} Vậy có khi nào gặp bài mà không nén được như vầy, bắt buộc phải chơi 4D không?\\
-
-\textbf{[vuivethoima]:} Chắc có, nếu hai thực thể di chuyển độc lập mà không có ràng buộc ``đồng bộ'' giữa chúng thì đúng là phải 4D, tao nghĩ vậy? 
-
 \begin{lstlisting}[title=\centering\textbf{Cài đặt}]
 #include <bits/stdc++.h>
 #define int long long
@@ -539,14 +496,6 @@ signed main() {
 }
 \end{lstlisting}
 
-\textbf{[Groot]:} Ủa, nhưng tao coi lời giải trên mạng thấy có người làm 3 chiều, có người 4 chiều thôi à. Sao mày lại dựng hẳn tới 5 chiều? Có dư thừa gì không?\\
-
-\textbf{[vuivethoima]:} Ờ thì cách tao viết là kiểu full state - giữ luôn 2 món gần nhất của mỗi mỏ. Đảm bảo tính đúng, nhưng hơi minh béo. \\
-
-\textbf{[Groot]:} Vậy sao mày không làm tối ưu hơn, cách mày cài đặt tốn $4^4 \times 10^5$ ô nhớ lận. Viết kiểu đó làm cái gì cho tốn bộ nhớ?\\
-
-\textbf{[Groot]:} Mày coi thử cách giảm chiều của tao bên dưới oke hông?\\
-
 \textbf{Phân tích bài toán (2):}
 
 Gọi $f[i][a][b][c]$ là tổng lượng than lớn nhất có thể sản xuất được sau $i$ đợt vận chuyển, trong đó:
@@ -645,135 +594,4 @@ int main() {
     }
     cout << ans;
 }
-\end{lstlisting}
-
-\begin{baitap}{Exam Cheating}{https://codeforces.com/problemset/problem/796/E}
-
-Zane và người mà Zane thích vừa mới bắt đầu hẹn hò! Tuy nhiên, cô gái đang gặp khó khăn với kỳ thi cuối kỳ môn Vật lý, và cần bạn giúp đỡ.
-
-Có n câu hỏi, được đánh số từ $1$ đến $n$. Câu hỏi $i$ sẽ đứng trước câu hỏi $i + 1$ $(1 \leq i < n)$. Mỗi câu hỏi không thể chọn bừa, vì nếu trả lời sai sẽ bị phạt rất nặng. May mắn thay, cô gái đang ngồi giữa hai thiên tài, và cô ấy sẽ quay cóp bài họ.
-
-Tuy nhiên, hai thiên tài cũng có giới hạn. Mỗi người có thể biết hoặc không biết câu trả lời của một số câu hỏi. Dù vậy, những câu trả lời trên bài của họ thì luôn chính xác tuyệt đối.
-
-Để không bị giám thị phát hiện, cô gái chỉ được quay cóp tối đa $p$ lần, mỗi lần nhìn được nhiều nhất $k$ câu hỏi liên tiếp từ bài của một trong hai thiên tài. Khi cô ấy nhìn vào bài một thiên tài, nếu câu hỏi đó có trong bài của họ, cô ấy sẽ chép lại, nếu không thì bỏ qua.
-
-Nhiệm vụ của bạn là giúp cô ấy trả lời đúng được nhiều nhất bao nhiêu câu hỏi.
-
-\textbf{Input}
-\begin{itemize}[noitemsep]
-    \item Dòng đầu tiên: ba số nguyên $n, p, k$ ($1 \leq n, p \leq 1000$, $1 \leq k \leq \min(n, 50)$).  
-    \item Dòng thứ hai: số $r$ — số câu hỏi thiên tài 1 biết, tiếp theo $r$ số nguyên phân biệt $a_1,\dots,a_r$ (tăng dần).  
-    \item Dòng thứ ba: số $s$ — số câu hỏi thiên tài 2 biết, tiếp theo $s$ số nguyên phân biệt $b_1,\dots,b_s$ (tăng dần).  
-\end{itemize}
-
-\textbf{Output}  
-In ra số câu hỏi tối đa mà cô gái có thể trả lời đúng.
-
-\textbf{Ví dụ}
-
-\begin{sampleio}
-6 2 3 & 4 \\
-3 1 3 6 & \\
-4 1 2 5 6 & \\ \hline
-8 3 3 & 7 \\
-4 1 3 5 6 & \\
-5 2 4 6 7 8 & \\
-\end{sampleio}
-
-\textbf{Ghi chú}  
-
-Ví dụ 1: Có thể chọn các hành động $(1,1,3)$ và $(2,5,6)$ để trả lời đúng 4 câu hỏi.  
-
-Ví dụ 2: Có thể chọn $(1,3,5)$, $(2,2,4)$ và $(2,6,8)$ để trả lời đúng 7 câu hỏi.  \\
-
-\end{baitap}
-
-\textbf{Phân tích bài toán}\\
-
-Gọi hai thiên tài lần lượt là A và B. \\
-
-Gọi $f[i][j][k_A][k_B]$ là tổng số câu tối đa có thể chép được khi xét $i$ câu trắc nghiệm đầu tiên, ta đã có $j$ đợt chép bài. Và:
-\begin{itemize}
-    \item Đối với người A: ta đã chép được $k_A$ câu liên tục.
-    \item Đối với người B: ta đã chép được $k_B$ câu liên tục.
-\end{itemize}
-
-\textbf{Trường hợp cơ sở:} $f[0][0][0][0] = 0$
-
-Nếu $k_A = 0$ và $k_B = 0$: hiện tại câu thứ $i$ của bạn A (hoặc B) không được chép.
-
-\textbf{Kết quả bài toán:} \[\max_{j \leq p, 0 \leq kA, kB \leq k} f[n][j][k_A][k_B]\] \\
-
-
-\begin{lstlisting}[title=\centering\textbf{Cài đặt}]
-
-\end{lstlisting}
-
-\begin{baitap}{SC6}{Summer Contest 2022}
-
-Cho một dãy số nguyên dương a gồm N số. Bạn hãy chia dãy số trên thành k đoạn, mỗi đoạn gồm một dãy gồm các số ở vị trí liên tục sao cho với mỗi số thuộc đúng một đoạn.  
-Gọi $s_1, s_2, \ldots, s_k$ lần lượt là tổng các số trên mỗi đoạn.  
-
-Hỏi bạn cần chia như thế nào để được tổng  
-\[
-|s_2 - s_1| + |s_3 - s_2| + \ldots + |s_k - s_{k-1}|
-\]  
-lớn nhất.
-
-\textbf{Dữ liệu đầu vào (SC6.INP):}  
-\begin{itemize}
-  \item Dòng đầu tiên gồm một số nguyên dương $T$ $(1 \leq T \leq 40)$, là số lượng bộ dữ liệu.
-  \item T bộ dữ liệu tiếp theo, mỗi bộ dữ liệu có cấu trúc:
-    \begin{itemize}
-      \item Dòng đầu tiên chứa 2 số nguyên dương $N$ và $k$.
-      \item Dòng thứ hai chứa $N$ số nguyên (có thể âm), số nguyên dương thứ $i$ có giá trị là $a_i$.
-    \end{itemize}
-\end{itemize}
-
-\textbf{Dữ liệu đầu ra (SC6.OUT):}  
-\begin{itemize}
-  \item Kết quả cho T bộ dữ liệu, mỗi bộ dữ liệu in ra một số nguyên duy nhất là tổng  
-  \(|s_2 - s_1| + |s_3 - s_2| + \ldots + |s_k - s_{k-1}|\) lớn nhất.
-\end{itemize}
-
-\textbf{Ví dụ}  
-
-\begin{sampleio}
-3 & 18 \\
-6 4 & \\
-5 2 1 5 4 6 & \\
-5 2 & 11 \\
-1 1 3 6 2 & \\
-6 3 & 16 \\
-5 2 4 4 1 3 & \\
-\end{sampleio}
-
-\textbf{Giải thích test ví dụ:}  
-\begin{itemize}
-  \item Với test ví dụ 1: Chia dãy thành 4 đoạn: [5], [2], [1], [5, 4, 6] với tổng lần lượt $s_1 = 5, s_2 = 2, s_3 = 1, s_4 = 15$, tổng lớn nhất là $|2-5| + |1-2| + |15-1| = 18$.  
-  \item Với test ví dụ 2: Chia dãy như sau: [1], [1], [3, 6, 2] với $s_1 = 1, s_2 = 1, s_3 = 11$, tổng là $|12-1| = 11$.  
-  \item Với test ví dụ 3: Chia dãy như sau: [5, 2, 4, 4], [1], [3] với $s_1 = 15, s_2 = 1, s_3 = 3$, tổng lớn nhất là $|2-1| + |3-1| + |15-1| = 16$.  
-\end{itemize}
-
-\textbf{Bài toán sẽ được chia làm 2 Dataset:}  
-\begin{itemize}
-  \item Small Dataset: $k = 2$.
-  \item Large Dataset: $2 \leq k \leq \min(N,200)$.  
-  \item Trong mọi dataset, 95\% test có $2 \leq N \leq 200$, 5\% còn lại có $2 \leq N \leq 10000$.  
-  \item Ngoài ra, $-10000 \leq a_i \leq 10000$.  
-\end{itemize}
-
-\end{baitap}
-
-
-\textbf{Phân tích bài toán}
-
-    Gọi $f[i][j][\texttt{prevState}][\texttt{curState}]$ là tổng lớn nhất có thể khi xét $i$ phần tử đầu tiên của dãy $a$, hiện tại $a_i$ đang nằm trong đoạn thứ $j$, prevState là trạng thái của trị tuyệt đối ``trước đó'' và curState là trạng thái của trị tuyệt đối hiện tại.
-
-\textbf{Trường hợp cơ sở:} 
-
-\textbf{Kết quả bài toán:}
-
-\begin{lstlisting}[title=\centering\textbf{Cài đặt}]
-
 \end{lstlisting}

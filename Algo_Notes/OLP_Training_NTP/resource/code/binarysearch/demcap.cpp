@@ -16,17 +16,20 @@ signed main() {
         int nl = l - a[i], nr = r - a[i];
 
         int left = i + 1, right = n;
-        int ans = -1;
-        while (left <= right) {
-            int mid = left + right >> 1;
-            if (a[mid] >= nl && a[mid] <= nr) {
-                ans = mid;
-                left = mid + 1;
-            } 
-            else {
-                
-            }
-        }
+
+        /*
+        Tìm a[j] sao cho nl <= a[j] <= nr mà j là lớn nhất
+
+        Khi này, kết quả sẽ là (j - i - 1)
+
+        l = 2, r = 4
+        Khi xét i = 1
+
+        nl = 1
+        nr = 3
+        Thì mình cần tìm a[j] mà 1 <= a[j] <= 3, và j là lớn nhất 
+        [1, 2, 3]
+        */
 
     }
 }

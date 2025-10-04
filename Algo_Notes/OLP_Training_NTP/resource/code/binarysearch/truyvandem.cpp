@@ -10,6 +10,8 @@ signed main() {
         cin >> a[i];
     }
     vector<vector<int>> pos(1e5 + 1);
+    
+    // pos[i] : là tập hợp các vị trí mà phần tử tại vị trí đó có giá trị là i
 
     for (int i = 1; i <= n; i++) {
         pos[a[i]].push_back(i);

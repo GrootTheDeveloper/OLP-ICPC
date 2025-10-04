@@ -123,23 +123,6 @@ Từ những tính toán trên, ta rút ra được công thức truy hồi tổ
 \text{Với } i \geq 3: \quad f[i] = \min \left( f[i - 2] + |h[i] - h[i-2]|, \; f[i - 1] + |h[i] - h[i-1]| \right)
 \]
 
-
-\textbf{[Groot]:} Đột nhiên tao nãy ra suy nghĩ là cái công thức này dựa trên việc ếch chỉ được nhảy 1 hoặc 2 bước. Nếu lỡ tao thay đổi luật cho nhảy từ $i$ đến $i + 3$ thì sao?\\
-
-\textbf{[vuivethoima]:} Thì nếu thay đổi luật thì tao chỉ cần mở rộng công thức thành:
-\[
-f[i] = \min \Big( 
-    f[i-1] + |h[i] - h[i-1]|,\;
-    f[i-2] + |h[i] - h[i-2]|,\;
-    f[i-3] + |h[i] - h[i-3]|
-\Big).
-\]
-Ý tưởng không đổi, chỉ khác ở tập trạng thái chuyển tiếp thôi.\\
-
-\textbf{[Groot]:} À tao hiểu rồi, vậy là quan trọng không phải học vẹt cái công thức mà phải hiểu cách nó sinh ra, để khi thay đổi đề thì vẫn ứng biến được.\\
-
-\textbf{[vuivethoima]:} Bingo!!! Cái đó mới là tinh thần ``học DP'': nắm nguyên lý chứ không chỉ chép công thức. 
-
 \begin{lstlisting}[title=\centering \textbf{Cài đặt}]
 #include <bits/stdc++.h>
 #define int long long
@@ -212,18 +195,6 @@ Từ những tính toán trên, ta rút ra được công thức truy hồi tổ
 \text{Với } i \geq 3: \quad f[i] = \min \left( f[i-2] + r[i-1], \; f[i-1] + t[i] \right)
 \]
 
-
-\textbf{[Groot]:} Ủa, bài Ếch thì tao còn hình dung được: nhảy 1 bước hoặc 2 bước, công thức thấy rõ ràng.  
-Còn bài xếp hàng mua vé này sao mày lại nảy ra được cái công thức DP nghe hợp lý vậy? Tao thấy giống như mày bịa ra mà nó lại đúng ấy? \\
-
-\textbf{[vuivethoima]:} Cái thằng ngoo này, phân tích quá rõ ràng ở trên mà còn không hiểu. Thôi để tao cho mày xem lại cái luồng suy nghĩ của tao. Tao nghĩ thử: để phục vụ tới người thứ $i$, thì có 2 tình huống thôi.  
-Một là thằng $i$ tự mua vé $\Rightarrow f[i] = f[i-1] + t[i]$.  
-Hai là nó nhờ thằng $i-1$ mua hộ $\Rightarrow f[i] = f[i-2] + r[i-1]$.  
-Hết phim, không có lựa chọn nào khác nữa.\\
-
-\textbf{[Groot]:} À, tức là bản chất nó vẫn là ``chia trường hợp'' hả? Giống bài Ếch mà mỗi lần tới đá mới thì coi xem bước từ đâu tới.\\
-
-\textbf{[vuivethoima]:} Đúng rồi, y chang. Chỉ khác là ở đây ``bước nhảy'' không phải 1 hay 2 đá, mà là ``tự mua'' hoặc ``nhờ thằng trước mua hộ''. Nhiều khi DP nó vậy đó, nhìn thì ảo ma vcl nhưng bản chất chỉ là liệt kê hết trường hợp hợp lệ rồi chọn cái tối ưu thôi.
 
 \begin{lstlisting}[title=\centering \textbf{Cài đặt}]
 #include <bits/stdc++.h>
@@ -302,20 +273,6 @@ Từ những tính toán trên, ta rút ra được công thức truy hồi tổ
     f[i] = \max \left( 1,\ \max_{\substack{1 \leq j < i, a[i] > a[j]}} \left( f[j] + 1 \right) \right)
 \]
 
-
-\textbf{[Groot]:} Ủa tự nhiên ở đâu lòi ra cái $\max\limits_{j<i, a[i]>a[j]} (f[j]+1)$ vậy? 
-
-\textbf{[vuivethoima]:} Mày nghĩ coi, muốn có dãy tăng kết thúc ở $a[i]$ thì trước đó phải có thằng nào nhỏ hơn $a[i]$ chứ. 
-Nối $a[i]$ vô sau nó thì độ dài tăng thêm 1, thành $f[j]+1$.\\
-
-\textbf{[Groot]:} Ờ, nghe hợp lý... Nhưng mày nói rõ ràng hơn cái vụ max đi.\\
-
-\textbf{[vuivethoima]:} Vì đâu chỉ có một thằng nối được. 
-Có khi $a[i]$ lớn hơn nhiều thằng trước đó, mỗi thằng cho ra một độ dài khác nhau. 
-Thì mình phải chọn cái dài nhất trong mớ đó chứ.\\
-
-\textbf{[Groot]:} À à, hiểu rồi. Tức là “thử nối với tất cả đứa trước đó, lấy cái lời nhất”. 
-Nếu không nối được với ai thì tự đứng một mình, $f[i]=1$.\\
 
 \begin{lstlisting}[title=\centering \textbf{Cài đặt}]
 #include <bits/stdc++.h>
@@ -414,20 +371,6 @@ Tiếp tục như vậy cho đến khi $i=0$ hoặc $j=0$.
 Lúc này ta thu được xâu LCS theo thứ tự ngược, vì ta đi từ cuối về đầu.  
 Đảo ngược lại sẽ ra xâu con chung dài nhất cần tìm.\\
 
-\textbf{[Groot]:} Nếu có nhiều xâu con chung dài nhất thì sao? Ví dụ như cùng độ dài 4 mà ra tới 2–3 xâu khác nhau thì mày in cái nào?\\
-
-\textbf{[vuivethoima]:} Hỏi đỡ ngu rồi đó, thì cái câu mày thắc mắc là chuyện hay gặp. Thuật toán truy vết bình thường chỉ lần theo một nhánh, nên kết quả sẽ là một xâu LCS bất kỳ. 
-Nếu đề chỉ cần ``một đáp án đúng'' thì vậy là đủ.\\
-
-\textbf{[Groot]:} Còn nếu đề bắt in ra hết mọi xâu LCS thì?\\
-
-\textbf{[vuivethoima]:} Thì rắc rối hơn nhiều. Mày phải duyệt hết các nhánh có cùng độ dài, dùng backtracking hoặc DFS. 
-Số lượng nghiệm có thể rất lớn nên thường đề bài không yêu cầu. 
-Người ta chỉ cần một nghiệm đại diện thôi.\\
-
-\textbf{[Groot]:} Vậy mày trình bày chi tiết cho tao phần liệt kê này đi. \\
-
-\textbf{[vuivethoima]:} Muốn biết thì liên hệ \textbf{Bruce}.
 
 \begin{lstlisting}[title=\centering \textbf{Cài đặt}]
 #include <bits/stdc++.h>
@@ -529,14 +472,6 @@ f[i][j] =
     \max(f[i - 1][j],\ f[i - 1][j - w_i] + v_i) & \text{nếu } j \geq w_i
 \end{cases}
 \]
-
-
-
-\textbf{[Groot]:} Ủa, công thức mày ghi là $f[i][j] = \max(f[i-1][j], f[i-1][j-w_i] + v_i)$. Tại sao không phải $f[i][j-w_i]$ mà là $f[i-1][j-w_i]$?\\
-
-\textbf{[vuivethoima]:} À, cái này quan trọng lắm.  
-Nếu mày dùng $f[i][j-w_i]$ thì hóa ra trong cùng một bước tính, mày cho phép chọn đi chọn lại vật phẩm $i$ nhiều lần.  
-Mà đề Knapsack 0/1 thì mỗi vật phẩm chỉ được lấy tối đa một lần thôi.
 
 \begin{lstlisting}[title=\centering \textbf{Cài đặt}]
 #include <bits/stdc++.h>

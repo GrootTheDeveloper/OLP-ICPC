@@ -143,19 +143,6 @@ Sau khi có kết quả bài toán là tổng điểm tối đa, kí hiệu: ans
 
 Xét $i = F \rightarrow 1$, với $i$ ta tìm $f[i][j] == \text{answer}, \forall j \in [i, V - F + i]$. Khi tìm được $f[i][j]$ thỏa mãn, ta đồng thời tìm được bó hoa thứ $i$ được đặt ở chậu $j$. Sau đó lấy kết quả answer $-= f[i][j]$ để dịch về tổng điểm tối đa khi xét bó hoa thứ $i - 1$, đồng thời giảm $i$ đi 1 đơn vị. Lặp lại đến khi $i < 1$, ta sẽ tìm được các chậu hoa đặt bó hoa tương ứng thỏa mãn yêu cầu bài toán.\\
 
-\textbf{[Groot]:} Ê, tao thắc mắc chỗ này. Trong công thức mày chỉ cho $j$ chạy từ $i$ tới $V - F + i$. 
-Ủa sao không để $j$ từ $1$ tới $V$ cho tiện? 
-Tự nhiên lại giới hạn nhìn hơi kì.\\
-
-\textbf{[vuivethoima]:} À, cái này là do ràng buộc thứ tự. 
-Bó hoa thứ $i$ bắt buộc phải nằm bên phải bó hoa thứ $i-1$, nên chắc chắn bình hoa nó chọn phải có chỉ số ít nhất là $i$.  
-Còn bên phải thì cũng không thể chọn quá xa, vì phải chừa chỗ cho những bó hoa còn lại. 
-Nên giới hạn trên là $V - F + i$.\\
-
-\textbf{[Groot]:} À, tức là để đảm bảo cuối cùng $F$ bó hoa đều đặt vừa trong $V$ bình. 
-Nếu cho $j$ rộng ra thì sẽ bị tình huống ``dồn không kịp'' cho mấy bó sau.\\
-
-\textbf{[vuivethoima]:} Chuẩn rồi. Giới hạn đoạn $[i, V-F+i]$ là để đảm bảo tính hợp lệ, chứ không thì DP có thể tính ra mấy phương án ``không thể xếp'' được.\\
 
 \begin{lstlisting}[title=\centering \textbf{Cài đặt}]
 #include <bits/stdc++.h>
@@ -269,35 +256,6 @@ f[i+1][j-1] & \text{nếu } s[i] = s[j] \\
 
 Lưu ý với $f[i][j]$, để biết $f[i + 1][j - 1]$ là gì thì ta cần phải tính $f[i + 1][j - 1]$ trước, tương tự với $f[i + 1][j]$ hay $f[i][j - 1]$. Tức là ta cần phải tính lần lượt các chuỗi con có độ dài tăng dần lên, hay xét lần lượt các chuỗi có độ dài length từ 2 đến $N$ và tính $f[i][j]$ với $j - i + 1$ = length \\
 
-\textbf{[Groot]:} Ủa, mày nói phải tính $f[i][j]$ theo độ dài tăng dần. 
-Sao vậy? Không lẽ không thể tính kiểu đệ quy từ trên xuống hả?\\
-
-\textbf{[vuivethoima]:} Thật ra làm đệ quy top–down có memo vẫn được, 
-nhưng dễ bị chậm vì số lời gọi hàm rất lớn. 
-Làm bottom–up theo độ dài tăng dần thì mình chắc chắn khi tính $f[i][j]$ 
-các trạng thái nhỏ hơn như $f[i+1][j-1], f[i+1][j], f[i][j-1]$ đã có sẵn, 
-đỡ phải gọi đi gọi lại.\\
-
-\textbf{[Groot]:} À ha. Rồi còn cái đoạn $s[i] \neq s[j]$ đó, 
-mày bảo chỉ có 2 cách insert thôi. Biết đâu còn cách khác thì sao?\\
-
-\textbf{[vuivethoima]:} Thực ra bản chất chỉ có 2. 
-Hoặc tao làm cho $s[i]$ “có đôi” bằng cách chèn thêm một ký tự $s[i]$ bên phải, 
-hoặc tao làm cho $s[j]$ “có đôi” bằng cách chèn thêm một ký tự $s[j]$ bên trái. 
-Ngoài ra thì cũng quy về hai tình huống này thôi, 
-chứ không còn nước đi nào khác.\\
-
-\textbf{[Groot]:} Hmmm, tao vẫn hơi mù mờ. 
-Tại sao insert $s[j]$ trước $s[i]$ thì lại biến bài toán thành $f[i+1][j]$?\\
-
-\textbf{[vuivethoima]:} Nghĩ thế này nè: 
-giả sử $s[i] \neq s[j]$, tao chèn thêm $s[j]$ vào trước $s[i]$. 
-Lúc này $s[j]$ mới chèn khớp với $s[j]$ cũ ở cuối, 
-coi như cặp này xong xuôi. 
-Phần còn lại cần xử lý chỉ còn đoạn $s[i..j-1]$, 
-mà bỏ ký tự đầu $s[i]$ đi là ra $s[i+1..j]$. 
-Thế nên nó rút gọn thành $f[i+1][j]$.\\
-
 \begin{lstlisting}[title=\centering \textbf{Cài đặt}]
 #include <bits/stdc++.h>
 #define int long long
@@ -392,15 +350,6 @@ f[i][j] = \min
 \]
 
 
-\textbf{[Groot]:} Ủa, tao thấy trong công thức mày chỉ cho 3 lựa chọn thôi. 
-Chẳng lẽ không còn cách ghép nào khác hả?  
-Lỡ tao muốn vừa chèn ở $S_1$, vừa chèn ở $S_2$ cùng lúc thì sao?\\
-
-\textbf{[vuivethoima]:} Nếu mày chèn cả hai bên cùng lúc thì 
-thực chất mày chỉ đang tăng thêm độ dài cả hai chuỗi bằng dấu ``\_''. 
-Khoảng cách giữa ``\_'' và ``\_'' bằng 0, 
-mà làm vậy thì vô nghĩa vì không thay đổi gì cả.  
-Thế nên không cần xét thêm tình huống này.
 
 \begin{lstlisting}[title=\centering \textbf{Cài đặt}]
 #include <bits/stdc++.h>
@@ -496,17 +445,6 @@ Từ những tính toán trên, ta rút ra được công thức truy hồi tổ
 \]
 
 \textbf{Kết quả bài toán:} $f[a][b]$
-
-\textbf{[Groot]:} Ủa, sao công thức chỉ xét cắt ngang với cắt dọc thôi? 
-Có khi nào cắt chéo ra hình vuông nhanh hơn không?\\
-
-\textbf{[vuivethoima]:} Vãi cả l**, mày nghiêm túc à? Cắt chéo thì hai phần không còn là hình chữ nhật nữa?\\
-
-\textbf{[Groot]:} Rồi đùa thôi đừng nóng, nhưng tao thấy trong công thức mày cộng thêm ``+1''. Tại sao vậy? Không phải mình đã tính $f[\cdot][\cdot]$ cho hai mảnh nhỏ rồi sao?\\
-
-\textbf{[vuivethoima]:} ``+1'' là chi phí của lần cắt hiện tại. 
-Mỗi lần chia ra hai mảnh thì dù mảnh nào cũng tính riêng, 
-nhưng thao tác cắt vẫn phải đếm thêm một bước nữa.\\
 
 \begin{lstlisting}[title=\centering \textbf{Cài đặt}]
 #include <bits/stdc++.h>
