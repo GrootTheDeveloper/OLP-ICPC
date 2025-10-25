@@ -560,10 +560,6 @@ Từ đó, ta có chiến lược:
 Như vậy, mỗi lần ``đóng–mở'' đường ta đều hợp thức: giảm số TPLT đi $1$, 
 cho đến khi toàn bộ đồ thị chỉ còn một TPLT duy nhất. \\
 
-\textbf{[Groot]:} Oke, mày lảm nhảm nghe cũng hay đó, nhưng tao vẫn chưa hình dung được cách cài đặt. Kiểu làm sao để cài đặt tìm cạnh dư thừa ấy?
-
-\textbf{[vuivethoima]:} Khi union\_sets$(u, v)$, nếu tụi nó đã nằm cùng một TPLT, thì tức là thêm cạnh $(u, v)$ vào không ảnh hưởng đến việc giảm TPLT. Vậy nó chính là một cạnh dư thừa.
-
 \paragraph{Cài đặt}
 \begin{lstlisting}
 #include <bits/stdc++.h>
@@ -713,7 +709,5 @@ Vì vậy mỗi khi thêm được một cạnh hợp lệ thì cứ thêm, vì:
     \item Không tồn tại trường hợp ``thêm bây giờ làm hỏng cơ hội về sau''.
 \end{itemize}
 
-Do đó, chiến lược tham lam ở đây là \textbf{tối ưu}. Tao nói tới vậy rồi đó, cái bộ não thiếu nếp nhăn của mày được thông chút nào chưa?
-
-\textbf{[Groot]:} *éo.
+Do đó, chiến lược tham lam ở đây là \textbf{tối ưu}. 
  

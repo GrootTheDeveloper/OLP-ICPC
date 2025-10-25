@@ -1,42 +1,31 @@
-\chapter{Giới thiệu}
-\minitoc 
+\chapter*{Lời nói đầu}
+\addcontentsline{toc}{chapter}{Lời nói đầu}
 
-Bài viết này được biên soạn với mục tiêu giúp tác giả hệ thống hoá và vận dụng các kiến thức thuộc chuyên đề \textit{Quy hoạch động (Dynamic Programming)}, từ đó áp dụng hiệu quả trong \textit{Competitive Programming} (Lập trình thi đấu).
+Trong thời đại công nghệ số, lập trình không chỉ là một kỹ năng quan trọng mà còn là cánh cửa mở ra vô vàn cơ hội phát triển cho sinh viên trong lĩnh vực công nghệ thông tin và khoa học máy tính.  
+Đặc biệt, với các cuộc thi lập trình như \textbf{Olympic Tin học Sinh viên Việt Nam (OLP)}, \textbf{International Collegiate Programming Contest (ICPC)} hay các kỳ thi trực tuyến toàn cầu, lập trình thi đấu (\textit{Competitive Programming - CP}) đã trở thành môi trường tuyệt vời để sinh viên rèn luyện tư duy logic, kỹ năng phân tích và khả năng giải quyết vấn đề.  \\
 
-\section{Các nguồn tài nguyên}
-\begin{quote}
-    \begin{itemize}
-        \item C{\tt/}C++: \url{https://github.com/GrootTheDeveloper/OLP-ICPC/tree/master/2025/C%2B%2B}
-        \item \cite{CP10}. \textit{CP10. Competitive Programming} \url{https://drive.google.com/drive/folders/1MTEVHT-7nBnMJ7C9LgyAR_pEVSE3FlKz?fbclid=IwAR3TovIj2rKCRe1a4oZxW-LQCoEoVkipVAvCzwrr0nJ6GzcAd47P6LO1Rwc}
-	
-        \item \cite{cp-algorithms}. \textit{Algorithms for Competitive Programming} \url{https://cp-algorithms.com}
+Với khát vọng tạo dựng một cộng đồng học thuật năng động tại Trường Đại học Quản lý và Công nghệ TP.HCM (UMT) và hỗ trợ sinh viên UMT tiếp cận \textit{Competitive Programming} từ con số 0, \textbf{Câu lạc bộ Lập trình Ứng dụng (APC)} trực thuộc UMT - Khoa Công nghệ đã biên soạn bộ tài liệu này với mong muốn đồng hành cùng sinh viên từ những bước đi đầu tiên trong hành trình lập trình thi đấu.
 
-        \item \cite{VNOI-WIKI}. \textit{Thư viện VNOI} \url{https://wiki.vnoi.info}
-    \end{itemize}
-\end{quote}
+\vspace{0.5cm}
 
-\section{Tài khoản trên các Online Judge}
-\begin{quote}
-    \begin{itemize}
-        \item Codeforces: \url{https://codeforces.com/profile/vuivethoima}
-        \item VNOI: \url{oj.vnoi.info/user/Groot}
-        \item IUHCoder: \url{oj.iuhcoder.com/user/ankhang2111}
-        \item MarisaOJ: \url{https://marisaoj.com/user/grootsiuvip/submissions}
-        \item CSES: \url{https://cses.fi/user/212174}
-        \item UMTOJ: \url{sot.umtoj.edu.vn/user/grootsiuvip}
-        \item SPOJ: \url{www.spoj.com/users/grootsiuvip/}
-        \item POJ: \url{http://poj.org/userstatus?user_id=vuivethoima}
-        \item AtCoder: \url{https://atcoder.jp/users/grootsiuvip}
-        \item OnlineJudge.org: \url{vuivethoima}
-    \end{itemize}
-\end{quote}
+Tài liệu này không chỉ là nguồn học tập, mà còn là cầu nối gắn kết các thành viên trong CLB APC, tạo ra một cộng đồng học thuật năng động, nơi các bạn sinh viên cùng nhau học hỏi, trao đổi và tiến bộ.  
+Nhóm biên soạn hy vọng rằng với sự đồng hành của tài liệu này, mỗi bạn sinh viên đều có thể từng bước vươn lên, từ người mới bắt đầu đến thí sinh tự tin tham gia các kỳ thi lập trình, góp phần nâng cao vị thế của UMT trên các sân chơi học thuật trong và ngoài nước.
 
-\section{Một vài lưu ý}
-Chuyên đề này được viết bởi hai ``tác giả'':
+\vspace{0.5cm}
+\noindent
+Trong quá trình biên soạn, nhóm đã nỗ lực hết mình để đảm bảo tính chính xác và tính thực tiễn. Tuy nhiên, do phạm vi kiến thức rộng lớn, khó tránh khỏi những thiếu sót. Chúng tôi rất mong nhận được những ý kiến đóng góp từ bạn đọc để tài liệu ngày càng hoàn thiện hơn.
 
+\vspace{0.5cm}
+
+\textbf{Thông tin liên hệ:}
 \begin{itemize}
-    \item \textbf{vuivethoima} – tác giả chính, chịu trách nhiệm biên soạn nội dung.
-    \item \textbf{Groot} – một thằng chuyên chọc ngoáy, đặt những câu hỏi nghe thì rất ngu ngơ nhưng lại gợi mở những góc khuất của bài toán mà thường ít ai để ý (chắc vậy?).
+    \item Facebook: \url{https://www.facebook.com/apc.umt}
+    \item Email: apc.sot@umt.edu.vn
+    \item Số điện thoại: 0967 670 770 (An Khang)
 \end{itemize}
 
-Nói cho sang thì là ``cộng tác'', nhưng thực chất đây là quá trình DPAK tự viết, rồi tự hỏi, rồi tự tranh luận. Hai ``nhân vật'' trong đầu thay phiên nhau đóng vai \textit{tác giả} và \textit{độc giả khó tính}. Và thế là hình thành nên chuyên đề này.
+\vspace{1cm}
+\begin{flushright}
+\textit{TP. Hồ Chí Minh, \today} \\[0.3cm]
+\textbf{Nhóm biên soạn tài liệu APC}
+\end{flushright}
