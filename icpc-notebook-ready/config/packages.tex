@@ -1,0 +1,31 @@
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{vietnamese}
+
+% Safer fonts included in TeX Live
+\setmainfont{Times New Roman}              % Font có sẵn tiếng Việt
+\setsansfont{Arial}                        % Font sans-serif chuẩn Windows
+\setmonofont{Consolas}[Scale=0.9]          % Font code mặc định Windows (không lỗi)
+
+\usepackage{dblfloatfix} % cải thiện vị trí float figure* trong tài liệu 2 cột
+
+% Math & symbols
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{bm}
+\usepackage{siunitx}
+\sisetup{detect-family=true}
+
+% Layout
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{booktabs, multirow, makecell}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+% Code
+\usepackage{listings}
+\usepackage{lstautogobble}

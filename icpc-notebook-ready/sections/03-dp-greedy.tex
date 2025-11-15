@@ -1,0 +1,292 @@
+\section{Quy hoạch động \& Tham lam}
+%\subsection{Knapsack 0/1 (ví dụ công thức)}
+\subsection{Dãy con tăng dài nhất (LIS)}
+
+\textbf{Bài toán.} Cho mảng $A$ gồm $n$ phần tử, tìm độ dài lớn nhất của dãy con tăng chặt:
+\[
+i_1 < i_2 < \dots < i_k,\quad A_{i_1} < A_{i_2} < \dots < A_{i_k}.
+\]
+
+\textbf{Ý tưởng.} Duy trì mảng chỉ số \(\texttt{f}[L]\) là \emph{chỉ số phần tử kết thúc nhỏ nhất}
+trong mọi dãy tăng \emph{độ dài đúng \(L\)} đã thấy. So sánh luôn qua giá trị \(A[\texttt{f}[L]]\).
+
+\textbf{Bước xử lý phần tử \(A[i]\).}
+Tìm \(\texttt{pos}=\max\{L \mid A[\texttt{f}[L]] < A[i]\}\) bằng nhị phân trên \(L\in[0, \texttt{len}]\).
+Khi đó có thể kéo dài dãy độ dài \(\texttt{pos}\) thành \(\texttt{pos}{+}1\) bằng \(A[i]\):
+\(\texttt{f[pos+1]} \gets i\).
+Nếu \(\texttt{pos+1}>\texttt{len}\) thì cập nhật \(\texttt{len}\).
+
+\textbf{Kết quả.} \(\texttt{len}\) chính là độ dài LIS.  
+Độ phức tạp \(O(n\log n)\), bộ nhớ \(O(n)\).
+
+\codefile[]{code/lis_nlogn.cpp}
+
+\subsection{Xoá tối đa $k$ đoạn về 0 để tối đa hoá tổng}
+
+\textbf{Bài toán.} Cho mảng $A$ gồm $n$ số nguyên. Thực hiện không quá $k$ lần thao tác: chọn đoạn liên tiếp $[l,r]$ và gán $A_l,\dots,A_r:=0$. Tìm tổng lớn nhất có thể của mảng sau các thao tác.
+
+\textbf{Quy hoạch động (cuộn lớp).} 
+Ký hiệu:
+\[
+\text{dp}[i][j][t] = \text{tổng lớn nhất xét đến } i,\ 
+\text{đã dùng } j \text{ lần xoá},\
+t\in\{0,1\}
+\]
+trong đó $t=0$: \emph{không xoá tại vị trí $i$} (giữ $A_i$), 
+$t=1$: \emph{đang ở trong một đoạn xoá} (nên $A_i$ bị \underline{không} cộng).
+
+\textbf{Chuyển trạng thái.}
+\[
+\begin{aligned}
+\text{dp}[i][j][0] &= \max\big(\text{dp}[i{-}1][j][0] + A_i,\ \text{dp}[i{-}1][j][1] + A_i\big),\\
+\text{dp}[i][j][1] &= \max\big(\text{dp}[i{-}1][j{-}1][0],\ \text{dp}[i{-}1][j][1]\big).
+\end{aligned}
+\]
+Giải thích: hoặc không xoá tại $i$ (cộng $A_i$), hoặc xoá tại $i$ (không cộng $A_i$); 
+bắt đầu đoạn xoá mới làm $j$ tăng 1.
+
+\textbf{Khởi tạo.} 
+$\text{dp}[0][0][0]=0$, các trạng thái còn lại $=-\infty$ (không hợp lệ).
+Trả lời: $\displaystyle \max_{0\le j\le k}\ \max(\text{dp}[n][j][0],\text{dp}[n][j][1])$.
+
+\textbf{Độ phức tạp.} $O(nk)$ thời gian, $O(k)$ bộ nhớ với cuộn lớp theo $i$.
+
+\codefile[]{code/max_sum_after_k_zero_segments_dp.cpp}
+
+\subsection{Balo nhiều vật (bounded knapsack) – tách nhị phân}
+
+\textbf{Bài toán.} Có $n$ loại, loại $i$ có trọng lượng $w_i$, giá trị $v_i$, số lượng $a_i$. Chọn tổng trọng lượng $\le S$ để giá trị lớn nhất.
+
+Mỗi loại $i$ có trọng lượng $w_i$, giá trị $v_i$, và số lượng tối đa $a_i$.
+Không được vượt quá sức chứa $S$.
+
+\textbf{Vấn đề:} Nếu duyệt từng món trong $a_i$ thì tốn $O(n \cdot a_i \cdot S)$ (quá lớn).
+
+\textbf{Cách làm:}
+\begin{itemize}
+    \item Ta tách số lượng $a_i$ thành các nhóm theo dạng nhị phân: $a_i = 1 + 2 + 4 + \dots + \text{(phần dư)}$
+    \item Mỗi nhóm được coi như một món 0/1:$
+        W = w_i \cdot \text{nhóm}, \quad V = v_i \cdot \text{nhóm}
+    $
+    \item Tổng số món sau khi tách chỉ khoảng $\sum \log_2 a_i \le 1400$.
+    \item Sau đó giải như bài toán \textbf{balo 0/1}:
+    $
+        dp[s] = \max(dp[s],\ dp[s-W] + V)
+    $
+\end{itemize}
+
+\codefile[]{code/bounded_knapsack_binary_split.cpp}
+
+\subsection{Hai lộ trình ăn nấm: đi $(1,1)\to(n,n)$ rồi quay về tối đa hoá tổng}
+
+\textbf{Tóm tắt.} Từ $(1,1)$ đi đến $(n,n)$ chỉ bằng bước \texttt{Down/Right}, rồi quay về $(1,1)$ chỉ bằng \texttt{Up/Left}. Mỗi ô chỉ được hái nấm \textbf{tối đa một lần}. Tính tổng nấm lớn nhất có thể hái.
+
+\textbf{Phân tích (quy về 2 lộ trình đồng thời).}
+Lộ trình đi và lộ trình về có thể xem như \emph{hai người} cùng đi từ $(1,1)$ đến $(n,n)$, chỉ bước \texttt{Down/Right}, và tổng thưởng là:
+\[
+\text{gain} = A_{i_1,j_1} + (i_1\neq i_2\ ?\ A_{i_2,j_2}:0).
+\]
+Tại “thời điểm” $k=i_1+j_1=i_2+j_2$, đặt $j_1=k-i_1$, $j_2=k-i_2$. Quy hoạch động:
+\[
+\text{dp}[i_1][i_2] = \max
+\begin{cases}
+\text{dp}[i_1-1][i_2-1],\\
+\text{dp}[i_1-1][i_2],\\
+\text{dp}[i_1][i_2-1],\\
+\text{dp}[i_1][i_2]
+\end{cases}
+\;+\; A_{i_1,j_1} + \big(i_1\neq i_2\big)\cdot A_{i_2,j_2}.
+\]
+Duyệt $k=2..2n$, mỗi $k$ cập nhật $\text{dp}$ theo các chỉ số hợp lệ ($1\le i_1,i_2\le n$, $1\le j_1,j_2\le n$).
+
+\textbf{Độ phức tạp.} $O(n^3)$ thời gian, $O(n^2)$ bộ nhớ (cuộn theo $k$).
+
+\codefile[]{code/marisa_two_paths_max_mushroom.cpp}
+
+\subsection{Đường đi đơn lớn nhất trên cây (node-weighted)}
+
+\textbf{Bài toán.} Cho cây $n$ đỉnh, mỗi đỉnh $i$ có trọng số $A_i$ (có thể âm). Tìm tổng lớn nhất của một \emph{đường đi đơn} bất kỳ.
+
+\textbf{Phân tích.} Gọi $down[u]$ là \emph{tổng lớn nhất của một đường đi đi xuống} từ $u$ (chỉ chọn đúng một nhánh con), bao gồm $u$:
+\[
+down[u] = A_u + \max\{0,\ \max_{v\in \text{con}(u)} down[v]\}.
+\]
+Đường đi tốt nhất \emph{đi qua $u$} là $A_u + \max(0,\text{best}_1) + \max(0,\text{best}_2)$, với $\text{best}_1,\text{best}_2$ là hai giá trị $down[v]$ lớn nhất từ các con của $u$ (cắt âm về $0$). Đáp án là max trên mọi $u$.
+
+\textbf{Cài đặt.} Duyệt cây theo hậu tố (postorder) bằng duyệt không đệ quy: lấy thứ tự DFS, xử lý ngược lại để tính $down$ và cập nhật đáp án. Thời gian $O(n)$, bộ nhớ $O(n)$.
+
+\codefile[]{code/tree_max_path_sum_nodes.cpp}
+
+\subsection{Đếm số \textbf{đồ thị con liên thông} (subtree connected) của cây}
+
+\textbf{Bài toán.} Cho cây $n$ đỉnh. Một \emph{đồ thị con} ở đây là tập đỉnh liên thông (không rỗng). Đếm số đồ thị con, mod $10^9{+}7$.
+
+\textbf{Phân tích.} Gốc hoá cây tại $1$. Gọi
+\[
+\text{dp}[u] = \text{ số tập đỉnh liên thông (không rỗng) nằm trong \emph{duy nhất} nhánh con của $u$ và \emph{chứa} $u$ }.
+\]
+Khi đó với mỗi con $v$ của $u$, ta có hai lựa chọn độc lập: \emph{không} lấy nhánh $v$ hoặc \emph{lấy} một tập liên thông chứa $v$ (có $\text{dp}[v]$ cách). Do đó:
+\[
+\boxed{\ \text{dp}[u] \;=\; \prod_{v \in \text{child}(u)} \bigl(1 + \text{dp}[v]\bigr) \ \bmod M\ }.
+\]
+Mọi tập liên thông có \emph{đỉnh gần gốc nhất} là duy nhất, nên tổng số đồ thị con chính là
+\[
+\boxed{\ \text{Ans} \;=\; \sum_{u=1}^{n} \text{dp}[u]\ \bmod M\ },\quad M=10^9{+}7.
+\]
+
+\textbf{Độ phức tạp.} $O(n)$ thời gian, $O(n)$ bộ nhớ (duyệt hậu tố).
+
+\codefile[]{code/count_connected_subgraphs_tree.cpp}
+
+\subsection{Đếm số đường đi độ dài $k$ trên cây}
+
+\textbf{Đề bài tóm tắt.}
+Cho cây $n$ đỉnh. Đường đi đơn là chuỗi các đỉnh phân biệt, mỗi cặp kề nhau nối bằng cạnh. 
+Với mỗi truy vấn $n, k$, hãy đếm số lượng đường đi đơn có \emph{đúng} $k$ cạnh.
+
+\textbf{Ràng buộc.} 
+$1 \le n \le 10^5,\ 1 \le k \le 100$. Cây không có chu trình.
+
+\textbf{Ý tưởng (DP trên cây).}
+
+\begin{itemize}
+    \item Gốc cây bất kỳ, ví dụ tại đỉnh 1.
+    \item Với mỗi đỉnh $u$, lưu mảng:
+    \[
+        dp_u[d] = \text{số đỉnh trong subtree của }u\text{ cách }u\text{ đúng }d\text{ cạnh}
+    \]
+    \item Khởi tạo: $dp_u[0] = 1$ (tự bản thân nó).
+    \item Khi gộp con $v$ vào $u$:
+    \begin{itemize}
+        \item \textbf{Đường đi qua $u$:} một đầu ở nhánh đã xử lý (dp\_u), đầu còn lại trong subtree(v):
+        \[
+            \text{ans} += \sum_{j=0}^{k-1} dp_u[j] \cdot dp_v[k - 1 - j]
+        \]
+        (Đi từ $u$ xuống $v$ tốn thêm 1 cạnh, nên tổng là $j + 1 + t = k$).
+        \item \textbf{Cập nhật dp:} mọi nút trong subtree $v$ sẽ xa $u$ hơn 1 cạnh:
+        \[
+            dp_u[d] += dp_v[d-1] \quad \forall d = 1..k
+        \]
+    \end{itemize}
+    \item Duyệt cây theo hậu tự (post-order). Đáp án là tổng \texttt{ans}.
+\end{itemize}
+
+\codefile[]{code/count_paths_length_k_tree.cpp}
+
+\subsection{Số thứ $k$ có tổng chữ số là số nguyên tố}
+
+\textbf{Bài toán.} Liệt kê các số dương có tổng chữ số nguyên tố: $2,3,5,7,11,12,14,16,\dots$.
+Cho $k$, tìm \emph{số thứ $k$} trong dãy (đếm từ $1$).
+
+\textbf{Ý tưởng.} Dùng \emph{Digit DP} để đếm
+\[
+F(X)=\#\{1\le n\le X \mid \mathrm{sumDigits}(n)\text{ là số nguyên tố}\}.
+\]
+Sau đó \emph{nhị phân} tìm $X$ nhỏ nhất sao cho $F(X)\ge k$.  
+Tổng chữ số tối đa $\le 9\cdot 19=171$ (với $X<10^{19}$), nên tiền xử lý prime đến $171$.
+
+\textbf{Độ phức tạp.} Mỗi lần đếm $O(\text{digits}\cdot\text{maxSum})\approx 19\cdot171$,  
+nhị phân $\approx 60$ bước $\Rightarrow$ rất nhanh.
+
+\codefile[]{code/kth_prime_digit_sum.cpp}
+
+\subsection{Đếm số không có xâu con palindrome (độ dài $>1$)}
+
+\textbf{Tóm tắt.} Đếm các số trong $[L,R]$ sao cho trong biểu diễn thập phân \emph{không có} xâu con liên tiếp nào là palindrome độ dài $\ge 2$.
+
+\textbf{Phân tích.}
+Mọi palindrome độ dài $\ge 4$ đều chứa một palindrome độ dài $2$ hoặc $3$ ở giữa.  
+Vì thế \textbf{chỉ cần cấm} hai mẫu tối thiểu:
+\[
+\text{(i) } d_i \ne d_{i+1}\quad\text{và}\quad
+\text{(ii) } d_i \ne d_{i+2}.
+\]
+Đếm bằng \textbf{digit DP}:
+\[
+\text{DP[pos][prev1][prev2][started][tight]}
+\]
+với $prev1$ là chữ số liền trước, $prev2$ là chữ số cách 2 trước đó (giá trị đặc biệt “\_” khi chưa bắt đầu).  
+Khi chọn chữ số $x$ ở vị trí hiện tại (nếu đã bắt đầu), ràng buộc: $x \ne prev1$ và $x \ne prev2$.
+
+\textbf{Đáp án: } $F(R) - F(L-1)$.
+
+\codefile[]{code/count_no_pal_substrings.cpp}
+
+\subsection{Đếm $y \in [L,R]$ sao cho $x \oplus y \le S$ (digit DP theo bit)}
+
+\textbf{Tóm tắt.} Cho $x,L,R,S \le 10^{18}$. Đếm số $y$ thỏa $L \le y \le R$ và $x \oplus y \le S$.
+
+\textbf{Ý tưởng.} Dùng \emph{bit-DP} trên 60 bit cao xuống thấp. Tính
+\[
+F(N)=\#\{\,0\le y\le N:\ x\oplus y\le S\,\},\quad \text{đáp án }=F(R)-F(L-1).
+\]
+Trạng thái:
+\[
+\text{dp}[i][t_y][t_z]
+\]
+với $i$ là vị trí bit (từ cao xuống), $t_y$ là cờ “đang chặt theo $N$”, $t_z$ là cờ “đang chặt theo $S$”.  
+Tại bit $i$, chọn $y_i\in\{0,1\}$ không vượt $N_i$ nếu $t_y=1$. Khi đó $z_i=x_i\oplus y_i$ không vượt $S_i$ nếu $t_z=1$. Cập nhật cờ chặt mới theo so sánh bằng.
+
+\codefile[]{code/count_xor_leq.cpp}
+
+
+\subsection{Sắp xếp đồ vào thùng (Bin Packing với $n \le 20$)}
+
+\textbf{Đề bài.} Marisa có $n$ món đồ, mỗi món nặng $w_i$. Mỗi thùng chịu tải tối đa $W$. Mỗi thùng có thể chứa nhiều món nhưng tổng khối lượng không vượt $W$. Hỏi cần ít nhất bao nhiêu thùng để chứa hết $n$ món.
+
+\textbf{Ràng buộc:}
+\[
+1 \le n \le 20,\quad 1 \le w_i \le W \le 10^9.
+\]
+
+\textbf{Ý tưởng.}
+
+Vì $n \le 20$, dùng \emph{bitmask DP}. Với mỗi tập con các món đồ (mask), lưu:
+\[
+\text{dp}[mask] = (b, s)
+\]
+trong đó $b$ là số thùng đã dùng, $s$ là tổng khối lượng trong thùng đang mở cuối cùng. Trạng thái tối ưu là trạng thái có $b$ nhỏ hơn, hoặc nếu $b$ bằng nhau thì $s$ nhỏ hơn.
+
+Chuyển trạng thái: với mỗi món $i$ thuộc $mask$, xét $prev = mask \setminus \{i\}$. Nếu $s + w_i \le W$ thì bỏ vào thùng hiện tại; ngược lại phải mở thùng mới.
+
+\[
+\text{dp}[mask] = 
+\begin{cases}
+(b,\ s + w_i) & \text{nếu } s + w_i \le W,\\[4pt]
+(b + 1,\ w_i) & \text{nếu vượt } W.
+\end{cases}
+\]
+
+Khởi tạo:
+\[
+\text{dp}[0] = (1,\ 0).
+\]
+
+Kết quả là $\text{dp}[(1 \ll n) - 1].b$.
+
+\textbf{Độ phức tạp.} $O(n \cdot 2^n)$, phù hợp với $n \le 20$.
+
+\codefile[]{code/bin_packing_bitmask.cpp}
+
+\subsection{TSP – Quay lui (Backtracking) với cắt tỉa}
+
+\textbf{Bài toán.} Cho ma trận chi phí $A_{i,j}$ (có thể bất đối xứng), tìm chu trình chi phí nhỏ nhất đi qua mỗi thành phố đúng một lần và quay lại thành phố xuất phát (cố định thành phố $0$).
+
+\textbf{Ý tưởng quay lui + cắt tỉa.}
+Dùng DFS xây lộ trình từ $0$, giữ:
+\begin{itemize}
+\item \texttt{mask}: tập các đỉnh đã đi,
+\item \texttt{u}: đỉnh hiện tại,
+\item \texttt{cost}: chi phí hiện tại,
+\item \texttt{best}: đáp án tốt nhất.
+\end{itemize}
+Cắt tỉa bằng \emph{cận dưới} đơn giản: đặt $g=\min\limits_{i\ne j} A_{i,j}$, số cạnh còn lại (kể cả cạnh về $0$) là $r=(n - \text{cnt}) + 1$. Nếu
+\[
+\texttt{cost} + g \cdot r \ge \texttt{best}
+\]
+thì bỏ nhánh. Duyệt các thành phố tiếp theo theo thứ tự chi phí tăng dần để sớm cập nhật \texttt{best}.
+
+\textbf{Độ phức tạp.} Tệ nhất $O(n!)$, nhưng với $n\le 10$ và cắt tỉa + sắp thứ tự, chạy tốt.
+
+\codefile[]{code/tsp_backtracking_prune.cpp}
+

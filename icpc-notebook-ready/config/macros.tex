@@ -1,0 +1,26 @@
+% Inline code
+\newcommand{\code}[1]{\texttt{#1}}
+
+% Include an external code file quickly:
+% \codefile[Optional caption]{path/to/file.cpp}
+\newcommand{\codefile}[2][]{%
+  \begin{Code}
+    \lstinputlisting[style=icpc, caption={#1}]{#2}
+  \end{Code}
+}
+
+% Info box
+\newcommand{\ibox}[1]{\fbox{\parbox{0.96\columnwidth}{#1}}}
+
+% Code full-width (tràn cả 2 cột) trong tài liệu two-column
+\newcommand{\codefilewide}[2][]{%
+  \begin{figure*}[!t]
+    \lstinputlisting[style=icpc, caption={#1}]{#2}
+  \end{figure*}
+}
+\usepackage{fancyvrb}
+\newcommand{\verbatimfilewide}[2][]{%
+  \begin{figure*}[!t]
+    \VerbatimInput[fontsize=\footnotesize,#1]{#2}
+  \end{figure*}
+}

@@ -1,0 +1,189 @@
+\section{Tổ hợp \& Xác suất \& Kỳ vọng}
+\subsection{Kiến thức cơ bản}
+
+\begin{itemize}
+    \item \textbf{Giai thừa:} $n! = 1 \cdot 2 \cdot 3 \cdots n,\quad 0! = 1$
+
+    \item \textbf{Chỉnh hợp (Permutation):} $A(n, k) = n \times (n-1) \times \dots \times (n-k+1) = \frac{n!}{(n-k)!}$
+
+    \item \textbf{Tổ hợp (Combination):} $\binom{n}{k} = \frac{n!}{k!(n-k)!}$
+
+    \item \textbf{Tổ hợp có lặp:} $\binom{n + k - 1}{k}
+    \quad
+    \text{(chọn $k$ phần tử từ $n$ loại, cho phép trùng)}$
+
+    \item \textbf{Công thức Pascal:} $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$
+
+    \item \textbf{Nhị thức Newton:} $(a + b)^n = \sum_{k=0}^{n} \binom{n}{k} a^k b^{n-k}$
+
+    \item \textbf{Tính modulo với số nguyên tố $p$:}
+    \[
+        \binom{n}{k} \bmod p 
+        = n! \cdot (k!)^{-1} \cdot ((n-k)!)^{-1} \bmod p
+    \]
+    \[
+        a^{-1} \equiv a^{p-2} \pmod p \quad \text{(Fermat nhỏ)}
+    \]
+
+\end{itemize}
+
+\subsubsection*{Kỳ vọng (Expected Value)}
+
+\begin{itemize}
+    \item \textbf{Định nghĩa tổng quát:}  
+    $E[X] = \sum_{x} x \cdot P(X = x)$
+
+    \item \textbf{Nếu $X$ là biến rời rạc nhận các giá trị $x_1, x_2, \dots, x_k$:}  
+    $E[X] = x_1 P(X = x_1) + x_2 P(X = x_2) + \dots + x_k P(X = x_k)$
+
+    \item \textbf{Nếu $X$ là tổng của nhiều biến độc lập $X = X_1 + X_2 + \dots + X_n$:}  
+    $E[X] = E[X_1] + E[X_2] + \dots + E[X_n]$
+
+    \item \textbf{Tính tuyến tính (Linearity of Expectation) – rất quan trọng:}  
+    $E[X + Y] = E[X] + E[Y]$ (đúng không cần độc lập)  
+    $E[aX + b] = a E[X] + b$
+
+    \item \textbf{Nếu $X, Y$ độc lập:}  
+    $E[X \cdot Y] = E[X] \cdot E[Y]$
+
+    \item \textbf{Biến Bernoulli ($X \in \{0,1\}$):}  
+    $P(X=1)=p,\quad P(X=0)=1-p,\quad E[X] = p$
+
+    \item \textbf{Phân phối Nhị thức (Binomial):}  
+    $P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$  
+    $E[X] = np$
+
+    \item \textbf{Phân phối Hình học (Geometric) – số lần thử đến khi thành công:}  
+    $P(X = k) = (1-p)^{k-1} p$  
+    $E[X] = \dfrac{1}{p}$
+
+    \item \textbf{Biến chỉ thị (Indicator Variable):}  
+    Xét $X_i = 1$ nếu sự kiện $A_i$ xảy ra, $X_i = 0$ nếu không.  
+    Khi đó $E[X_i] = P(A_i)$ và:  
+    \[
+    E\left[\sum_{i=1}^{n} X_i \right] = \sum_{i=1}^{n} P(A_i)
+    \]
+    (rất hay dùng để tính kỳ vọng số lần xảy ra của một sự kiện)
+
+    \item \textbf{Ví dụ kinh điển trong thi đấu:}
+    \begin{itemize}
+        \item Tung đồng xu $n$ lần, kỳ vọng số lần xuất hiện mặt ngửa: $E = n \cdot \frac{1}{2}$
+        \item Một hoán vị ngẫu nhiên độ dài $n$, kỳ vọng số phần tử giữ nguyên vị trí (fixed points):  
+        $E = 1$
+        \item Bài toán thu thập đủ $n$ món (Coupon Collector):  
+        $E = n \left(1 + \frac{1}{2} + \frac{1}{3} + \dots + \frac{1}{n}\right) \approx n \ln n$
+    \end{itemize}
+
+\end{itemize}
+
+\subsection{Tổng \textbf{max} của các dãy con độ dài $k$}
+
+Cho $A$ gồm $n$ phần tử. Giá trị của dãy con $B$ là $\max(B)$. Tính $S=\sum_{B:\,|B|=k} \max(B) \pmod{10^9+7}.$
+
+\textbf{Ý tưởng.} Sắp xếp $A$ tăng dần: $a_1 \le a_2 \le \dots \le a_n$. Phần tử $a_i$ là \emph{lớn nhất} của một dãy con độ dài $k$ iff chọn $k-1$ phần tử bất kỳ trong $\{a_1,\dots,a_{i-1}\}$.
+\[
+\Rightarrow\; \text{đóng góp của } a_i = a_i \cdot \binom{i-1}{\,k-1\,}.
+\]
+
+\textbf{Công thức.}
+\[
+S=\sum_{i=k}^{n} a_i \binom{i-1}{k-1} \pmod{10^9+7}.
+\]
+
+%\codefile[]{code/sum_max_subseq_k.cpp}
+
+\subsection{Đường đi trong tam giác trên của lưới $n \times n$}
+
+\textbf{Tóm tắt đề bài.}
+Trên bảng $n \times n$, từ ô $(x,y)$ ($x \le y$), mỗi bước đi xuống hàng tiếp theo:
+\[
+(i,j) \to (i+1,k) \quad \text{với } j \le k \le n.
+\]
+Không được đi vào ô có $a > b$ (chỉ ở vùng $i \le j$). Hỏi có bao nhiêu cách đi đến $(n,n)$.
+Có $q$ truy vấn $(x,y)$, in kết quả mod $998244353$.
+
+\textbf{Phân tích.}
+Mỗi đường đi gồm:
+\[
+D = n - x \text{ bước xuống}, \qquad R = n - y \text{ bước sang phải}.
+\]
+Điều kiện không đi vào $a > b$ tương đương \textbf{không được vượt xuống dưới đường chéo $i=j$}.  
+Đây là bài toán đếm đường đi giới hạn bởi đường chéo → áp dụng \textit{nguyên lý phản xạ (reflection principle)}.
+
+\textbf{Ký hiệu.}
+Gọi $s = y - x \ge 0$. Tổng số đường đi không bị giới hạn:
+\[
+\binom{D + R}{D}.
+\]
+Số đường đi \textit{vi phạm} (đi xuống dưới $i=j$) là:
+\[
+\binom{D + R}{D - s - 1}.
+\]
+
+\textbf{Công thức cuối:}
+$\text{ans}(x,y) = \binom{D + R}{D} - \binom{D + R}{D - (y - x) - 1} \pmod{998244353}$
+với $D = n - x$, $R = n - y$. Nếu chỉ số $\binom{n}{k}$ âm hoặc $>n$ thì giá trị là $0$.
+%\codefile[]{code/count_paths_in_triangle_grid.cpp}
+
+
+\subsection{Tổng thời gian ăn đào trên mọi cây (quy tắc mọc tuần tự)}
+
+\textbf{Mô tả tóm tắt.} Bắt đầu từ 1 quả (node gốc), mỗi bước gắn thêm 1 quả vào \emph{một nhánh trống} bất kỳ dưới một quả đang có (mỗi quả tối đa 2 nhánh). Sau $n$ bước thu được một cây nhị phân có hướng gốc (trái/phải phân biệt) với \emph{thứ tự mọc} khác nhau được tính là các cây khác nhau. Thời gian ăn hết đào trên một cây bằng \(\sum\) khoảng cách giữa mọi cặp quả (mỗi nhánh đi qua tốn 1). Yêu cầu: tổng thời gian này \emph{trên tất cả các cây} modulo \(p\).
+
+\textbf{Quan sát.} 
+- Số “lịch mọc” (cây phân biệt) là \(n!\) (ở bước có \(t\) quả thì có \(t{+}1\) nhánh trống để chọn).
+- Với một cây \(T\), \(\text{dist\_sum}(T) = \sum\limits_{e} s_e (n - s_e)\) (cộng theo mỗi cạnh \(e\), \(s_e\) là kích thước một phía khi cắt tại \(e\)).
+- Quy hoạch động không dùng chia (phù hợp modulo \(\,p\) bất kỳ): tách gốc với \(|L|{=}i, |R|{=}j=n-1-i\). Số cách ghép: \(\binom{n-1}{i}\cdot \text{Cnt}[i]\cdot \text{Cnt}[j]\), trong đó \(\text{Cnt}[m]\) là tổng số lịch của kích thước \(m\).
+  
+\textbf{DP.} Gọi:
+\[
+\text{Cnt}[n] = \text{tổng số lịch},\quad
+\text{SD}[n] = \sum \text{(tổng độ sâu các node)} \text{ trên mọi lịch},\quad
+\text{T}[n]=\sum \text{dist\_sum}(T)
+\]
+trên mọi lịch kích thước \(n\). Với \(\binom{\cdot}{\cdot}\) tính sẵn mod \(p\), có:
+\[
+\begin{aligned}
+\text{Cnt}[0]&=1,\ \text{SD}[0]=0,\ \text{T}[0]=0.\\
+\text{Cnt}[n] &= \sum_{i=0}^{n-1} \binom{n-1}{i}\ \text{Cnt}[i]\ \text{Cnt}[n-1-i],\\[2pt]
+\text{SD}[n]  &= \sum_{i=0}^{n-1} \binom{n-1}{i}\ \Big(\text{SD}[i]\ \text{Cnt}[j] + \text{SD}[j]\ \text{Cnt}[i] + (i{+}j)\ \text{Cnt}[i]\ \text{Cnt}[j]\Big),\\[2pt]
+\text{T}[n]   &= \sum_{i=0}^{n-1} \binom{n-1}{i}\Big(\text{T}[i]\ \text{Cnt}[j] + \text{T}[j]\ \text{Cnt}[i] \\
+&\qquad\qquad\qquad\quad + (j{+}1)\ (\text{SD}[i] + i\,\text{Cnt}[i])\ \text{Cnt}[j] + (i{+}1)\ (\text{SD}[j] + j\,\text{Cnt}[j])\ \text{Cnt}[i]\Big),
+\end{aligned}
+\]
+trong đó \(j=n-1-i\). Đáp án cần in ra là \(\boxed{\text{T}[n]\bmod p}\). Độ phức tạp \(O(n^2)\).
+
+%\codefile[]{code/monkey_peaches_total_time.cpp}
+\subsection{Đếm cặp \texorpdfstring{$(x,y)$}{(x,y)} sao cho dãy Fibonacci mở rộng chứa $k$ (vị trí $\ge 2$)}
+
+\textbf{Mô tả.} Cho $f_0=x$, $f_1=y$ (đều dương), $f_i=f_{i-1}+f_{i-2}$ với $i>1$. Đếm số cặp $(x,y)$ sao cho tồn tại $n\ge2$ với $f_n=k$ (và $k$ \emph{không} là $f_0$ hay $f_1$). In kết quả mod $10^9{+}7$.
+
+\textbf{Phân tích.} Với dãy Fibonacci chuẩn $F_0=0,F_1=1$, ta có
+\[
+f_n = F_{n-1}\,x + F_n\,y \quad (n\ge2).
+\]
+Cần số nghiệm nguyên dương $(x,y)$ của
+\[
+F_{n-1}\,x + F_n\,y = k \quad (x,y\ge1).
+\]
+Đặt $a=F_{n-1}$, $b=F_n$, $k' = k - a - b$ và $x'=x-1\ge0$, $y'=y-1\ge0$:
+\[
+a x' + b y' = k'.
+\]
+Với $\gcd(a,b)=1$, số nghiệm $(x',y')\in\mathbb{Z}_{\ge0}^2$ đếm bằng số $y'$ thỏa
+\[
+0\le y'\le \Big\lfloor \tfrac{k'}{b}\Big\rfloor,\quad b\,y' \equiv k' \pmod a.
+\]
+Gọi $b^{-1}$ là nghịch đảo của $b$ theo modulo $a$ (tồn tại do $\gcd(a,b)=1$), nghiệm nhỏ nhất
+\[
+y_0 \equiv b^{-1}\,(k'\bmod a)\pmod a,\quad 0\le y_0 < a.
+\]
+Nếu $y_0 > \left\lfloor \frac{k'}{b}\right\rfloor$ thì \#nghiệm $=0$, ngược lại
+\[
+\#\text{nghiệm} \;=\; \left\lfloor \frac{\left\lfloor k'/b\right\rfloor - y_0}{a}\right\rfloor + 1.
+\]
+Điều kiện cần: $k\ge F_{n+1}$ (vì $x,y\ge1$). Số $n$ cần xét chỉ $O(\log k)$.
+
+\textbf{Thuật toán.} Liệt kê $n=2,3,\dots$ cho đến khi $F_{n+1}>k$, với mỗi $n$ tính đóng góp như trên và cộng modulo $10^9{+}7$. Độ phức tạp $O(\log k)$.
+
+%\codefile[]{code/count_xy_fib_hits_k.cpp}

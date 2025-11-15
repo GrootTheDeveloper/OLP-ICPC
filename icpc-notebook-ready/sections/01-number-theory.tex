@@ -1,0 +1,70 @@
+\section{Số học}
+\subsection{Kiến thức cần nhớ}
+
+\begin{itemize}
+    \item $a \cdot b = \gcd(a, b) \cdot \text{lcm}(a, b)$
+    \item $\gcd(a, b) = \gcd(b, a \bmod b)$ (Thuật toán Euclid)
+    \item $a = bq + r,\ 0 \le r < |b|$ (Phép chia có dư)
+    \item Luật đồng dư: 
+    \begin{itemize}
+        \item $a \equiv b \pmod m \Rightarrow a + c \equiv b + c \pmod m$
+        \item $a \equiv b \pmod m \Rightarrow ac \equiv bc \pmod m$
+    \end{itemize}
+    \item Fermat nhỏ: $a^{p-1} \equiv 1 \pmod p$ (nếu $p$ nguyên tố, $p \nmid a$)
+    \item Nghịch đảo modulo: $a^{-1} \equiv a^{p-2} \pmod p$ (với $p$ nguyên tố)
+    \item Phân tích thừa số nguyên tố và số lượng ước: 
+    $d(n) = \prod (e_i + 1)$ nếu $n = \prod p_i^{e_i}$
+    \item Số ước của $n = \prod p_i^{e_i}$: $d(n) = \prod (e_i + 1)$
+    \item Số ước chung của $a$ và $b$: $d(\gcd(a, b)) = \prod (\min(e_i, f_i) + 1)$
+    \item Số ước của $n!$: $d(n!) = \prod_{p \le n} (\sum_{k=1}^{\infty} \lfloor \frac{n}{p^k} \rfloor + 1)$
+    \item Tính divCount nhanh cho mọi số đến $n$: $O(n \log n)$ bằng sieve
+
+\end{itemize}
+
+\subsection{Lũy thừa nhanh (powmod)}
+Tính $a^b \bmod m$ với logarit cơ số 2:
+\[
+\text{pow}(a,b,m) = 
+\begin{cases}
+1 & b=0 \\
+\text{pow}(a^2 \bmod m, \lfloor b/2 \rfloor, m) & b \text{ chẵn} \\
+a \cdot \text{pow}(a,b-1,m) \bmod m & b \text{ lẻ} 
+\end{cases}
+\]
+
+\codefile[]{code/powmod.cpp}
+
+\subsection{BCNN của mảng}
+
+Cho mảng $A$ gồm $n$ phần tử nguyên. Tính: $LCM(A_1, A_2, \dots, A_n) \mod 10^9 + 7$.
+
+\codefile[]{code/lcm_array.cpp}
+
+\subsection{Tổng tổng tổng}
+
+Cho $f(i, j)$ là tổng tất cả các ước nguyên dương $i, j$. Tính tổng $S = \sum_{i=1}^n \sum_{j=1}^m f(i, j)$.
+
+\subsubsection*{Phân tích}
+Gọi $S$ là tổng trên mọi cặp \((i \le j \le N)\) của \emph{tổng các ước số chung} của \(i\) và \(j\).
+Ta đổi góc nhìn: với mỗi \(d\), hãy đếm số cặp \((i \le j)\) đều là bội của \(d\).
+Nếu đặt \(t = \left\lfloor \dfrac{N}{d} \right\rfloor\) thì các bội dương của \(d\) trong \([1..N]\) là
+\(\{d, 2d, \ldots, td\}\) (có \(t\) phần tử).
+Số cặp \((i \le j)\) chọn từ \(t\) phần tử là $\binom{t+1}{2} = \frac{t(t+1)}{2}.$
+
+Mỗi cặp như vậy đóng góp đúng \(d\) (vì \(d\) là một ước chung). Do đó
+$S \;=\; \sum_{d=1}^{N} d \cdot \binom{\left\lfloor \dfrac{N}{d} \right\rfloor + 1}{2}.$
+
+\paragraph{Tối ưu hoá \(O(\sqrt{N})\).}
+Hàm \(\left\lfloor \dfrac{N}{d} \right\rfloor\) nhận cùng một giá trị trên từng đoạn liên tiếp.
+Nếu tại \(L\) ta có \(k=\left\lfloor \dfrac{N}{L} \right\rfloor\) thì giá trị này giữ nguyên cho mọi
+\(d \in [L..R]\) với $R \;=\; \left\lfloor \frac{N}{k} \right\rfloor.$
+
+Khi đó, đóng góp của đoạn là
+\[
+\left( \sum_{d=L}^{R} d \right) \cdot \binom{k+1}{2}
+\;=\; \frac{(L+R)(R-L+1)}{2} \cdot \frac{k(k+1)}{2}.
+\]
+Duyệt các đoạn bằng hai con trỏ \((L \leftarrow R+1)\) cho tới \(N\).
+Tất cả phép tính thực hiện theo modulo \(10^9+7\).
+
+\codefile[]{code/sum_of_divisors.cpp}

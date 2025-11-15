@@ -1,0 +1,45 @@
+% Header / Footer
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{ICPC Notebook}
+\chead{Team: <Điền tên đội>}
+\rhead{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+% Compact titles
+\titlespacing*{\section}{0pt}{4pt}{2pt}
+\titlespacing*{\subsection}{0pt}{3pt}{1pt}
+\titlespacing*{\subsubsection}{0pt}{2pt}{1pt}
+\setcounter{secnumdepth}{3}
+
+% Compact lists
+\setlist[itemize]{noitemsep, topsep=2pt, leftmargin=12pt}
+\setlist[enumerate]{noitemsep, topsep=2pt, leftmargin=14pt}
+
+% Listings style
+\lstdefinestyle{icpc}{
+  language=C++,
+  autogobble=true,
+  basicstyle=\ttfamily\footnotesize,   % hoặc \tiny nếu bạn muốn fit hơn
+  keywordstyle=\bfseries,
+  commentstyle=\itshape,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=8pt,
+  tabsize=2,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+  columns=fullflexible,
+  frame=none                       
+}
+
+
+
+% Two-column code helper (avoid floats)
+\newenvironment{Code}{\vspace{2pt}\par\noindent}{\par\vspace{2pt}}
+
+% Math helpers
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}

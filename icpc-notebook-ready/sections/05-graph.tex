@@ -1,0 +1,211 @@
+\section{Đồ thị (Graph)}
+
+\subsection{Đếm số vùng không bị ảnh hưởng bởi bão (L1)}
+
+\textbf{Tóm tắt.} Ma trận $n\times n$ gồm `.` (biển) và `X` (tâm bão). Mỗi bão tại $(i,j)$ ảnh hưởng mọi ô $(i',j')$ với $|i-i'|+|j-j'|\le r$. Hỏi có bao nhiêu \emph{vùng liên thông 4-hướng} chỉ gồm các ô \textbf{không bị ảnh hưởng}.
+
+\textbf{Ý tưởng.}
+\begin{enumerate}
+    \item Tính khoảng cách Manhattan tới \emph{tâm bão gần nhất} cho mọi ô bằng \textbf{BFS đa nguồn} (đưa tất cả ô `X` vào hàng đợi với khoảng cách $0$). Với lưới 4-neighbors, BFS cho đúng khoảng cách $L_1$.
+    \item Một ô bị ảnh hưởng nếu \(\text{dist}\le r\) (hoặc nó là `X`); còn lại là \textbf{an toàn}.
+    \item Đếm số \textbf{thành phần liên thông 4-hướng} trên các ô an toàn bằng duyệt BFS/DFS.
+\end{enumerate}
+Mỗi ô được thăm hữu hạn lần $\Rightarrow O(n^2)$ thời gian, $O(n^2)$ bộ nhớ. Phù hợp với $n\le 5000$.
+
+\codefile[]{code/count_safe_regions_bfs.cpp}
+
+\subsection{Băng tan \& hai điểm gặp nhau (Swan Lake)}
+
+\textbf{Đề bài.} Cho ma trận $n\times m$ với `X` là băng, `.` là nước, hai ô `L` là vị trí hai điểm. Mỗi ngày, \emph{mọi} ô băng kề \textbf{cạnh} (4 hướng) với nước sẽ tan (trở thành nước). Hỏi sau bao nhiêu ngày thì có đường đi chỉ qua ô nước giữa hai `L`.
+
+\textbf{Ý tưởng chuẩn (2 pha + nhị phân ngày).}
+\begin{enumerate}
+  \item \textbf{Pha 1 – Ngày tan của từng ô:} gán tất cả ô nước và `L` có \emph{ngày tan} = 0. Chạy BFS đa nguồn: khi từ một ô có ngày $d$ đẩy sang ô băng chưa gán, gán ngày = $d{+}1$. Kết quả: \(\text{day}[i][j]\) là ngày sớm nhất ô đó trở thành nước.
+  \item \textbf{Pha 2 – Tìm ngày nhỏ nhất:} nhị phân trên $D$ (từ $0$ đến $\max \text{day}$). Kiểm tra với BFS/DFS từ $`L_1`$ chỉ đi qua các ô có \(\text{day}\le D\). Nếu tới được $`L_2`$ thì khả thi, thu hẹp khoảng; ngược lại tăng $D$.
+\end{enumerate}
+Độ phức tạp: tính ngày $O(nm)$; mỗi lần kiểm tra $O(nm)$; nhị phân $\approx \lceil\log_2(nm)\rceil$ lần ⇒ tổng \(\,O(nm\log(nm))\), đủ cho $n,m\le 1500$.
+
+\codefile[]{code/swan_lake_min_days.cpp}
+
+\subsection{Đếm số đường đi ngắn nhất (Dijkstra + đếm cách)}
+
+\textbf{Tóm tắt.} Đồ thị vô hướng có trọng số. Đếm số lượng \emph{đường đi ngắn nhất} từ $1$ đến $n$, modulo $10^9{+}7$.
+
+\textbf{Ý tưởng.} Chạy Dijkstra từ $1$:
+\begin{itemize}
+    \item $dist[u]$ là độ dài ngắn nhất tới $u$.
+    \item $ways[u]$ là số đường đi đạt $dist[u]$ (mod $10^9{+}7$).
+\end{itemize}
+Khi relax cạnh $(u,v,w)$:
+\[
+\begin{cases}
+\text{Nếu } dist[u]+w < dist[v]: & dist[v]\leftarrow dist[u]+w,\ \ ways[v]\leftarrow ways[u] \\
+\text{Nếu } dist[u]+w = dist[v]: & ways[v]\leftarrow (ways[v]+ways[u]) \bmod M
+\end{cases}
+\]
+Kết quả là $ways[n]$ nếu $dist[n]<\infty$, ngược lại in $0$ (không có đường).
+
+\textbf{Độ phức tạp.} $O(m\log n)$.
+\codefile[]{code/count_shortest_paths_dijkstra.cpp}
+
+\subsection{Thang máy: đếm số tầng có thể tới (Dijkstra trên lớp dư)}
+
+\textbf{Đề bài.} Từ tầng $1$, mỗi lần bấm có thể:
+\begin{itemize}
+  \item quay về tầng $1$;
+  \item lên $A$ tầng; lên $B$ tầng; lên $C$ tầng.
+\end{itemize}
+Với $n$ tầng, đếm số tầng $\le n$ có thể đi tới từ tầng $1$.
+
+\textbf{Quy đổi.} Một tầng $f$ tới được $\iff f = 1 + t$ với $t$ biểu diễn được dạng
+\[
+t = aA + bB + cC \quad (a,b,c \in \mathbb{Z}_{\ge 0}),\quad t \le N:=n-1.
+\]
+Bài toán trở thành: đếm số $t \in [0,N]$ là tổng không âm của $\{A,B,C\}$.
+
+\textbf{Thuật giải (Dijkstra trên lớp dư mod $m$).}
+Đặt $m=\min(A,B,C)$. Xét đồ thị có $m$ đỉnh là các lớp dư $0,1,\dots,m-1$; với mỗi $x\in\{A,B,C\}$ có cạnh
+\[
+r \to (r+x)\bmod m \text{ với trọng số } x.
+\]
+Chạy Dijkstra từ $0$ để thu được $\text{dist}[r]$ là \emph{giá trị nhỏ nhất} có tổng $\equiv r \pmod m$ biểu diễn được bởi $\{A,B,C\}$.
+Khi đó $t$ biểu diễn được $\iff t \ge \text{dist}[\,t \bmod m\,]$.
+
+\textbf{Đếm.} Với mỗi $r\in[0,m-1]$, nếu $\text{dist}[r]\le N$ thì số $t\le N$ có $t\equiv r\pmod m$ là
+\[
+\left\lfloor \frac{N-\text{dist}[r]}{m}\right\rfloor + 1.
+\]
+Tổng đáp án:
+\[
+\boxed{\ \text{Ans} \;=\; \sum_{r=0}^{m-1} \max\!\left(0,\ \left\lfloor \frac{N-\text{dist}[r]}{m}\right\rfloor + 1\right)\ }.
+\]
+
+\textbf{Độ phức tạp.} Dijkstra trên $m\le 10^5$ đỉnh với $3m$ cạnh: $O(m\log m)$. Đếm: $O(m)$. Phù hợp với $n\le 10^{18}$.
+
+\codefile[]{code/elevator_reachable_floors_dijkstra_residue.cpp}
+
+\subsection{Đỉnh nhận được từ mọi đỉnh (reachable-from-all)}
+
+\textbf{Đề bài.} Cho đồ thị có hướng $n$ đỉnh, $m$ cạnh. Đếm số đỉnh $v$ sao cho \emph{từ mọi đỉnh $u$ đều tồn tại đường đi $u\to v$}.
+
+\textbf{Nhận xét.} Trong đồ thị ngưng tụ (SCC DAG), nếu tồn tại một thành phần liên thông mạnh $T$ mà \emph{mọi SCC khác đều đi tới $T$}, thì \emph{mọi đỉnh trong $T$} đều thỏa mãn. Nếu không tồn tại, đáp án là $0$. Thành phần $T$ (nếu có) là \emph{duy nhất}.
+
+\textbf{Thuật toán $O(n{+}m)$:}
+\begin{enumerate}
+\item Xét đồ thị đảo cạnh $G^R$. Tìm \emph{ứng viên mẹ} $c$ trong $G^R$: đỉnh có thời điểm kết thúc DFS cuối cùng (giống bài \emph{mother vertex}).
+\item Kiểm chứng: duyệt từ $c$ trên $G^R$. Nếu không tới được \emph{tất cả} $n$ đỉnh $\Rightarrow$ không có đỉnh nào thỏa $\Rightarrow$ in $0$.
+\item Kích thước SCC chứa $c$ chính là số đỉnh cần đếm. Ta lấy giao:
+\[
+\text{scc}(c)= \{\text{đỉnh tới được từ } c \text{ trên } G\}\ \cap\ \{\text{đỉnh tới được từ } c \text{ trên } G^R\}.
+\]
+\end{enumerate}
+
+\textbf{Kết quả.} Nếu bước 2 qua, in $|\text{scc}(c)|$, ngược lại in $0$.
+
+\codefile[]{code/reachable_from_all_count.cpp}
+
+\subsection{LCA (Lowest Common Ancestor) bằng Binary Lifting}
+
+\textbf{Đề bài.} Cây $n$ đỉnh gốc tại $1$. Trả lời $q$ truy vấn \((u,v)\), tìm tổ tiên chung gần nhất (LCA) của \(u\) và \(v\).
+
+\textbf{Ý tưởng.} Tiền xử lý \(\text{up}[k][u]\) = tổ tiên thứ \(2^k\) của \(u\) và \(\text{depth}[u]\).
+\begin{itemize}
+\item Nâng đỉnh sâu hơn lên cùng độ sâu với đỉnh kia bằng các bước \(2^k\).
+\item Nếu hai đỉnh khác nhau, thử từ \(k\) lớn xuống \(0\): khi \(\text{up}[k]\) khác nhau thì cùng nhảy lên.
+\item LCA là \(\text{up}[0]\) của một trong hai đỉnh sau bước trên.
+\end{itemize}
+Tiền xử lý \(O(n\log n)\), mỗi truy vấn \(O(\log n)\).
+
+\codefile[]{code/lca_binary_lifting.cpp}
+
+\subsection{Đếm cặp có \emph{đường đi duy nhất} trong đồ thị vô hướng}
+
+\textbf{Ý tưởng.}
+Trong đồ thị vô hướng, giữa $u,v$ có \emph{duy nhất một} đường đi đơn $\iff$ đường đi đó chỉ dùng \textbf{các cạnh là cầu (bridge)}.  
+Do đó, nếu chỉ giữ các \emph{cầu}, ta được một \textbf{rừng} $G'$; mọi cặp đỉnh trong cùng một cây của $G'$ có đúng một đường đi (và ngược lại).  
+\[
+\Rightarrow\ \text{đáp án}=\sum_{\text{thành phần }C\text{ của }G'} \binom{|C|}{2}.
+\]
+
+\textbf{Thuật toán.}
+\begin{enumerate}
+\item Dùng Tarjan để tìm tất cả \textbf{cầu} trong $O(n{+}m)$.
+\item Duyệt chỉ theo các cạnh là cầu để lấy kích thước từng thành phần liên thông $|C|$.
+\item Cộng $\frac{|C|(|C|-1)}{2}$ vào kết quả (dùng \texttt{long long}).
+\end{enumerate}
+
+\codefile[]{code/count_unique_path_pairs_bridges.cpp}
+
+
+\subsection{Đếm số đỉnh $x$ sao cho $f(u,x)=f(v,x)$ trên cây}
+
+\textbf{Đề bài.} Với mỗi truy vấn $(u,v)$ trên cây $n$ đỉnh, đếm số đỉnh $x$ có khoảng cách từ $x$ tới $u$ và $v$ bằng nhau.
+
+\textbf{Ý tưởng then chốt.} Gọi $d=\mathrm{dist}(u,v)$.
+\begin{itemize}
+\item Nếu $u=v$ $\Rightarrow$ mọi đỉnh đều thỏa: đáp án $=n$.
+\item Nếu $d$ lẻ $\Rightarrow$ \emph{không có} đỉnh nguyên giữa đường đi $u\!\leftrightarrow\!v$ $\Rightarrow$ đáp án $=0$.
+\item Nếu $d$ chẵn: điểm giữa (midpoint) là một \emph{đỉnh} $m$ trên đường đi $u\!\leftrightarrow\!v$.
+  \begin{itemize}
+  \item Nếu $m$ \textbf{trùng LCA} của $(u,v)$: gọi $a$ là đỉnh con của $m$ nằm trên đường $m\!\to\!u$, $b$ là đỉnh con của $m$ nằm trên đường $m\!\to\!v$.  
+  Khi đó đáp án:
+  \[
+  \boxed{\,n - \mathrm{sz}[a] - \mathrm{sz}[b]\,}
+  \]
+  (loại bỏ hai “nhánh” đi xa khỏi $m$ về phía $u$ và $v$).
+  \item Nếu $m$ \textbf{nằm giữa} $u$ và $v$ nhưng \emph{khác} LCA: giả sử $u$ nằm sâu hơn phía $m$ (\(\mathrm{depth}[u]>\mathrm{depth}[v]\)).  
+  Gọi $c$ là đỉnh \emph{con} của $m$ trên đường $m\!\to\!u$ (tức là từ $u$ đi lên \(d/2-1\) bước).  
+  Khi đó đáp án:
+  \[
+  \boxed{\,\mathrm{sz}[m] - \mathrm{sz}[c]\,}
+  \]
+  (chỉ tính phần “phía $m$ không đi vào nhánh $c$”).
+  \end{itemize}
+\end{itemize}
+
+\textbf{Tiền xử lý.} Chọn gốc $1$, tính \(\mathrm{depth}\), \(\mathrm{up}[k][v]\) (binary lifting), \(\mathrm{sz}[v]\) bằng DFS/BFS.  
+Trả lời mỗi truy vấn trong \(O(\log n)\).
+
+\codefile[]{code/count_equal_distance_nodes_on_tree.cpp}
+
+\subsection{Cộng vào cây con và truy vấn giá trị tại đỉnh}
+
+\textbf{Đề bài.}
+Cho cây $n$ đỉnh, gốc là $1$. Ban đầu mỗi đỉnh có giá trị $0$.
+Có $q$ truy vấn, gồm hai loại:
+\begin{itemize}
+    \item \texttt{1 u v}: tăng tất cả các đỉnh trong \textbf{cây con gốc $u$} thêm $v$.
+    \item \texttt{2 u}: in ra giá trị hiện tại tại đỉnh $u$.
+\end{itemize}
+
+\textbf{Yêu cầu:} Trả lời các truy vấn loại 2. $1 \le n,q \le 10^5$.
+
+\textbf{Ý tưởng lời giải.}
+\begin{enumerate}
+    \item Dùng \textbf{Euler Tour} để đánh số thời gian vào cây:
+    \[
+        \text{tin}[u], \text{tout}[u] \Rightarrow
+        \text{toàn bộ cây con của $u$ là đoạn } [\text{tin}[u], \text{tout}[u]].
+    \]
+    \item Gom toàn bộ đỉnh cây vào mảng theo thứ tự Euler.
+    \item Khi gặp truy vấn:
+    \[
+        \texttt{1 u v} \Rightarrow \text{cộng } v \text{ vào đoạn } [\text{tin}[u], \text{tout}[u]].
+    \]
+    \[
+        \texttt{2 u} \Rightarrow \text{giá trị tại } u = \text{giá trị tại vị trí } \text{tin}[u].
+    \]
+    \item Sử dụng \textbf{Segment Tree + Lazy Propagation} (hoặc Fenwick Tree) để hỗ trợ:
+    \[
+        \text{range add} + \text{point query},\ \text{độ phức tạp } O(q \log n).
+    \]
+\end{enumerate}
+
+\textbf{Cấu trúc dữ liệu dùng Segtree:}
+\begin{itemize}
+    \item Mỗi node lưu \texttt{lazy} (giá trị cần cộng cho cả đoạn).
+    \item \text{range\_add(l,r,val)}: cộng giá trị cho đoạn.
+    \item \text{point\_query(pos)}: cộng dồn lazy từ gốc xuống để lấy giá trị tại vị trí pos.
+\end{itemize}
+
+\codefile[]{code/tree_subtree_add_point_query_segtree.cpp}

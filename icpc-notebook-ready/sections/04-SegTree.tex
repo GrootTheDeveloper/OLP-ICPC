@@ -1,0 +1,76 @@
+\section{Cây phân đoạn (Segment Tree)}
+
+\subsection{Đếm số mảng con có tổng không âm (Prefix Sum + Segment Tree)}
+
+\textbf{Đề bài.}  
+Cho mảng $A$ gồm $n$ số nguyên. Một \emph{mảng con} $A[l..r]$ hợp lệ nếu:
+\[
+\sum_{i=l}^{r} A[i] \ge 0.
+\]
+Hãy đếm số mảng con như vậy.
+
+\textbf{Ràng buộc:}
+\[
+1 \le n \le 10^5,\quad |A_i| \le 10^9.
+\]
+
+\textbf{Ý tưởng.}  
+Dùng tổng tiền tố:
+\[
+P_0 = 0,\quad P_i = A_1 + \cdots + A_i.
+\]
+Khi đó:
+\[
+\sum_{l}^{r} \ge 0 \iff P_r - P_{l-1} \ge 0 \iff P_{l-1} \le P_r.
+\]
+Với mỗi $r$, cần đếm bao nhiêu $P_{l-1}$ trước đó thỏa $P_{l-1} \le P_r$.
+
+Do $P_i$ có thể lớn, ta \textbf{nén giá trị} $P_0..P_n$ rồi dùng \textbf{Segment Tree (Fenwick cũng được)} để:
+\begin{itemize}
+    \item Cộng 1 vào vị trí của $P_r$ (đánh dấu đã xuất hiện).
+    \item Truy vấn tổng đoạn $[1 .. \text{pos}(P_r)]$ để biết số $P_{l-1} \le P_r$.
+\end{itemize}
+
+\textbf{Độ phức tạp.} $O(n \log n)$.
+
+\codefile[]{code/count_nonneg_subarrays_segtree.cpp}
+
+\subsection{Phủ đoạn tối thiểu bằng segtree (range-\texttt{chmin} \& point query)}
+
+\textbf{Bài toán.} Có $q$ gói $(l_i,r_i,c_i)$, chọn tối thiểu chi phí để phủ đủ $[1..n]$; nếu không thể, in $-1$.
+
+\textbf{Ý tưởng với DP + Segment Tree.}
+Gọi $dp[i]$ là chi phí nhỏ nhất để phủ đủ $[1..i]$. Khi xét vị trí $i$, mọi gói bắt đầu tại $i$ (tức $l=i$) sẽ cho ta một \emph{ứng viên} chi phí $dp[i-1]+c$ phủ được \emph{toàn bộ} các vị trí từ $i$ đến $r$.
+Vì vậy, với mỗi gói $(i,r,c)$, ta \textbf{cập nhật} trên đoạn $[i,r]$ giá trị \(\min\)-assign bằng $dp[i-1]+c$.
+Khi đó \(dp[i]\) chính là giá trị nhỏ nhất đang “phủ” tại điểm $i$.
+
+\textbf{Cụ thể.}
+\[
+\begin{aligned}
+&dp[0]=0,\quad dp[i]=\min\limits_{(l,r,c):\,l\le i\le r}\big(dp[l-1]+c\big).\\
+&\text{Duyệt } i=1..n:\ \text{với mỗi gói }(i,r,c)\ \text{thực hiện } [i,r]\ \text{range-chmin bằng } (dp[i-1]+c);\quad dp[i]=\text{point\_query}(i).
+\end{aligned}
+\]
+Segment tree hỗ trợ \textbf{range-chmin} (gán $val:=\min(val,x)$) và \textbf{point query}. 
+Độ phức tạp $O((n+q)\log n)$.
+
+\codefile[]{code/min_cost_cover_segment_segtree.cpp}
+
+
+\subsection{Số thao tác đổi chỗ cặp kề tối thiểu để sắp xếp hoán vị}
+
+\textbf{Đề bài.} Cho hoán vị $A$ độ dài $n$. Mỗi thao tác được phép hoán vị hai phần tử kề nhau $A_i, A_{i+1}$. Hãy tìm số thao tác ít nhất để sắp $A$ tăng dần.
+
+
+\textbf{Nhận xét.} Số bước tối thiểu chính là \textbf{số nghịch thế}:
+\[
+\mathrm{inv}(A)=\#\{(i,j): i<j,\ A_i>A_j\}.
+\]
+Mỗi hoán vị kề làm giảm đúng 1 nghịch thế.
+
+\textbf{Tính bằng Segment Tree.}
+Duyệt $i=1\to n$, với mỗi $x=A_i$:
+- \# phần tử trước $i$ mà lớn hơn $x$ = \(\text{query}(x{+}1, n)\).
+- Cập nhật đã thấy $x$: \(\text{update}(x,+1)\).
+
+\codefile[]{code/inversions_segtree_perm.cpp}

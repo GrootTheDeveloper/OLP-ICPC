@@ -1,0 +1,121 @@
+\section{Bitmask}
+
+\subsection{Kiến thức cần nhớ}
+
+\begin{itemize}
+    \item \textbf{Biểu diễn tập hợp bằng bitmask:} 
+    Một số nguyên không âm dùng để biểu diễn tập các phần tử từ $0 \rightarrow n-1$.
+    Bit thứ $i$ bằng 1 nếu phần tử $i$ thuộc tập.
+    \[
+        \text{VD: } S = \{0,2,3\} \Rightarrow \text{mask} = (1101)_2 = 13
+    \]
+
+    \item \textbf{Các phép toán cơ bản:}
+    \begin{itemize}
+        \item Thêm phần tử $i$: \verb|mask |= (mask | (1 << i))
+        \item Xóa phần tử $i$: \verb|mask &= ~(1 << i)|
+        \item Kiểm tra phần tử $i$: \verb|(mask >> i) & 1|
+        \item Đảo bit $i$: \verb|mask ^= (1 << i)|
+    \end{itemize}
+
+    \item \textbf{Duyệt các tập con của một mask:}
+    \begin{lstlisting}[language=C++]
+for (int sub = mask; sub > 0; sub = (sub - 1) & mask) {
+    // sub là một tập con của mask
+}
+    \end{lstlisting}
+
+    \item \textbf{Đếm số bit bằng 1 (popcount):}
+    \begin{itemize}
+        \item \verb|__builtin_popcount(x)| (int)
+        \item \verb|__builtin_popcountll(x)| (long long)
+    \end{itemize}
+
+    \item \textbf{Duyệt tất cả mask từ 0 đến $2^n - 1$:}
+    \begin{lstlisting}[language=C++]
+for (int mask = 0; mask < (1 << n); mask++) {
+    // xử lý
+}
+    \end{lstlisting}
+
+    \item \textbf{Lưu ý về độ phức tạp:}
+    \[
+        2^{20} \approx 10^6 \Rightarrow \text{có thể duyệt được}
+        \quad\text{nhưng}\quad
+        2^{25} \approx 3\times10^7 \Rightarrow \text{chậm}
+    \]
+\end{itemize}
+
+\subsection{Đếm cặp $(i<j)$ thoả $A_i \oplus j = A_j \oplus i$}
+
+\textbf{Ý tưởng.}
+Từ $A_i \oplus j = A_j \oplus i \iff (A_i \oplus i) = (A_j \oplus j)$.  
+Đặt $B_i = A_i \oplus i$ (chỉ số $i$ tính \textbf{1-based}). Khi đó số cặp cần đếm là
+\[
+\sum_{x} \binom{\text{freq}[x]}{2},
+\]
+với $\text{freq}[x]$ là số lần $x$ xuất hiện trong dãy $B$.
+
+\textbf{Độ phức tạp.} $O(n)$ với \texttt{unordered\_map}.
+
+\codefile[]{code/count_pairs_ai_xor_j_eq_aj_xor_i.cpp}
+
+\subsection{Bật/Tắt/Đảo bit trên số 32-bit}
+
+\textbf{Đề bài.} Ban đầu có một số nguyên không âm 32-bit $x=0$ (mọi bit đều bằng $0$). Có $q$ truy vấn:
+\begin{itemize}
+  \item \texttt{1 k}: bật (set) bit thứ $k$ $\Rightarrow$ gán bit $k$ bằng $1$.
+  \item \texttt{2 k}: tắt (clear) bit thứ $k$ $\Rightarrow$ gán bit $k$ bằng $0$.
+  \item \texttt{3 k}: đảo (toggle) bit thứ $k$ $\Rightarrow$ $0\!\leftrightarrow\!1$.
+\end{itemize}
+Sau mỗi truy vấn, in ra giá trị thập phân hiện tại của $x$.
+
+\textbf{Ràng buộc.}
+\[
+1 \le q \le 10^5,\quad 0 \le k \le 31.
+\]
+
+\textbf{Lời giải.} Dùng toán tử bit trên \texttt{uint32\_t}:
+\[
+\begin{aligned}
+&\text{mask} = (1\ll k),\\
+&\text{set: } x \mathrel{:=} x \mid \text{mask},\qquad
+\text{clear: } x \mathrel{:=} x \& \sim \text{mask},\qquad
+\text{toggle: } x \mathrel{:=} x \oplus \text{mask}.
+\end{aligned}
+\]
+Mỗi truy vấn $O(1)$, tổng $O(q)$.
+
+\codefile[]{code/bit_operations_32bit_queries.cpp}
+
+\subsection{XOR nhỏ nhất của hai số khác nhau (cập nhật online)}
+
+\textbf{Bài toán.} Ban đầu dãy rỗng. Truy vấn:
+\begin{itemize}
+\item \texttt{1 x}: chèn $x$;
+\item \texttt{2 x}: xoá một $x$ đang có;
+\item \texttt{3}: in $\min_{i\ne j}(a_i \oplus a_j)$ (đảm bảo lúc này có $\ge2$ số).
+\end{itemize}
+
+\textbf{Ý tưởng.}
+Tối thiểu XOR trong một đa tập bằng:
+\[
+\min\Big(0\ \text{nếu tồn tại phần tử có tần suất}\ge2,\ \ \min_{cặp\ kề\ nhau\ trong\ dãy\ đã\ sắp\ xếp} (b_i \oplus b_{i+1})\Big).
+\]
+Vì với các số \emph{phân biệt}, giá trị nhỏ nhất luôn đạt ở hai số \textbf{kề nhau} theo thứ tự tăng dần.  
+Do đó, duy trì:
+\begin{itemize}
+\item \texttt{cnt[x]}: tần suất $\Rightarrow$ nếu có phần tử đạt $\ge2$ thì đáp án là $0$;
+\item \texttt{set} các giá trị \textbf{phân biệt} (sắp xếp tăng);
+\item \texttt{multiset} các XOR của \textbf{cặp kề} trong \texttt{set}.
+\end{itemize}
+Chèn/xoá một giá trị phân biệt $x$ chỉ ảnh hưởng tới hai láng giềng \texttt{pred} và \texttt{succ} trong \texttt{set}:
+\begin{itemize}
+\item \textbf{Insert mới $x$:} nếu cả \texttt{pred}, \texttt{succ} tồn tại, xoá $(pred\oplus succ)$; thêm $(pred\oplus x)$ và $(x\oplus succ)$.
+\item \textbf{Erase cuối $x$:} xoá $(pred\oplus x)$, $(x\oplus succ)$; nếu cả hai tồn tại, thêm $(pred\oplus succ)$.
+\end{itemize}
+Truy vấn \texttt{3}: nếu có phần tử lặp $\Rightarrow 0$, ngược lại là $\min$ trong \texttt{multiset} XOR kề.
+
+\textbf{Độ phức tạp.} Mỗi thao tác $O(\log n)$.
+
+\codefile[]{code/dynamic_min_xor_pair.cpp}

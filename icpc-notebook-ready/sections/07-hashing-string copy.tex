@@ -1,0 +1,112 @@
+\section{Hash \& String}
+
+\subsection{Đếm số lần xuất hiện của $T$ trong $S$ (Z-algorithm, $O(|S|{+}|T|)$)}
+
+\textbf{Ý tưởng.} Tạo xâu $X = T + '\#' + S$ (ký tự ngăn cách không xuất hiện trong $S,T$), tính mảng $Z$ của $X$.  
+Mỗi vị trí $i$ trong phần $S$ có một khớp $T$ nếu $Z[i] \ge |T|$. Tổng số vị trí như vậy là đáp án.
+
+\codefile[]{code/count_substring_occurrences_z.cpp}
+
+\subsection{Chu kỳ ngắn nhất của xâu (minimal period)}
+
+\textbf{Bài toán.} Tìm xâu $T$ ngắn nhất sao cho lặp $T$ đủ $n$ ký tự thì được $S$.
+
+\textbf{Ý tưởng (KMP prefix function).}
+Tính $\pi[i] =$ độ dài tiền tố dài nhất cũng là hậu tố của $S[0..i]$.  
+Gọi $p = n - \pi[n-1]$. Khi đó:
+\[
+\text{Nếu } n \bmod p = 0 \Rightarrow T = S[0..p-1],\quad
+\text{ngược lại } T = S.
+\]
+
+\codefile[]{code/minimal_period_string.cpp}
+
+\subsection{So sánh \textbf{tập} của các tiền tố hai mảng $A$ và $B$}
+
+\textbf{Đề bài.} Cho hai mảng $A,B$ độ dài $n$. Với mỗi truy vấn $(i,j)$, xét hai \emph{tập}:
+\[
+S_A(i)=\{A_1,\dots,A_i\},\qquad S_B(j)=\{B_1,\dots,B_j\}.
+\]
+Hỏi $S_A(i)$ và $S_B(j)$ có bằng nhau không?
+
+\textbf{Ý tưởng.} Tiền xử lý hai dãy:
+\[
+\text{reachA}[i] = \min\{\,j \mid S_A(i)\subseteq S_B(j)\,\},\quad
+\text{reachB}[j] = \min\{\,i \mid S_B(j)\subseteq S_A(i)\,\}.
+\]
+Tính bằng hai con trỏ với \emph{tập} đã thấy (chỉ quan tâm sự xuất hiện, không đếm số lần):
+\begin{itemize}
+\item Duyệt $i=1..n$, mỗi khi gặp phần tử mới trong $A$ mà chưa có trong $B[1..j]$ thì tăng biến \texttt{need}. Tăng $j$ và “thêm” các phần tử trong $B$ cho tới khi \texttt{need}=0. Khi đó \texttt{reachA[i]=j} (nếu không đạt, đặt $\infty$).
+\item Tương tự, tráo vai $A\leftrightarrow B$ để có \texttt{reachB}.
+\end{itemize}
+Với truy vấn $(i,j)$, $S_A(i)=S_B(j)$ \textbf{iff} \(\text{reachA}[i]\le j\) \emph{và} \(\text{reachB}[j]\le i\) (bao hàm 2 chiều).
+
+Độ phức tạp tiền xử lý $O(n)$ trung bình (unordered\_set), mỗi truy vấn $O(1)$.
+
+\codefile[]{code/prefix_set_equality_queries.cpp}
+\subsection{Xâu xoay từ điển nhỏ nhất (Lexicographically Minimal Rotation)}
+
+\textbf{Đề bài.}  
+Một \textbf{xâu xoay (cyclic shift)} được tạo bằng cách chuyển ký tự cuối của xâu lên đầu (hoặc ngược lại) nhiều lần.  
+Ví dụ với \texttt{S = "marisa"}:  
+\[
+\text{marisa},\ \text{amaris},\ \text{samari},\ \text{isamar},\ \text{risama},\ \text{arisam}
+\]  
+Yêu cầu: Tìm \textbf{xâu xoay nhỏ nhất theo thứ tự từ điển} của xâu \(S\).
+
+\textbf{Ràng buộc.}
+\[
+1 \le |S| \le 10^6
+\]
+
+\textbf{Ý tưởng.}  
+- Nếu duyệt tất cả các xoay và so sánh → \(O(n^2)\), quá chậm.  
+- Dùng \textbf{Thuật toán Booth} để tìm vị trí bắt đầu của xoay nhỏ nhất, độ phức tạp \(O(n)\).  
+  
+\textbf{Thuật toán Booth (tóm tắt):}
+\begin{itemize}
+    \item Gộp xâu với chính nó: \(T = S + S\)
+    \item Dùng hai con trỏ \(i, j\) để tìm vị trí bắt đầu tốt nhất.
+    \item Nếu \(T[i + k] = T[j + k]\) thì tăng \(k\).  
+    \item Nếu \(T[i + k] > T[j + k]\) thì bỏ toàn bộ từ \(i\) đến \(i+k\), cập nhật \(i = i + k + 1\).
+    \item Nếu \(T[i + k] < T[j + k]\) → tương tự cho \(j\).
+    \item Kết quả là \(\min(i, j)\).
+\end{itemize}
+
+\textbf{Độ phức tạp:} \(O(n)\) thời gian, \(O(1)\) bộ nhớ.
+
+\codefile[]{code/minimal_rotation.cpp}
+
+\subsection{Xâu dài nhất xuất hiện $\ge k$ lần}
+
+\textbf{Ý tưởng (Suffix Array + LCP).}
+Gọi $SA$ là mảng suffix, $LCP[i]=\text{lcp}(\text{suffix }SA[i-1], SA[i])$ (Kasai).  
+Một xâu xuất hiện $\ge k$ lần tương ứng với \textbf{một cửa sổ} $k$ suffix liên tiếp trong $SA$; độ dài lớn nhất trong cửa sổ đó là
+\[
+\min(LCP[i-k+2],\,LCP[i-k+3],\,\dots,\,LCP[i])\quad (i \text{ là rìa phải cửa sổ}).
+\]
+Quét rìa phải $i=1..n-1$, duy trì \textbf{deque} giá trị nhỏ nhất (RMQ trượt) trên $LCP$ với kích thước hiệu dụng $k{-}1$.  
+Đáp án là max của các minimum này. Trường hợp $k=1$ trả ngay $|S|$.
+
+\textbf{Độ phức tạp.} Xây $SA$ bằng doubling $O(n\log n)$, Kasai $O(n)$, cửa sổ trượt $O(n)$.
+
+\codefile[]{code/longest_substring_at_least_k_times_sa.cpp}
+
+\subsection{Chu kỳ ngắn nhất của \([l..r]\) cho nhiều truy vấn}
+
+\textbf{Bài toán.} Với mỗi truy vấn \((l,r)\), tìm độ dài ngắn nhất \(p\) sao cho \(S[l..r]\) là lặp của một xâu độ dài \(p\).
+
+\textbf{Nhận xét.} Gọi \(L = r-l+1\). Một \(p\) là chu kỳ hợp lệ \(\iff\) \(p\mid L\) và
+\[
+\text{LCP}(l,\ l{+}p)\ \ge\ L-p,
+\]
+tức \(S[l..r-p] = S[l+p..r]\).
+
+\textbf{Lời giải.}
+\begin{itemize}
+\item Tiền xử lý \textbf{Suffix Array} + \textbf{LCP} (Kasai) và \textbf{RMQ} (sparse table) để truy vấn \(\text{LCP}(i,j)\) trong \(O(1)\).
+\item Với mỗi truy vấn, liệt kê các \textbf{ước} của \(L\) theo thứ tự tăng dần, kiểm tra điều kiện trên; ước đầu tiên thỏa là đáp án, nếu không có thì đáp án \(=L\).
+\end{itemize}
+Độ phức tạp: tiền xử lý \(O(n\log n)\); mỗi truy vấn \(O(\tau(L))\) (số ước của \(L\)), đủ nhanh trong thực tế.
+
+\codefile[]{code/min_period_range_queries_sa_lcp.cpp}
