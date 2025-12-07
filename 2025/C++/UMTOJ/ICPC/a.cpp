@@ -1,66 +1,54 @@
 #include <bits/stdc++.h>
-
+#define int long long
 using namespace std;
 
-struct point {
-    double x1,y1,x2,y2;
+struct Cell {
+    int x, y;
 };
 
-pair<double, double> calc(point p) {
-    double a = (p.y1 - p.y2) / (p.x1 - p.x2);
-    double b = p.y1 - a * p.x1;
-    return {a, b};
+int calc(Cell a, Cell b) {
+    return abs(a.x - b.x) + abs(a.y - b.y);
 }
 
-bool comp(point a, point b) {
-    return (calc(a) == calc(b)) && (b.x1 >= a.x2 && b.y1 >= a.y2);
-}
-
-bool compare(const point &A, const point &B) {
-    if (A.x1 != B.x1) {
-        return A.x1 < B.x1;
+signed main() {
+    int n, m; cin >> n >> m;
+    vector<Cell> a(m + 1);
+    for (int i = 1; i <= m; i++) {
+        cin >> a[i].x >> a[i].y;
     }
-    else {
-        if (A.x2 != B.x2) {
-            return A.x2 < B.x2;
-        }
-        else {
-            if (A.y1 != B.y1) {
-                return A.y1 < B.y1;
+    Cell start = a[1];
+
+    int cnt = 2;
+    vector<bool> check(m + 1, false);
+    check[1] = true;
+    int ans = 0;
+    while (cnt <= m) {
+        int idx = -1;
+        int minValue = 1e18;
+        Cell cur = {-1, -1};
+        for (int i = 2; i <= m; i++) {
+            if (check[i]) continue;
+            int val = calc(start, a[i]);
+            if (val < minValue) {
+                idx = i;
+                minValue = val;
+                cur = a[i];
             }
-            else {
-                return A.y2 < B.y2;
-            }
-        }
-    }
-}
-
-
-int main() {
-    int n;
-    while (cin >> n && n != 0) {
-        vector<point> a(n + 1);
-        for (int i = 1; i <= n; i++) {
-            cin >> a[i].x1 >> a[i].y1 >> a[i].x2 >> a[i].y2;
-        }
-        vector<bool> check(n + 1, false);
-
-        sort(a.begin() + 1, a.end(), compare);
-
-        int ans = n;
-
-        for (int i = 1; i <= n; i++) {
-            if (check[i] == false) {
-                check[i] = true;
-                for (int j = 1; j <= n; j++) {
-                    if (check[j] == false && comp(a[i], a[j])) {
-                        ans--;
-                        check[j] = true;
-                    }
+            else if (val == minValue) {
+                if (a[i].x < cur.x) {
+                    cur = a[i];
+                    idx = i;
+                }
+                else if (a[i].x == cur.x && i < idx) {
+                    cur = a[i];
+                    idx = i;
                 }
             }
         }
-
-        cout << ans << endl;
+        cnt++;
+        ans += minValue;
+        check[idx] = true;
+        start = a[idx];
     }
+    cout << ans;
 }
